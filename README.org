@@ -1,0 +1,8 @@
+
+* Intro
+
+This is a library for perceptually uniform color calculation.
+
+* Thanks
+Thanks go to the team creating http://costar.sfu.ca/painterly for open-sourcing
+their CIECAM02 implementation, from which this was derived.
