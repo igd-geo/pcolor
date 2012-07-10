@@ -1,5 +1,6 @@
 package de.fhg.igd.pcolor.colorspace;
 
+import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 import de.fhg.igd.pcolor.JCh;
 
 /**
@@ -45,6 +46,14 @@ public class CS_Jab extends CS_CIECAM02 {
 	 */
 	public CS_Jab(double[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(XYZWhitePoint, L_A, Y_b, sur);
+	}
+
+	/**
+	 *
+	 * @param cond viewing conditions
+	 */
+	public CS_Jab(ViewingConditions cond) {
+		super(cond);
 	}
 
 	@Override

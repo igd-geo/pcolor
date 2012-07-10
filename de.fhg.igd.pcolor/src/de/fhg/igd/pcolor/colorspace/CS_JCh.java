@@ -1,5 +1,7 @@
 package de.fhg.igd.pcolor.colorspace;
 
+import de.fhg.igd.pcolor.colorspace.ViewingConditions;
+
 
 /**
  * This class implements the JCh colorspace, which is derived from the CIECAM02
@@ -44,6 +46,14 @@ public class CS_JCh extends CS_CIECAM02 {
 	 */
 	public CS_JCh(double[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(XYZWhitePoint, L_A, Y_b, sur);
+	}
+
+	/**
+	 *
+	 * @param cond viewing conditions
+	 */
+	public CS_JCh(ViewingConditions cond) {
+		super(cond);
 	}
 
 	@Override

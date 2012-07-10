@@ -92,7 +92,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param XYZWhitePoint XYZ white point
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
@@ -101,6 +101,15 @@ public class CS_CIECAM02 extends PColorSpace {
 	public CS_CIECAM02(double[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(TYPE_7CLR, 7);
 		this.context = new ViewingConditions(XYZWhitePoint, L_A, Y_b, sur);
+	}
+
+	/**
+	 *
+	 * @param cond viewing conditions
+	 */
+	public CS_CIECAM02(ViewingConditions cond) {
+		super(TYPE_7CLR, 7);
+		this.context = cond;
 	}
 
 	@Override
@@ -356,8 +365,8 @@ public class CS_CIECAM02 extends PColorSpace {
 	 * calculate a and b
 	 * @param h hue
 	 * @param e eccentricity
-	 * @param t
-	 * @param p2
+	 * @param t preliminary magnitude
+	 * @param p2 preliminary magnitude
 	 * @return red-green, yellow-blue
 	 */
 	protected double[] reverseab(double h, double e, double t, double p2) {
@@ -388,7 +397,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	 * calculate postadaptation cone response (resulting in dynamic range compression)
 	 * @param a red-green
 	 * @param b yellow-blue
-	 * @param p2
+	 * @param p2 preliminary magnitude
 	 * @return postadaptation cone response 
 	 */
 	protected double[] reverseResponseCompression(double a, double b, double p2) {
