@@ -652,6 +652,13 @@ public class CS_CIECAM02 extends PColorSpace {
 		else return h;
 	}
 
+	/**
+	 * @return viewing conditions
+	 */
+	public ViewingConditions getViewingconditions() {
+		return context;
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 	    if (this == anObject) return true;
