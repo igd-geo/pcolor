@@ -58,48 +58,6 @@ public class sRGB extends PColor {
 		this((argb >> 16 & 0xff) / 255f, (argb >> 8 & 0xff) / 255f, (argb & 0xff) / 255f, (argb >> 24 & 0xff) / 255f);
 	}
 
-    /**
-     * Gets the euclidean distance between two rgb colors
-     */
-    public static float distance(sRGB rgb1, sRGB rgb2) {
-    	return distance(rgb1, rgb2, new float[] {1, 1, 1, 0});
-    }
-
-    /**
-     * calculates the distance between two sRGB colors
-     * @param rgb1 sRGB color
-     * @param rgb2 sRGB color
-     * @param weights
-     * @return the distance
-     */
-    public static float distance(sRGB rgb1, sRGB rgb2, float[] weights) {
-    	// normalize weights to 1.0
-    	float highest = Float.MIN_VALUE;
-    	for(int i = 0; i < weights.length; i++) {
-    		if(weights[i] > highest) highest = weights[i];
-    	}
-    	float[] normalizedWeights = new float[weights.length];
-    	for(int i = 0; i < weights.length; i++) {
-    		normalizedWeights[i] = weights[i] * 1 / highest;
-    	}
-
-    	// perform distance calculation 
-        float distance = 0;
-        distance += Math.pow(rgb1.get(R) - rgb2.get(R), 2) * weights[R];
-        distance += Math.pow(rgb1.get(G) - rgb2.get(G), 2) * weights[G];
-        distance += Math.pow(rgb1.get(B) - rgb2.get(B), 2) * weights[B];
-        distance += Math.pow(rgb1.getAlpha() - rgb2.getAlpha(), 2) * weights[3];
-        return (float)Math.sqrt(distance);
-    }
-
-    /**
-     * 
-     * @return the highest channel
-     */
-    public float getHighestChannel() {
-    	return Math.max(this.get(R), Math.max(this.get(G), this.get(B)));
-    }
-
     @Override
 	public sRGB convertFrom(PColor color) {
 		return new sRGB(color);

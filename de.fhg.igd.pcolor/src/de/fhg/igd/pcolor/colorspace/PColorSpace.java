@@ -21,8 +21,6 @@ public abstract class PColorSpace extends ColorSpace {
 	 * example, whether it is a polar angle component or a polar radius
 	 * component); this knowledge is useful during scale and blur operations.
 	 * 
-	 * @param component
-	 *            the component index
 	 * @return the component type for the specified component
 	 */
 	public ColorSpaceType getColorSpaceType() {

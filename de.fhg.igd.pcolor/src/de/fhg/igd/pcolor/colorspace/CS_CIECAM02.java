@@ -565,7 +565,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	}
 
 	/**
-	 * calfulate chroma
+	 * calculate chroma
 	 * @param s saturation
 	 * @param Q brightness
 	 * @return chroma
@@ -650,6 +650,13 @@ public class CS_CIECAM02 extends PColorSpace {
 		}
 		if(h > 360.0) return h - 360.0;
 		else return h;
+	}
+
+	/**
+	 * @return viewing conditions
+	 */
+	public ViewingConditions getViewingconditions() {
+		return context;
 	}
 
 	@Override
