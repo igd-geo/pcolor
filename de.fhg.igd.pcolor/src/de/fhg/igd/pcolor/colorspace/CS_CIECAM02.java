@@ -565,7 +565,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	}
 
 	/**
-	 * calfulate chroma
+	 * calculate chroma
 	 * @param s saturation
 	 * @param Q brightness
 	 * @return chroma
