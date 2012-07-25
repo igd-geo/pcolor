@@ -20,6 +20,11 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
+/**
+ * The surrounding coarsely characterises the viewing conditions as
+ * modelled in CIECAM02.
+ * @author Thu Huong Luu
+ */
 public class Surrounding {
 
 	/**

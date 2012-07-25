@@ -26,13 +26,10 @@ import de.fhg.igd.pcolor.util.ColorTools;
 
 /**
  * This class implements the CIECAM02 color appearance model, providing forward
- * and backwards transformations from the CIE XYZ colorspace. Each CS_CIECAM02
+ * and backwards transformations from the CIE XYZ color space. Each CS_CIECAM02
  * object contains within a small Context class, which is responsible for
  * determining the numerous pre-calculated surround variables associated with
- * the CIECAM02 model. Constructors are provided for setting these variables to
- * non-default values; however, it is usually only necessary to invoke the
- * class' no-argument constructor, which makes use of a static Context object to
- * conserve memory.
+ * the CIECAM02 viewing conditions.
  */
 public class CS_CIECAM02 extends PColorSpace {
 

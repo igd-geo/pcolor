@@ -23,7 +23,8 @@ package de.fhg.igd.pcolor.colorspace;
 import java.awt.color.ColorSpace;
 
 /**
- * This class implements the CIE L*a*b* color appearance model, providing
+ * This class implements the CIE L*a*b* color space (often used for
+ * "delta E" difference estimation), providing
  * forward and backwards transformations from the CIE XYZ colorspace.
  */
 public class CS_CIELab extends PColorSpace {
@@ -42,7 +43,7 @@ public class CS_CIELab extends PColorSpace {
 	 */
 	public static final int b = 2;
 
-	// conversion function constants as defined by Lindbloom
+	// conversion function constants as suggested by Lindbloom and adopted by CIE
 	private static final double EPSILON = 216d / 24389;
 	private static final double KAPPA = 24389d / 27;
 

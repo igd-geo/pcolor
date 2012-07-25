@@ -30,6 +30,7 @@ import de.fhg.igd.pcolor.util.ColorTools;
  * model, where J represents lightness, C represents chroma, and h represents
  * hue angle. It is thought to be the best currently-implemented means of
  * representing value, and so it is employed wherever value is used as a metric.
+ * <p>
  * Note the the conversion to and from CIECAM02 is somewhat expensive; it is
  * best to code such that it need be performed as infrequently as possible.
  */

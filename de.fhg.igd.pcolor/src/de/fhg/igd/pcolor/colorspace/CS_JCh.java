@@ -25,10 +25,7 @@ import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 
 /**
  * This class implements the JCh colorspace, which is derived from the CIECAM02
- * color appearance model. Like CS_HSV, this class extends its parent space
- * CS_CIECAM02, but unlike CS_HSV this class' conversion methods are overriden
- * to provide slightly faster transformation to and from JCh than they would be
- * to and from CIECAM02.
+ * color appearance model.
  */
 public class CS_JCh extends CS_CIECAM02 {
 
@@ -51,7 +48,6 @@ public class CS_JCh extends CS_CIECAM02 {
 
 	/**
 	 * default constructor
-	 * creates CIECAM02 color space with seven components
 	 */
 	public CS_JCh() {
 		super();
@@ -69,7 +65,6 @@ public class CS_JCh extends CS_CIECAM02 {
 	}
 
 	/**
-	 *
 	 * @param cond viewing conditions
 	 */
 	public CS_JCh(ViewingConditions cond) {

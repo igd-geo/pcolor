@@ -26,13 +26,10 @@ import de.fhg.igd.pcolor.colorspace.PColorSpace;
  * PColors, like java.awt.Colors, consist of two major components: The color
  * itself as represented by an array of float components as well as an alpha
  * channel, and a colorspace object that is responsible for transforming these
- * components to and from the CIE XYZ colorspace. Common color operations (such
- * as finding the mean of a list of colors or blending between two colors) can
- * be implemented by subclasses of PColor, however at present PColor specifies
- * no such methods abstract or or otherwise in an effort to keep it lightweight.
- * <P>
- * PColors assume a whitepoint of D65 (the same as sRGB), an average surround
- * luminance La of 64 cd/m2, and a background Yb of 20% gray.
+ * components to and from the CIE XYZ colorspace.
+ * <p>
+ * PColors typically use a whitepoint of D65 (the same as sRGB), an average surround
+ * luminance La of 64 cd/m2, and a background Yb of 20% gray (CIECAM02 convention).
  */
 public abstract class PColor implements Cloneable {
 

@@ -22,7 +22,11 @@ package de.fhg.igd.pcolor.colorspace;
 
 import java.util.Arrays;
 
-
+/**
+ * Represents CIEVAM02 Viewing Conditions
+ * 
+ * @author Thu Huong Luu
+ */
 public class ViewingConditions {
 
 	// environment parameters

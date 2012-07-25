@@ -51,14 +51,12 @@ public class CS_Jab extends CS_CIECAM02 {
 
 	/**
 	 * default constructor
-	 * creates CIECAM02 color space with seven components
 	 */
 	public CS_Jab() {
 		super();
 	}
 
 	/**
-	 * 
 	 * @param XYZWhitePoint XYZ white point
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
@@ -69,7 +67,6 @@ public class CS_Jab extends CS_CIECAM02 {
 	}
 
 	/**
-	 *
 	 * @param cond viewing conditions
 	 */
 	public CS_Jab(ViewingConditions cond) {
