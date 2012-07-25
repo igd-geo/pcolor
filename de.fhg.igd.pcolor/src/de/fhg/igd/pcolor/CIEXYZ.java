@@ -20,7 +20,6 @@
 
 package de.fhg.igd.pcolor;
 
-import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 
 /**
  * This class contains Pcolors in the CIE XYZ colorspace. While the XYZ
@@ -46,7 +45,7 @@ public class CIEXYZ extends PColor {
 	 * @param color color
 	 */
 	public CIEXYZ(PColor color) {
-		super(new CS_CIEXYZ(), color);
+		super(de.fhg.igd.pcolor.colorspace.CS_CIEXYZ.instance, color);
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class CIEXYZ extends PColor {
 	 * @param alpha alpha value
 	 */
 	public CIEXYZ(float X, float Y, float Z, float alpha) {
-		super(new CS_CIEXYZ(), new float[] {X, Y, Z}, alpha);
+		super(de.fhg.igd.pcolor.colorspace.CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
 	}
 
 	@Override

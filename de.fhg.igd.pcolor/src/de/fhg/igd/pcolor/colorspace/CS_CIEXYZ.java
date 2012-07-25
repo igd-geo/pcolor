@@ -20,7 +20,6 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
-import java.awt.color.ColorSpace;
 
 /**
  * This class implements the CIE XYZ colorspace; calling toCIEXYZ(float[]
@@ -46,9 +45,11 @@ public class CS_CIEXYZ extends PColorSpace {
 	 * default constructor
 	 * creates CIEXYZ color space with three components
 	 */
-	public CS_CIEXYZ() {
+	private CS_CIEXYZ() {
 		super(CS_CIEXYZ, 3);
 	}
+	
+	public static CS_CIEXYZ instance = new CS_CIEXYZ();
 
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {
@@ -57,8 +58,7 @@ public class CS_CIEXYZ extends PColorSpace {
 
 	@Override
 	public float[] fromRGB(float[] colorvalue) {
-		ColorSpace sRGB = new CS_sRGB();
-		float[] XYZComponents = sRGB.toCIEXYZ(colorvalue);
+		float[] XYZComponents = de.fhg.igd.pcolor.colorspace.CS_sRGB.instance.toCIEXYZ(colorvalue);
 		return fromCIEXYZ(XYZComponents);
 	}
 
@@ -70,8 +70,7 @@ public class CS_CIEXYZ extends PColorSpace {
 	@Override
 	public float[] toRGB(float[] colorvalue) {
 		float[] XYZComponents = toCIEXYZ(colorvalue);
-		ColorSpace sRGB = new CS_sRGB();
-		return sRGB.fromCIEXYZ(XYZComponents);
+		return de.fhg.igd.pcolor.colorspace.CS_sRGB.instance.fromCIEXYZ(XYZComponents);
 	}
 
 	@Override

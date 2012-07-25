@@ -45,9 +45,14 @@ public class CS_sRGB extends PColorSpace {
 	 * default constructor
 	 * creates sRGB color space with three components
 	 */
-	public CS_sRGB() {
+	private CS_sRGB() {
 		super(CS_sRGB, 3);
 	}
+	
+	/**
+	 * a pcolor-based sRGB instance
+	 */
+	public static CS_sRGB instance = new CS_sRGB();
 
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {
@@ -214,5 +219,10 @@ public class CS_sRGB extends PColorSpace {
 	@Override
 	public int hashCode() {
 		return 8;
+	}
+
+	@Override
+	public boolean isCS_sRGB() {
+		return true;
 	}
 }

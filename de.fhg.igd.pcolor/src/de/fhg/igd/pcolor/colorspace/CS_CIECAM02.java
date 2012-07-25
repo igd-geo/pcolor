@@ -20,7 +20,6 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
-import java.awt.color.ColorSpace;
 import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.util.ColorTools;
@@ -489,16 +488,14 @@ public class CS_CIECAM02 extends PColorSpace {
 
 	@Override
 	public float[] fromRGB(float[] colorvalue) {
-		ColorSpace sRGB = new CS_sRGB();
-		float[] XYZComponents = sRGB.toCIEXYZ(colorvalue);
+		float[] XYZComponents = de.fhg.igd.pcolor.colorspace.CS_sRGB.instance.toCIEXYZ(colorvalue);
 		return fromCIEXYZ(XYZComponents);
 	}
 
 	@Override
 	public float[] toRGB(float[] colorvalue) {
 		float[] XYZComponents = toCIEXYZ(colorvalue);
-		ColorSpace sRGB = new CS_sRGB();
-		return sRGB.fromCIEXYZ(XYZComponents);
+		return de.fhg.igd.pcolor.colorspace.CS_sRGB.instance.fromCIEXYZ(XYZComponents);
 	}
 
 	/**
