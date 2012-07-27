@@ -20,7 +20,7 @@
 
 package de.fhg.igd.pcolor;
 
-import de.fhg.igd.pcolor.colorspace.PColorSpace;
+import java.awt.color.ColorSpace;
 
 /**
  * PColors, like java.awt.Colors, consist of two major components: The color
@@ -36,7 +36,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * the color space
 	 */
-	private final PColorSpace colorspace;
+	private final ColorSpace colorspace;
 	/**
 	 * the components
 	 */
@@ -51,8 +51,8 @@ public abstract class PColor implements Cloneable {
 	 * @param cspace color space
 	 * @param color color
 	 */
-	public PColor(PColorSpace cspace, PColor color) {
-		PColorSpace space = color.getColorSpace();
+	public PColor(ColorSpace cspace, PColor color) {
+		ColorSpace space = color.getColorSpace();
 		if(space.equals(cspace)) {
 			this.colorspace = cspace;
 			float[] colorComponents = color.getComponents();
@@ -74,7 +74,7 @@ public abstract class PColor implements Cloneable {
 	 * @param components components
 	 * @param alpha alpha value
 	 */
-	public PColor(PColorSpace cspace, float[] components, float alpha) {
+	public PColor(ColorSpace cspace, float[] components, float alpha) {
 		this.colorspace = cspace;
 		this.components = components;
 		this.alpha = alpha;
@@ -107,7 +107,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * Returns a reference to this color's ColorSpace.
 	 */
-	public PColorSpace getColorSpace() {
+	public ColorSpace getColorSpace() {
 		return colorspace;
 	}
 

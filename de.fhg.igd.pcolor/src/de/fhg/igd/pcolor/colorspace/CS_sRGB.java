@@ -20,12 +20,14 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
+import java.awt.color.ColorSpace;
+
 /**
  * This class implements sRGB colorspace, providing forward and backwards
  * transformations from the sRGB colorspace. CS_sRGB color components are
  * normalized to 0.0-1.0.
  */
-public class CS_sRGB extends PColorSpace {
+public class CS_sRGB extends ColorSpace {
 
 	private static final long serialVersionUID = 9219578757932711538L;
 	/**

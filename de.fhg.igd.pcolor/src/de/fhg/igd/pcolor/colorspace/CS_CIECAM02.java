@@ -20,6 +20,8 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
+import java.awt.color.ColorSpace;
+
 import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.util.ColorTools;
@@ -31,7 +33,7 @@ import de.fhg.igd.pcolor.util.ColorTools;
  * determining the numerous pre-calculated surround variables associated with
  * the CIECAM02 viewing conditions.
  */
-public class CS_CIECAM02 extends PColorSpace {
+public class CS_CIECAM02 extends ColorSpace {
 
 	private static final long serialVersionUID = -4262171288421726143L;
 

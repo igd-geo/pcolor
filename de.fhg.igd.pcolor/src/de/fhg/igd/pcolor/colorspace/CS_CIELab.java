@@ -27,7 +27,7 @@ import java.awt.color.ColorSpace;
  * "delta E" difference estimation), providing
  * forward and backwards transformations from the CIE XYZ colorspace.
  */
-public class CS_CIELab extends PColorSpace {
+public class CS_CIELab extends ColorSpace {
 
 	private static final long serialVersionUID = -3816629468334699096L;
 	/**

@@ -20,12 +20,16 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
+import java.awt.color.ColorSpace;
+
 
 /**
  * This class implements the CIE XYZ colorspace; calling toCIEXYZ(float[]
  * components) or fromCIEXYZ(float[] components) will simply return components.
+ * 
+ * It avoids calling into native CMSes and the associated ICC DICS.
  */
-public class CS_CIEXYZ extends PColorSpace {
+public class CS_CIEXYZ extends ColorSpace {
 
 	private static final long serialVersionUID = -7923913005471667746L;
 	/**
