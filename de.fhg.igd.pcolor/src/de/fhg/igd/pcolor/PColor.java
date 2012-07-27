@@ -36,7 +36,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * the color space
 	 */
-	private PColorSpace colorspace;
+	private final PColorSpace colorspace;
 	/**
 	 * the components
 	 */
@@ -192,6 +192,7 @@ public abstract class PColor implements Cloneable {
 	 * Returns a String containing this color's components and alpha value in
 	 * the format "R: 1.0 B: 1.0 G: 1.0 Alpha: 1.0"
 	 */
+	@Override
 	public String toString() {
 		String result = "";
 		for(int i = 0; i < components.length; i++) {

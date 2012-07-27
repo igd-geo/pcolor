@@ -83,7 +83,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	/**
 	 * default context
 	 */
-	protected static ViewingConditions defaultContext;
+	protected static ViewingConditions defaultContext = new ViewingConditions(D65White, 64.0, 20.0, Surrounding.averageSurrounding);
 
 	/**
 	 * context
@@ -96,15 +96,7 @@ public class CS_CIECAM02 extends PColorSpace {
 	 */
 	public CS_CIECAM02() {
 		super(TYPE_7CLR, 7);
-		if(defaultContext == null) instantiateDefaultContext();
 		context = defaultContext;
-	}
-
-	/**
-	 * sets default context with D65 white point, L_A = 64, Y_b = 20 and c = 0.69
-	 */
-	public static void instantiateDefaultContext() {
-		defaultContext = new ViewingConditions(D65White, 64.0, 20.0, Surrounding.averageSurrounding);
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class Surrounding {
 	 */
 	private final double N_c;
 
-	private Surrounding(double F, double c, double Nc) {
+	public Surrounding(double F, double c, double Nc) {
 		this.F = F;
 		this.c = c;
 		this.N_c = Nc;
@@ -75,6 +75,4 @@ public class Surrounding {
 	public double getN_c() {
 		return N_c;
 	}
-
-	
 }

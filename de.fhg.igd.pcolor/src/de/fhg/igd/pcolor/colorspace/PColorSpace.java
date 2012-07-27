@@ -23,6 +23,11 @@ package de.fhg.igd.pcolor.colorspace;
 import java.awt.color.ColorSpace;
 
 public abstract class PColorSpace extends ColorSpace {
+	
+	public enum CoordinateType {
+		CARTESIAN,
+		POLAR
+	}
 
 	private static final long serialVersionUID = 9164851006288790616L;
 
@@ -43,7 +48,7 @@ public abstract class PColorSpace extends ColorSpace {
 	 * 
 	 * @return the component type for the specified component
 	 */
-	public ColorSpaceType getColorSpaceType() {
-		return new CartesianType();
+	public CoordinateType getCoordinateType(int num) {
+		return CoordinateType.CARTESIAN;
 	}
 }

@@ -172,7 +172,8 @@ public class CS_JCh extends CS_CIECAM02 {
 	}
 
 	@Override
-	public ColorSpaceType getColorSpaceType() {
-		return new PolarCoordinateType(1, 2);
+	public CoordinateType getCoordinateType(int num) {
+		return (num == 2) ? CoordinateType.POLAR : CoordinateType.CARTESIAN;
 	}
+
 }

@@ -95,11 +95,10 @@ public class ViewingConditions {
 	    if (this == anObject) return true;
 	    if (anObject == null || !(anObject instanceof ViewingConditions)) return false;
 	    ViewingConditions object = (ViewingConditions)anObject;
-	    return
-	    Arrays.equals(XYZ_w, object.XYZ_w) &&
-	    Double.doubleToLongBits(this.L_A) == Double.doubleToLongBits(object.L_A) &&
-	    Double.doubleToLongBits(this.Y_b) == Double.doubleToLongBits(this.Y_b) &&
-	    Double.doubleToLongBits(this.surrounding.getC()) == Double.doubleToLongBits(this.surrounding.getC());
+	    return Arrays.equals(XYZ_w, object.XYZ_w) &&
+		    Double.doubleToLongBits(this.L_A) == Double.doubleToLongBits(object.L_A) &&
+		    Double.doubleToLongBits(this.Y_b) == Double.doubleToLongBits(this.Y_b) &&
+		    Double.doubleToLongBits(this.surrounding.getC()) == Double.doubleToLongBits(this.surrounding.getC());
 	}
 
 	@Override
