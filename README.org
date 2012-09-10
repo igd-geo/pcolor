@@ -1,8 +1,154 @@
+* PColor
 
-* Intro
+PColor is a library for perceptually oriented color calculation. It tries
+to be easier to use than similar implementations. It mainly implements
+the CIECAM02 model in idiomatic java.
 
-This is a library for perceptually uniform color calculation.
+The library enables color operations that are typically hard to
+perform and require manual tuning, such as finding visually
+equidistant colours.
+
+Basically colors can sensibly be manipulated in two types of color
+spaces: optically or perceptually uniform color spaces. There are also
+a lot of options in-between, but more on this follows below. This
+library mainly cares about the perceptual sort, but can be used for
+optical manipulation as well.
+   
+Established color management systems, such as those Java's JAI bridges
+to, enable conversion of colours or, more generally, colorimetric
+operations. In a nutshell, that means finding suitable colours a given
+device may reproduce from a set of input colours.
+
+This is by no means a small thing, but with the advent of easily
+applicable colour appearance models, chiefly CIECAM02 in 2002, more
+interesting tasks can be tackled. Most color management systems use
+CIECAM02, but they use it to answer the question outlined above, just
+more precisely. This leaves the richer capabilities of CAMs aside, some of
+which are outlined in the next section.
+
+* Use cases
+  CIECAM02, and potential related models, offer a host of new or improved
+  capabilities. This library aims to provide an idiomatic java API to
+  exploit these capabilities. Use cases include:
+  - Altering colours to look the same under different viewing conditions
+  - Finding a set of equidistant colours
+  - Estimating how visually distant different colours are (delta E-like)
+  - Exploiting colour relations for visualization of value relations
+
+** API
+   
+   TODO add html and java for use cases
+   
+   The API is not considered stable. It largely builds upon the AWT
+   color management API for interoperability, and partly the (defunct)
+   Painterly project this was derived from.
+
+   This is NOT a high performance implemetation. It favours
+   correctness, precision and idiomatic APIs over speed. You need to
+   think yourself about how to avoid needless computations in your
+   environment.
+** Regarding correctness / a word of warning
+   On the web, colour science is one of the most frequently ignored
+   or misrepresented fields. The ubiquitousness of sRGB (HTML #xxxxxx
+   colors, 99.9% of image material) leads people to think there are
+   no other ways of dealing with colour, and sometimes they just
+   assume the wildest things about sRGB in a vain attempt to
+   disguise they don't really care.
+
+   In fact, the only reason that sRGB is ubiquituous is that it's
+   easy to implement, and it is a reasonable way of storing and
+   transmitting color information. It never was intended for color
+   manipulation, and -- unsurprisingly -- performs poor in this
+   regard. That's because it sits between two chairs:
+
+   It is NOT perceptually uniform. It does not wholly neglect the
+   properties of human vision, but addresses them just to the extent
+   necessary to transmit colours from a bright environment (like a
+   studio or sunny daylight) to a dim one (like the average living
+   room as assumed in the 50s). All of that video legacy is
+   still in sRGB and determines its structure. The curious may want to
+   see Charles Pontyon's tremendous Gamma FAQ for details. Why I tell
+   you this? I hope it will let you think twice before trusting sRGB,
+   that's all.
+
+   It is also NOT optically linear. #808080 is NOT half as bright as
+   #FFFFFF - neither optically nor perceptually (though the latter is
+   close). Even adding colours (+) is not a well-defined operation in
+   sRGB. Don't do it, it will get you errors unlikely to be
+   understood. Thus, to do things such as whitening, filtering
+   etc. you need to work in a linear colour space such as XYZ or
+   linear RGB. See e.g. "Alpha Channel Masking and Computer Graphics
+   Compatibility" in [[http://www.w3.org/Graphics/Color/sRGB]].  (Be
+   advised that the referred section applies the term "visually
+   uniform" to intensity and its encoding or perception, _not_ to
+   colour or other appearance correlates.)
+
+   In summary: sRGB is fine for the things it was designed for. It
+   just was not designed to be an optically or perceptually linear
+   working space. Working in sRGB won't magically get you the best of
+   both, it will rather get you hard-to-diagnose errors instead.
+
+   This library tries to make it easy to do the right thing and hard
+   to do otherwise. It isn't yet good at this and perhaps never will,
+   so please be reminded that in colour, there is ample opportunity
+   to do things in a simple, straigt-forward but wrong manner.
+
+** Calculating colors
+
+The general pattern in color calculation is finding a suitable color space
+to work in, and then executing your task. But what is "suitable"?
+
+We believe that, from a purely task-centric perspective, there are
+very few good choices; choices this library actually provides. If you
+have to accomodate technical considerations such as video coding, this
+is better handled by other means.
+
+** Choosing a working space
+This part is usually skipped by people, unaware there even is a
+choice. There are, however, options from a range of color spaces whose
+ends are:
+- optically/physically linear color spaces
+- perceptually linear color spaces
+
+This library deals with both ends of the spectrum. The in-betweens,
+such as non-linear RGB/sRGB, YCbCr/YUV, and CYMK are great to store
+and transmit colors but a total mess if you want to properly work with
+colors.
+
+*Optically* linear color spaces relate to an amount of light, e.g. as
+might be expressed in cd/m^2 (candela per square meter). They can be
+used to model colors as resulting from a lighting change, such as
+adding a drop shadow, a spotlight or blending light sources.
+
+More mathematically, as soon as you want to add or multiply two colors
+as a part of your task, non-linear color spaces will add their
+personal twist to the result, because the result (which might look
+fine numerically) is to be interpreted in terms of the non-linear
+space again. This is not something you want, almost never.
+
+Supported physically linear spaces are CIE XYZ.
+
+*Perceptually* linear color spaces relate to the human visual
+system. The properties of our viusual system are still subject to
+debate, but from time to time the CIE endorses color models designed
+to match those properties. Using such a model, it becomes feasible to
+answer questions such as
+- What colors are percieved as being between two other colors?
+- How might this color look against that background?
+- and how do I preserve its look in other circumstances?
+in a way most humans will be able to follow. Obviously, they're
+suitable for perception-oriented "artistic" tasks. By no means you
+should use them in modeling natural phenomena - such as a drop shadow.
+
+Their downside is that as a vector space, they're pretty odd in shape.
+However it is easy to test if your colour is out of gamut and how far.
+
+This library fully implements CIECAM02 and partly CIE L*a*b*.
 
 * Thanks
-Thanks go to the team creating http://costar.sfu.ca/painterly for open-sourcing
-their CIECAM02 implementation, from which this was derived.
+Thanks go to the team creating http://costar.sfu.ca/painterly for
+open-sourcing their CIECAM02 implementation, from which this work was
+derived. The name goes back to this implementation; probably it stands
+for perceptual colour.
+
+This work has been partly funded by the GeoViQua EU FP7 project.
