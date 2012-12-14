@@ -29,7 +29,7 @@ import de.fhg.igd.pcolor.util.ColorTools;
 /**
  * This class implements the CIECAM02 color appearance model, providing forward
  * and backwards transformations from the CIE XYZ color space. Each CS_CIECAM02
- * object contains within a small Context class, which is responsible for
+ * object contains a small context object, which is responsible for
  * determining the numerous pre-calculated surround variables associated with
  * the CIECAM02 viewing conditions.
  */
@@ -107,7 +107,6 @@ public class CS_CIECAM02 extends ColorSpace {
 	}
 
 	/**
-	 *
 	 * @param XYZWhitePoint XYZ white point
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
@@ -119,7 +118,6 @@ public class CS_CIECAM02 extends ColorSpace {
 	}
 
 	/**
-	 *
 	 * @param cond viewing conditions
 	 */
 	public CS_CIECAM02(ViewingConditions cond) {

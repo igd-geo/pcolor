@@ -24,11 +24,11 @@ import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 import de.fhg.igd.pcolor.JCh;
 
 /**
- * This class implements the Jab colorspace, which is derived from the CIECAM02
- * color appearance model. The advantage of using CIECAM02's red-green (a) and
+ * This class implements the Jab colorspace, which consists of the J, a, b CIECAM02
+ * color appearance correlates. The advantage of using CIECAM02's red-green (a) and
  * yellow-blue (b) correlates is that the colorspace is Euclidian (as opposed to
  * JCh, which uses a polar coordinate system) and can therefore be used for
- * convolution filtering or rescaling.
+ * perceptual difference estimation and other perceptually linear operations.
  */
 public class CS_Jab extends CS_CIECAM02 {
 

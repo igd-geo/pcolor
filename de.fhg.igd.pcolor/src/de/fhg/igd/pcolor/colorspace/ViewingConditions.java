@@ -23,7 +23,7 @@ package de.fhg.igd.pcolor.colorspace;
 import java.util.Arrays;
 
 /**
- * Represents CIEVAM02 Viewing Conditions
+ * Represents CIEVAM02 Viewing Conditions.
  * 
  * @author Thu Huong Luu
  */
@@ -39,11 +39,11 @@ public class ViewingConditions {
 	private final double[] D_RGB;
 
 	/**
-	 * 
+	 * Construct a new ViewingConditions instance
 	 * @param XYZ_w XYZ whitepoint
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
-	 * @param sur surrounding
+	 * @param sur the surrounding
 	 */
 	public ViewingConditions(double[] XYZ_w, double L_A, double Y_b, Surrounding sur) {
 		this.XYZ_w = XYZ_w; // XYZ whitepoint

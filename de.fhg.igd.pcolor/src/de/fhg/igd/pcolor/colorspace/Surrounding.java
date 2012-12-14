@@ -53,7 +53,6 @@ public class Surrounding {
 	public final static Surrounding darkSurrounding = new Surrounding(0.8, 0.525, 0.8);
 
 	/**
-	 * 
 	 * @return factor determining degree of adaptation
 	 */
 	public double getF() {
@@ -61,7 +60,6 @@ public class Surrounding {
 	}
 
 	/**
-	 * 
 	 * @return impact of surrounding
 	 */
 	public double getC() {

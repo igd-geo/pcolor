@@ -25,7 +25,7 @@ import java.awt.color.ColorSpace;
 /**
  * This class implements sRGB colorspace, providing forward and backwards
  * transformations from the sRGB colorspace. CS_sRGB color components are
- * normalized to 0.0-1.0.
+ * normalized to 0.0-1.0 instead of the conventional 0-255.
  */
 public class CS_sRGB extends ColorSpace {
 
