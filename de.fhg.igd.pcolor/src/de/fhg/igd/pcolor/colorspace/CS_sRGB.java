@@ -70,8 +70,7 @@ public class CS_sRGB extends ColorSpace {
 				rgb[i] = Math.signum(rgb[i]) * (1.055 * Math.pow(Math.abs(rgb[i]), 1.0 / 2.4) - 0.055); 
 			}
 		}
-		clipToGamut(rgb);
-
+		
 		float[] result = new float[] {(float)rgb[0], (float)rgb[1], (float)rgb[2]};
 		return result;
 	}
@@ -102,8 +101,8 @@ public class CS_sRGB extends ColorSpace {
 	 *            An sRGB component array, to be modified inplace.
 	 * @return true if the color was clipped, or false if it wasn't necessary.
 	 */
-	protected static boolean clipToGamut(double[] rgb) {
-		if(rgb[0] < 0d || rgb[0] > 1d || rgb[1] < 0d || rgb[1] > 1d || rgb[2] < 0d || rgb[2] > 1d) {
+	public static boolean clipToGamut(double[] rgb) {
+		if(isInGamut(rgb)) {
 			// set origin to [0.5 0.5 0.5]
 			rgb[0] -= 0.5;
 			rgb[1] -= 0.5;
@@ -125,6 +124,10 @@ public class CS_sRGB extends ColorSpace {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean isInGamut(double[] rgb) {
+		return !(rgb[0] < 0d || rgb[0] > 1d || rgb[1] < 0d || rgb[1] > 1d || rgb[2] < 0d || rgb[2] > 1d);
 	}
 
 	@Override
