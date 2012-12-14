@@ -95,10 +95,10 @@ public class ViewingConditions {
 	    if (this == anObject) return true;
 	    if (anObject == null || !(anObject instanceof ViewingConditions)) return false;
 	    ViewingConditions object = (ViewingConditions)anObject;
-	    return Arrays.equals(XYZ_w, object.XYZ_w) &&
+	    return Arrays.equals(this.XYZ_w, object.XYZ_w) &&
+	    	this.surrounding.equals(object.surrounding) &&
 		    Double.doubleToLongBits(this.L_A) == Double.doubleToLongBits(object.L_A) &&
-		    Double.doubleToLongBits(this.Y_b) == Double.doubleToLongBits(this.Y_b) &&
-		    Double.doubleToLongBits(this.surrounding.getC()) == Double.doubleToLongBits(this.surrounding.getC());
+		    Double.doubleToLongBits(this.Y_b) == Double.doubleToLongBits(object.Y_b);
 	}
 
 	@Override
@@ -106,8 +106,8 @@ public class ViewingConditions {
 		int hash = 7;
 		hash = 31 * hash + (int)Double.doubleToLongBits(L_A);
 		hash = 31 * hash + (int)Double.doubleToLongBits(Y_b);
-		hash = 31 * hash + (int)Double.doubleToLongBits(surrounding.getC());
-		hash = 31 * hash + (null == XYZ_w ? 0 : XYZ_w.hashCode());
+		hash = 31 * hash + surrounding.hashCode();
+		hash = 31 * hash + Arrays.hashCode(XYZ_w);
 		return hash;
 	}
 

@@ -69,10 +69,42 @@ public class Surrounding {
 	}
 
 	/**
-	 * 
 	 * @return chromatic induction factor
 	 */
 	public double getN_c() {
 		return N_c;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(F);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(N_c);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(c);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Surrounding other = (Surrounding) obj;
+		if (Double.doubleToLongBits(F) != Double.doubleToLongBits(other.F))
+			return false;
+		if (Double.doubleToLongBits(N_c) != Double.doubleToLongBits(other.N_c))
+			return false;
+		if (Double.doubleToLongBits(c) != Double.doubleToLongBits(other.c))
+			return false;
+		return true;
+	}
+	
 }
