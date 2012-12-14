@@ -54,7 +54,7 @@ public class CS_sRGB extends ColorSpace {
 	/**
 	 * a pcolor-based sRGB instance
 	 */
-	public static CS_sRGB instance = new CS_sRGB();
+	public static final CS_sRGB instance = new CS_sRGB();
 
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {

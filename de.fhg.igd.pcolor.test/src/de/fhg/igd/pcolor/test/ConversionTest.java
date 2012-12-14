@@ -198,7 +198,7 @@ public class ConversionTest {
 	public void XYZtoRGB() {
 		float[] xyz = new float[]{0.0353f, 0.0656f, 0.0214f};
 
-		CS_sRGB sRGB = de.fhg.igd.pcolor.colorspace.CS_sRGB.instance;
+		CS_sRGB sRGB = CS_sRGB.instance;
 		float[] rgb = sRGB.fromCIEXYZ(xyz);
 		float[] back_xyz = sRGB.toCIEXYZ(rgb);
 
