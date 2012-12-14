@@ -215,14 +215,15 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * This method guarantees that every PColor object can be successfully
-	 * instantiated from every other PColor object. PColor objects should
+	 * This method provides arbitrary conversion between
+	 * PColor objects.
+	 * 
+	 * PColor objects should
 	 * provide constructors in the form of PColor(PColor<?> color) for
 	 * convenience that do the same thing.
 	 * 
-	 * @param color -
-	 *            The color to be converted
-	 * @return A new PColor<E> in its native colorspace.
+	 * @param color The color to be converted
+	 * @return A PColor in its native colorspace.
 	 */
 	public abstract PColor convertFrom(PColor color);
 

@@ -269,6 +269,8 @@ public class JCh extends PColor {
 
     @Override
 	public JCh convertFrom(PColor color) {
+    	if (color.getColorSpace().equals(this.getColorSpace()))
+			return (JCh)color;
 		return new JCh(color, (CS_JCh)this.getColorSpace());
 	}
 

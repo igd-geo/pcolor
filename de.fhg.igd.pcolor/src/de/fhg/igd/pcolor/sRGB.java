@@ -79,6 +79,8 @@ public class sRGB extends PColor {
 
     @Override
 	public sRGB convertFrom(PColor color) {
+    	if (color.getColorSpace().equals(this.getColorSpace()))
+			return (sRGB)color;
 		return new sRGB(color);
 	}
 	

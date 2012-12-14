@@ -71,6 +71,8 @@ public class CIEXYZ extends PColor {
 
 	@Override
 	public CIEXYZ convertFrom(PColor color) {
+		if (color.getColorSpace().equals(this.getColorSpace()))
+			return (CIEXYZ)color;
 		return new CIEXYZ(color);
 	}
 
