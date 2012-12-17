@@ -88,7 +88,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	public static double[] E = new double[] {100.0, 100.0, 100.0};
 
 	/**
-	 * default context
+	 * default viewing conditions for D64 white-point, 64 cd/m2 average luminance and 20 cd/m2 adaption luminance
 	 */
 	protected static ViewingConditions defaultContext = new ViewingConditions(D65White, 64.0, 20.0, Surrounding.averageSurrounding);
 
@@ -412,11 +412,11 @@ public class CS_CIECAM02 extends ColorSpace {
 	}
 
 	/**
-	 * calculate postadaptation cone response (resulting in dynamic range compression)
+	 * calculate post-adaptation cone response (resulting in dynamic range compression)
 	 * @param a red-green
 	 * @param b yellow-blue
 	 * @param p2 preliminary magnitude
-	 * @return postadaptation cone response 
+	 * @return post-adaptation cone response 
 	 */
 	protected double[] reverseResponseCompression(double a, double b, double p2) {
 		double[] RGBPrime_a = new double[3];

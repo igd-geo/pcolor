@@ -26,6 +26,7 @@ import java.awt.color.ColorSpace;
  * This class implements the CIE L*a*b* color space (often used for
  * "delta E" colour difference estimation), providing
  * forward and backwards transformations from the CIE XYZ colorspace.
+ * This implementation covers the illuminant E only.
  */
 public class CS_CIELab extends ColorSpace {
 
