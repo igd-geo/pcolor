@@ -46,7 +46,7 @@ public class CIELab extends PColor {
 	 * @param color color
 	 */
 	public CIELab(PColor color) {
-		super(new CS_CIELab(), color);
+		super(CS_CIELab.instance, color);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class CIELab extends PColor {
 	 * @param alpha alpha value
 	 */
 	public CIELab(float L, float a, float b, float alpha) {
-		super(new CS_CIELab(), new float[] {L, a, b}, alpha);
+		super(CS_CIELab.instance, new float[] {L, a, b}, alpha);
 	}
 
 	@Override

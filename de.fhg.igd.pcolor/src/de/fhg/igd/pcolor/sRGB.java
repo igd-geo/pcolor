@@ -20,6 +20,8 @@
 
 package de.fhg.igd.pcolor;
 
+import de.fhg.igd.pcolor.colorspace.CS_sRGB;
+
 
 /**
  * sRGB is a prevalent colorspace in computer graphics, and as such the standard
@@ -45,7 +47,7 @@ public class sRGB extends PColor {
 	 * @param color color
 	 */
 	public sRGB(PColor color) {
-		super(de.fhg.igd.pcolor.colorspace.CS_sRGB.instance, color);
+		super(CS_sRGB.instance, color);
 	}
 	
 	/**
@@ -66,7 +68,7 @@ public class sRGB extends PColor {
 	 * @param alpha alpha value
 	 */
 	public sRGB(float R, float G, float B, float alpha) {
-		super(de.fhg.igd.pcolor.colorspace.CS_sRGB.instance, new float[] {R, G, B}, alpha);
+		super(CS_sRGB.instance, new float[] {R, G, B}, alpha);
 	}
 	
 	/**

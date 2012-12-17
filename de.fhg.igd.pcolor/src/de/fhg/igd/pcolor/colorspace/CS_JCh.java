@@ -45,13 +45,11 @@ public class CS_JCh extends CS_CIECAM02 {
 	 * Hue
 	 */
 	public static final int h = 2;
-
+	
 	/**
-	 * default constructor
+	 * the default instance operating under the {@link #defaultContext} viewing conditions.
 	 */
-	public CS_JCh() {
-		super();
-	}
+	public static final CS_JCh defaultInstance = new CS_JCh(defaultContext);
 
 	/**
 	 * 

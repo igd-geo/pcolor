@@ -50,11 +50,9 @@ public class CS_Jab extends CS_CIECAM02 {
 	public static final int b = 2;
 
 	/**
-	 * default constructor
+	 * the default instance operating under the {@link #defaultContext} viewing conditions.
 	 */
-	public CS_Jab() {
-		super();
-	}
+	public static final CS_Jab defaultInstance = new CS_Jab(defaultContext);
 
 	/**
 	 * @param XYZWhitePoint XYZ white point

@@ -51,7 +51,7 @@ public class Jab extends PColor {
 	 * @param color color
 	 */
 	public Jab(PColor color) {
-		this(color, new CS_Jab());
+		this(color, CS_Jab.defaultInstance);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Jab extends PColor {
 	 * @param alpha alpha value
 	 */
 	public Jab(float J, float a, float b, float alpha) {
-		super(new CS_Jab(), new float[] {J, a, b}, alpha);
+		super(CS_Jab.defaultInstance, new float[] {J, a, b}, alpha);
 	}
 
 	/**

@@ -65,7 +65,7 @@ public class JCh extends PColor {
 	 * @param color color
 	 */
 	public JCh(PColor color) {
-		this(color, new CS_JCh());
+		this(color, CS_JCh.defaultInstance);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class JCh extends PColor {
 	 * @param alpha alpha value
 	 */
 	public JCh(float J, float C, float h, float alpha) {
-		super(new CS_JCh(), new float[] {J, C, h}, alpha);
+		super(CS_JCh.defaultInstance, new float[] {J, C, h}, alpha);
 	}
 
 	/**

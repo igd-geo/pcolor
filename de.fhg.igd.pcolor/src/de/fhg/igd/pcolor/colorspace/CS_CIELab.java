@@ -46,12 +46,17 @@ public class CS_CIELab extends ColorSpace {
 	// conversion function constants as suggested by Lindbloom and adopted by CIE
 	private static final double EPSILON = 216d / 24389;
 	private static final double KAPPA = 24389d / 27;
+	
+	/**
+	 * the default CS_CIELab instance
+	 */
+	public static final CS_CIELab instance = new CS_CIELab();
 
 	/**
 	 * default constructor
 	 * creates CIELab color space with three components
 	 */
-	public CS_CIELab() {
+	private CS_CIELab() {
 		super(TYPE_Lab, 3);
 	}
 

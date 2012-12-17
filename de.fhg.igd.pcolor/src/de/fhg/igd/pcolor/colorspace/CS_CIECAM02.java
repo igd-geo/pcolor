@@ -96,12 +96,17 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * context
 	 */
 	protected ViewingConditions context;
+	
+	/**
+	 * the default instance operating under the {@link #defaultContext} viewing conditions.
+	 */
+	public static final CS_CIECAM02 defaultInstance = new CS_CIECAM02();
 
 	/**
 	 * default constructor
 	 * creates a CIECAM02 color space with default context
 	 */
-	public CS_CIECAM02() {
+	protected CS_CIECAM02() {
 		super(TYPE_7CLR, 7);
 		context = defaultContext;
 	}

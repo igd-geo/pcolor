@@ -53,7 +53,7 @@ public class CS_CIEXYZ extends ColorSpace {
 		super(CS_CIEXYZ, 3);
 	}
 	
-	public static CS_CIEXYZ instance = new CS_CIEXYZ();
+	public static final CS_CIEXYZ instance = new CS_CIEXYZ();
 
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {
