@@ -24,9 +24,9 @@ import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 
 
 /**
- * sRGB is a prevalent colorspace in computer graphics, and as such the standard
- * adopted by Java's libraries. In Painterly, sRGB color components are
- * normalized to 0.0-1.0.
+ * sRGB is a prevalent colorspace in computer graphics, the standard on the web
+ * also adopted by Java's libraries. If you don't know which color space your're
+ * in, you're likely in sRGB. Normalised to 0..1.
  */
 public class sRGB extends PColor {
 	/**
@@ -72,7 +72,14 @@ public class sRGB extends PColor {
 	}
 	
 	/**
-	 * 
+	 * @param rgba array of floats in rgba order (a is optional) 
+	 */
+	public sRGB(float[] rgba) {
+		super(CS_sRGB.instance, new float[] {rgba[0], rgba[1], rgba[2]}, rgba.length > 3 ? rgba[3] : 1);
+	}
+	
+	/**
+	 * Unpack a 32-Bit ARGB int, normalising to 0..1
 	 * @param argb argb color
 	 */
 	public sRGB(int argb) {

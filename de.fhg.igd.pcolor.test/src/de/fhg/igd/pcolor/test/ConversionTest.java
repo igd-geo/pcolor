@@ -22,9 +22,15 @@ package de.fhg.igd.pcolor.test;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.awt.color.ColorSpace;
+
 import org.junit.Test;
 
+import de.fhg.igd.pcolor.CIEXYZ;
+import de.fhg.igd.pcolor.PColor;
+import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_CIECAM02;
+import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
@@ -32,8 +38,9 @@ import de.fhg.igd.pcolor.colorspace.Surrounding;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 
 /**
- * testing conversion with pcolor
+ * Test conversion with pcolor
  * @author Thu Huong
+ * @author Simon Thum
  */
 public class ConversionTest {
 	ViewingConditions brightCond = new ViewingConditions(CS_CIECAM02.D65White, 318.31, 20.0, Surrounding.averageSurrounding);
@@ -47,15 +54,7 @@ public class ConversionTest {
 		float[] xyz = new float[]{0.1901f, 0.2f, 0.2178f};
 
 		CS_CIECAM02 csc = new CS_CIECAM02(brightCond);
-		float[] ciecam = csc.fromCIEXYZ(xyz);
-		float[] back_xyz = csc.toCIEXYZ(ciecam);
-
-		System.out.println("XYZtoCIECAM02_1:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("ciecam: "+ ciecam[0] +" "+ ciecam[1] +" "+ ciecam[2] +" "+ ciecam[3] +" "+ ciecam[4] +" "+ ciecam[5] +" "+ ciecam[6] +"\n");
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+		testXYZForwardBackward(xyz, csc, 0.001f);
 	}
 
 	/**
@@ -66,15 +65,7 @@ public class ConversionTest {
 		float[] xyz = new float[]{0.5706f, 0.4306f, 0.3196f};
 
 		CS_CIECAM02 csc = new CS_CIECAM02(darkCond);
-		float[] ciecam = csc.fromCIEXYZ(xyz);
-		float[] back_xyz = csc.toCIEXYZ(ciecam);
-
-		System.out.println("XYZtoCIECAM02_2:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("ciecam: "+ ciecam[0] +" "+ ciecam[1] +" "+ ciecam[2] +" "+ ciecam[3] +" "+ ciecam[4] +" "+ ciecam[5] +" "+ ciecam[6] +"\n");
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+		testXYZForwardBackward(xyz, csc, 0.001f);
 	}
 
 	/**
@@ -85,15 +76,7 @@ public class ConversionTest {
 		float[] xyz = new float[]{0.0353f, 0.0656f, 0.0214f};
 
 		CS_CIECAM02 csc = new CS_CIECAM02(brightCond);
-		float[] ciecam = csc.fromCIEXYZ(xyz);
-		float[] back_xyz = csc.toCIEXYZ(ciecam);
-
-		System.out.println("XYZtoCIECAM02_3:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("ciecam: "+ ciecam[0] +" "+ ciecam[1] +" "+ ciecam[2] +" "+ ciecam[3] +" "+ ciecam[4] +" "+ ciecam[5] +" "+ ciecam[6] +"\n");
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+		testXYZForwardBackward(xyz, csc, 0.001f);
 	}
 
 	/**
@@ -104,15 +87,7 @@ public class ConversionTest {
 		float[] xyz = new float[]{0.1901f, 0.2f, 0.2178f};
 
 		CS_JCh csJCh = new CS_JCh(brightCond);
-		float[] jch = csJCh.fromCIEXYZ(xyz);
-		float[] back_xyz = csJCh.toCIEXYZ(jch);
-
-		System.out.println("XYZtoJCh:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("ciecam: "+ jch[0] +" "+ jch[1] +" "+ jch[2] +"\n");
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+		testXYZForwardBackward(xyz, csJCh, 0.001f);
 	}
 
 	/**
@@ -123,15 +98,7 @@ public class ConversionTest {
 		float[] xyz = new float[]{0.5706f, 0.4306f, 0.3196f};
 
 		CS_Jab csJab = new CS_Jab(darkCond);
-		float[] jab = csJab.fromCIEXYZ(xyz);
-		float[] back_xyz = csJab.toCIEXYZ(jab);
-
-		System.out.println("XYZtoJab:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("Jab: "+ jab[0] +" "+ jab[1] +" "+ jab[2] +"\n");
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+		testXYZForwardBackward(xyz, csJab, 0.001f);
 	}
 
 	/**
@@ -145,11 +112,6 @@ public class ConversionTest {
 		float[] ciecam = csc.fromRGB(rgb);
 		float[] back = csc.toRGB(ciecam);
 
-		System.out.println("RGBtoCIECAM02:");
-		System.out.println("rgb before: "+ rgb[0] +" "+ rgb[1] +" "+ rgb[2]);
-		System.out.println("rgb after: "+ back[0] +" "+ back[1] +" "+ back[2]);
-		System.out.println("ciecam: "+ ciecam[0] +" "+ ciecam[1] +" "+ ciecam[2] +" "+ ciecam[3] +" "+ ciecam[4] +" "+ ciecam[5] +" "+ ciecam[6] +"\n");
-
 		assertArrayEquals(rgb, back, 0.001f);
 	}
 
@@ -161,52 +123,95 @@ public class ConversionTest {
 		float[] rgb = new float[]{0.5f, 0.5f, 0.5f};
 
 		CS_JCh csJCh = new CS_JCh(brightCond);
-		float[] jch = csJCh.fromRGB(rgb);
-		float[] back = csJCh.toRGB(jch);
-
-		System.out.println("RGBtoJCh:");
-		System.out.println("rgb before: "+ rgb[0] +" "+ rgb[1] +" "+ rgb[2]);
-		System.out.println("rgb after: "+ back[0] +" "+ back[1] +" "+ back[2]);
-		System.out.println("JCh: "+ jch[0] +" "+ jch[1] +" "+ jch[2] +"\n");
-
-		assertArrayEquals(rgb, back, 0.001f);
+		testForwardBackward(new sRGB(rgb), csJCh, 0.001f);
+		testRGBForwardBackward(rgb, csJCh, 0.001f);
 	}
 
 	/**
-	 * tests conversion from sRGB to JCh and back. checks if CIECAM02 values are correct.
+	 * tests conversion from sRGB to JCh and back.
 	 */
 	@Test
 	public void RGBtoJab() {
-		float[] rgb = new float[]{0.736f, 0.237f, 0.946f};
-
 		CS_Jab csJab = new CS_Jab(brightCond);
-		float[] jab = csJab.fromRGB(rgb);
-		float[] back = csJab.toRGB(jab);
-
-		System.out.println("RGBtoJab:");
-		System.out.println("rgb before: "+ rgb[0] +" "+ rgb[1] +" "+ rgb[2]);
-		System.out.println("rgb after: "+ back[0] +" "+ back[1] +" "+ back[2]);
-		System.out.println("JCh: "+ jab[0] +" "+ jab[1] +" "+ jab[2] +"\n");
-
-		assertArrayEquals(rgb, back, 0.001f);
+		sRGB test = new sRGB(0.736f, 0.237f, 0.946f);
+		testForwardBackward(test, csJab, 0.001f);
+		testRGBForwardBackward(test.getComponents(), csJab, 0.001f);
 	}
 
 	/**
-	 * tests conversion from CIEXYZ to sRGB and back. 
+	 * tests conversion from CIEXYZ to sRGB and back with PColor sRGB definition.
 	 */
 	@Test
-	public void XYZtoRGB() {
+	public void XYZtoRGBAndBackPColor() {
 		float[] xyz = new float[]{0.0353f, 0.0656f, 0.0214f};
+		testXYZForwardBackward(xyz, CS_sRGB.instance, 0.001f);
+		
+		xyz = new float[]{0.353f, 0.656f, 0.214f};
+		testXYZForwardBackward(xyz, CS_sRGB.instance, 0.001f);
+	}
+	
+	/**
+	 * tests conversion from CIEXYZ to sRGB and back using the standard AWT
+	 * sRGB. This introduces some error which is why we keep {@link CS_sRGB}.
+	 * Needs some more investigation, in principle, and is likely to be platform
+	 * dependent. On my machine it fails (tm).
+	 */
+	@Test(expected = AssertionError.class)
+	public void XYZtoRGBAndBackAWT() {
+		float[] xyz = new float[]{0.0353f, 0.0656f, 0.0214f};
+		testXYZForwardBackward(xyz, ColorSpace.getInstance(ColorSpace.CS_sRGB), 0.001f);
+	}
 
-		CS_sRGB sRGB = CS_sRGB.instance;
-		float[] rgb = sRGB.fromCIEXYZ(xyz);
-		float[] back_xyz = sRGB.toCIEXYZ(rgb);
-
-		System.out.println("XYZtoRGB:");
-		System.out.println("xyz before: "+ xyz[0] +" "+ xyz[1] +" "+ xyz[2]);
-		System.out.println("xyz after: "+ back_xyz[0] +" "+ back_xyz[1] +" "+ back_xyz[2]);
-		System.out.println("rgb: "+ rgb[0] +" "+ rgb[1] +" "+ rgb[2]);
-
-		assertArrayEquals(xyz, back_xyz, 0.001f);
+	@Test(expected = AssertionError.class)
+	public void XYZtoRGBAndBackAWT2() {
+		float[] xyz = new float[]{0.353f, 0.656f, 0.214f};
+		testXYZForwardBackward(xyz, ColorSpace.getInstance(ColorSpace.CS_sRGB), 0.001f);
+	}
+	
+	// test XYZ -> CS -> XYZ
+	private void testXYZForwardBackward(float[] xyz, ColorSpace cs, float delta) {
+		// test color space ops
+		float[] other = cs.fromCIEXYZ(xyz);
+		float[] back_xyz = cs.toCIEXYZ(other);
+		assertArrayEquals(xyz, back_xyz, delta);
+		
+		
+		if (cs.getClass() == CS_CIECAM02.class)
+			return; // no pcolor equiv. for CIECAM02 (why not?)
+		
+		// test equivalent pcolor conversion ops
+		CIEXYZ ciexyz = new CIEXYZ(xyz);
+		PColor otherpcol = PColor.convert(ciexyz, cs);
+		PColor pcback = PColor.convert(otherpcol, CS_CIEXYZ.instance);
+		assertArrayEquals(ciexyz.getComponents(), pcback.getComponents(), delta);
+		
+		// inter-compare method's results (should be equal or very close
+		// as the code paths should be the same)
+		assertArrayEquals(back_xyz, pcback.getComponents(), 0.0000001f);
+	}
+	
+	// test RGB -> CS -> RGB
+	private void testRGBForwardBackward(float[] rgb, ColorSpace cs, float delta) {
+		// test color space ops
+		float[] other = cs.fromRGB(rgb);
+		float[] back_rgb = cs.toRGB(other);
+		assertArrayEquals(rgb, back_rgb, delta);
+		
+		// test equivalent pcolor conversion ops
+		sRGB sRGB = new sRGB(rgb);
+		PColor otherpcol = PColor.convert(sRGB, cs);
+		PColor pcback = PColor.convert(otherpcol, CS_sRGB.instance);
+		assertArrayEquals(sRGB.getComponents(), pcback.getComponents(), delta);
+		
+		// inter-compare method's results (should be equal or very close
+		// as the code paths should be the same)
+		assertArrayEquals(back_rgb, pcback.getComponents(), 0.0000001f);
+	}
+	
+	// test CS_in -> cs_test -> CS_in
+	private void testForwardBackward(PColor in, ColorSpace cs, float delta) {
+		PColor b = PColor.convert(in, cs);
+		PColor test = PColor.convert(b, in.getColorSpace());
+		assertArrayEquals(in.getComponents(), test.getComponents(), delta);
 	}
 }

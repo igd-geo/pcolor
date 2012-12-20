@@ -51,24 +51,6 @@ public class JCh extends PColor {
 	public static final int h = 2;
 
 	/**
-	 * Use a and b correlates derived directly from C and h.
-	 */
-	public static final int QUALITY_STANDARD = 0;
-
-	/**
-	 * Use a and b correlates derived from CIECAM02 model.
-	 */
-	public static final int QUALITY_ENHANCED = 1;
-
-	/**
-	 * 
-	 * @param color color
-	 */
-	public JCh(PColor color) {
-		this(color, CS_JCh.defaultInstance);
-	}
-
-	/**
 	 * 
 	 * @param color color
 	 * @param cspace JCh color space
@@ -100,8 +82,8 @@ public class JCh extends PColor {
 	}
 
 	/**
-	 * 
-	 *@param J Lightness
+	 * Full ctor. Interprets correlates in the given space.
+	 * @param J Lightness
 	 * @param C Chroma
 	 * @param h Hue
 	 * @param alpha alpha value
@@ -276,6 +258,6 @@ public class JCh extends PColor {
 
     @Override
 	public JCh clone() {
-		return new JCh(this);
+		return new JCh(this, (CS_JCh) this.getColorSpace());
 	}
 }

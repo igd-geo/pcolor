@@ -52,9 +52,9 @@ public class CS_sRGB extends ColorSpace {
 	}
 	
 	/**
-	 * a pcolor-based sRGB instance
+	 * a pcolor-based sRGB instance, which is probably more accurate than the AWT one.
 	 */
-	public static final CS_sRGB instance = new CS_sRGB();
+	public static final ColorSpace instance = new CS_sRGB();
 
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {

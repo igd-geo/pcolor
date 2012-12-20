@@ -88,7 +88,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	public static double[] E = new double[] {100.0, 100.0, 100.0};
 
 	/**
-	 * default viewing conditions for D64 white-point, 64 cd/m2 average luminance and 20 cd/m2 adaption luminance
+	 * default viewing conditions for D65 white-point, 64 cd/m2 average luminance and 20 cd/m2 adaption luminance
 	 */
 	protected static ViewingConditions defaultContext = new ViewingConditions(D65White, 64.0, 20.0, Surrounding.averageSurrounding);
 
@@ -100,16 +100,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	/**
 	 * the default instance operating under the {@link #defaultContext} viewing conditions.
 	 */
-	public static final CS_CIECAM02 defaultInstance = new CS_CIECAM02();
-
-	/**
-	 * default constructor
-	 * creates a CIECAM02 color space with default context
-	 */
-	protected CS_CIECAM02() {
-		super(TYPE_7CLR, 7);
-		context = defaultContext;
-	}
+	public static final CS_CIECAM02 defaultInstance = new CS_CIECAM02(defaultContext);
 
 	/**
 	 * @param XYZWhitePoint XYZ white point
@@ -503,7 +494,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * @return A float value containing color's lightness correlate.
 	 */
 	public static float getLightness(PColor color) {
-		return getLightness(color, new CS_CIECAM02());
+		return getLightness(color, CS_CIECAM02.defaultInstance);
 	}
 
 	/**

@@ -47,15 +47,7 @@ public class Jab extends PColor {
 	public static final int b = 2;
 
 	/**
-	 * 
-	 * @param color color
-	 */
-	public Jab(PColor color) {
-		this(color, CS_Jab.defaultInstance);
-	}
-
-	/**
-	 * 
+	 * Construct a Jab from any PColor, eventually including a light-preserving conversion.
 	 * @param color color
 	 * @param cspace Jab color space
 	 */
@@ -72,6 +64,14 @@ public class Jab extends PColor {
 	public Jab(float J, float a, float b) {
 		this(J, a, b, 1f);
 	}
+	
+	/**
+	 * Creates a Jab instance which reflects the input appearance.
+	 * @param color color
+	 */
+	public Jab(float[] color) {
+		super(CS_Jab.defaultInstance, color, color.length == 4 ? color[3] : 1);
+	}
 
 	/**
 	 * 
@@ -85,7 +85,7 @@ public class Jab extends PColor {
 	}
 
 	/**
-	 * 
+	 * Full ctor. Interprets correlates in the given space.
 	 * @param J Lightness
 	 * @param a Red-Green
 	 * @param b Yellow-Blue
@@ -105,6 +105,6 @@ public class Jab extends PColor {
 
 	@Override
 	public Jab clone() {
-		return new Jab(this);
+		return new Jab(this, (CS_Jab) this.getColorSpace());
 	}
 }

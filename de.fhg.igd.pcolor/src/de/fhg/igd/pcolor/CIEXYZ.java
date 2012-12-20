@@ -20,11 +20,13 @@
 
 package de.fhg.igd.pcolor;
 
+import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
+
 
 /**
- * This class contains Pcolors in the CIE XYZ colorspace. While the XYZ
- * colorspace serves as the interchange format between all others, it is not
- * used in Painterly to represent permanent color data.
+ * This class contains colors in the CIE XYZ colorspace. While the XYZ
+ * colorspace serves as the interchange format between all others, it is
+ * not suitable for perceptual tasks.
  */
 public class CIEXYZ extends PColor {
 	/**
@@ -41,11 +43,20 @@ public class CIEXYZ extends PColor {
 	public static final int Z = 2;
 
 	/**
-	 * 
+	 * Creates a CIEXYZ instance which reflects the input color.
 	 * @param color color
 	 */
 	public CIEXYZ(PColor color) {
-		super(de.fhg.igd.pcolor.colorspace.CS_CIEXYZ.instance, color);
+		super(CS_CIEXYZ.instance, color);
+	}
+	
+	/**
+	 * Creates a CIEXYZ instance which reflects the input color.
+	 * @param color color
+	 */
+	public CIEXYZ(float[] color) {
+		super(CS_CIEXYZ.instance, color, 
+				color.length == 4 ? color[3] : 1);
 	}
 
 	/**
@@ -66,7 +77,7 @@ public class CIEXYZ extends PColor {
 	 * @param alpha alpha value
 	 */
 	public CIEXYZ(float X, float Y, float Z, float alpha) {
-		super(de.fhg.igd.pcolor.colorspace.CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
+		super(CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
 	}
 
 	@Override

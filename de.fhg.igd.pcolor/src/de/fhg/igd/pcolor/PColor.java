@@ -22,14 +22,31 @@ package de.fhg.igd.pcolor;
 
 import java.awt.color.ColorSpace;
 
+import de.fhg.igd.pcolor.colorspace.CS_CIELab;
+import de.fhg.igd.pcolor.colorspace.CS_JCh;
+import de.fhg.igd.pcolor.colorspace.CS_Jab;
+
 /**
  * PColors, like java.awt.Colors, consist of two major components: The color
  * itself as represented by an array of float components as well as an alpha
  * channel, and a colorspace object that is responsible for transforming these
  * components to and from the CIE XYZ colorspace.
  * <p>
- * PColors typically use a whitepoint of D65 (the same as sRGB), an average surround
- * luminance La of 64 cd/m2, and a background Yb of 20% gray (CIECAM02 convention).
+ * PColors typically use a whitepoint of D65 (the same as sRGB), an average
+ * surround luminance La of 64 cd/m2, and a background Yb of 20% gray (CIECAM02
+ * convention).
+ * 
+ * PColors can be converted freely, for which there are type-safe convertFrom
+ * methods and a static {@link #convert(PColor, ColorSpace)} helper. These
+ * mostly avoid actual conversion if possible and if they perform, they use XYZ
+ * as the intermediary. Conversion retains lighting but not necessarily
+ * appearance correlates.
+ * 
+ * PColors based on CIECAM02 (Jab and JCh, currently) may also be (re)interpreted,
+ * i.e. one may try to reproduce appearance correlates under different viewing
+ * conditions. This is currently possible only using the
+ * {@link JCh#JCh(float, float, float, float, CS_JCh)} and
+ * {@link Jab#Jab(float, float, float, float, CS_Jab)} constructors.
  */
 public abstract class PColor implements Cloneable {
 
@@ -47,7 +64,7 @@ public abstract class PColor implements Cloneable {
 	private float alpha;
 
 	/**
-	 * 
+	 * This constructor creates a PColor, converting if necessary.
 	 * @param cspace color space
 	 * @param color color
 	 */
@@ -69,7 +86,7 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * 
+	 * This constructor creates a PColor with strictly the values given.
 	 * @param cspace color space
 	 * @param components components
 	 * @param alpha alpha value
@@ -215,14 +232,11 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * This method provides arbitrary conversion between
-	 * PColor objects.
+	 * This method provides arbitrary conversion between PColor objects. It
+	 * reuses the memory allocated for color.
 	 * 
-	 * PColor objects should
-	 * provide constructors in the form of PColor(PColor<?> color) for
-	 * convenience that do the same thing.
-	 * 
-	 * @param color The color to be converted
+	 * @param color
+	 *            The color to be converted
 	 * @return A PColor in its native colorspace.
 	 */
 	public abstract PColor convertFrom(PColor color);
@@ -242,4 +256,40 @@ public abstract class PColor implements Cloneable {
 
 	@Override
 	public abstract PColor clone();
+	
+	/**
+	 * Convert a PColor instance to another color space, optimising the case
+	 * where no actual conversion has to take place. In that case, the color is
+	 * just returned. The conversion goes over XYZ, i.e. will try to preserve
+	 * physical lighting not appearance.
+	 * 
+	 * Implementation note: the targetSpace is assumed as default for Lab, sRGB
+	 * and XYZ. Except for Lab, that is intentional as there is a single
+	 * reference for sRGB and XYZ. The Lab implementation is limited.
+	 * 
+	 * @param in
+	 *            the color to be converted
+	 * @param targetSpace
+	 *            the target color space
+	 * @return a PColor object hat conforms to the target color space
+	 */
+	public static PColor convert(PColor in, ColorSpace targetSpace) {
+		if (in.getColorSpace().equals(targetSpace))
+			return in;
+		if (targetSpace instanceof CS_Jab)
+			return new Jab(in, (CS_Jab)targetSpace);
+		else if (targetSpace instanceof CS_JCh)
+			return new JCh(in, (CS_JCh)targetSpace);
+		// we could check the getType() type for Lab but Lab has an illuminant
+		// we assume to be E. Better throw than pretend we handle this.
+		else if (targetSpace instanceof CS_CIELab)
+			return new CIELab(in /*, (CS_CIELab)targetSpace*/ );
+		else if (targetSpace.isCS_sRGB())
+			return new sRGB(in /*, (CS_sRGB)targetSpace */ );
+		else if (targetSpace.getType() == ColorSpace.CS_CIEXYZ)
+			return new CIEXYZ(in /*, (CS_CIEXYZ)targetSpace*/ );
+		else 
+			throw new IllegalStateException(
+					"Target space not supported: " + targetSpace.toString());
+	}
 }
