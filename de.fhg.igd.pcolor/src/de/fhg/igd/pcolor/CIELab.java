@@ -75,8 +75,4 @@ public class CIELab extends PColor {
 		return new CIELab(color);
 	}
 
-	@Override
-	public CIELab clone() {
-		return new CIELab(this);
-	}
 }

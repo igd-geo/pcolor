@@ -276,8 +276,4 @@ public class JCh extends PColor {
 		return new JCh(color, (CS_JCh)this.getColorSpace());
 	}
 
-    @Override
-	public JCh clone() {
-		return new JCh(this, (CS_JCh) this.getColorSpace());
-	}
 }

@@ -94,9 +94,5 @@ public class sRGB extends PColor {
 			return (sRGB)color;
 		return new sRGB(color);
 	}
-	
-    @Override
-	public sRGB clone() {
-		return new sRGB(this);
-	}
+
 }

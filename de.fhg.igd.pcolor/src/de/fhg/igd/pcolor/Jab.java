@@ -132,8 +132,4 @@ public class Jab extends PColor {
 		return new Jab(color, (CS_Jab)this.getColorSpace());
 	}
 
-	@Override
-	public Jab clone() {
-		return new Jab(this, (CS_Jab) this.getColorSpace());
-	}
 }

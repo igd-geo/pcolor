@@ -62,11 +62,11 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * the components
 	 */
-	private float[] components;
+	private final float[] components;
 	/**
 	 * alpha value
 	 */
-	private float alpha;
+	private final float alpha;
 
 	/**
 	 * This constructor creates a PColor, converting if necessary.
@@ -133,9 +133,13 @@ public abstract class PColor implements Cloneable {
 		return colorspace;
 	}
 
-    /**
-     * Returns a reference to this color's components array.
-     */
+	/**
+	 * Returns a reference to this color's components array. <b>This array MUST
+	 * NOT BE MODIFED! Behaviour is undefined if you modify this array.</b>
+	 * <p>
+	 * PColors are designed to be immutable, this loophole merely exists for
+	 * performance reasons. Modify at your peril.
+	 */
 	public float[] getComponents() {
 		return components;
 	}
@@ -152,31 +156,6 @@ public abstract class PColor implements Cloneable {
     }
 
 	/**
-	 * Copies the values in the specified float array to this color's components
-	 * array. Performance is undefined when the length of the specified array
-	 * differs from that of this color's components.
-	 * 
-	 * @param components
-	 */
-	public void setComponents(float[] components) {
-		System.arraycopy(components, 0, this.components, 0, components.length);
-	}
-
-	/**
-	 * Copies the values in the specified float array to this color's components
-	 * array as well as its alpha channel; the new alpha value should be the
-	 * last entry in the specified float[], following the color values.
-	 * Performance is undefined when the length of the specified array differs
-	 * from that of this color's components + 1.
-	 * 
-	 * @param components
-	 */
-	public void setRawComponents(float[] components) {
-		System.arraycopy(components, 0, this.components, 0, components.length - 1);
-		setAlpha(components[components.length - 1]);
-	}
-
-	/**
 	 * returns the component at the given index
 	 * @param component component index
 	 * @return component
@@ -186,28 +165,11 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * sets the component to a given value
-	 * @param component component index
-	 * @param value value
-	 */
-	public void set(int component, float value) {
-		components[component] = value;
-	}
-
-	/**
 	 * returns alpha
 	 * @return alpha
 	 */
 	public float getAlpha() {
 		return alpha;
-	}
-
-	/**
-	 * sets alpha to given value
-	 * @param alpha new value
-	 */
-	public void setAlpha(float alpha) {
-		this.alpha = alpha;
 	}
 
 	/**
@@ -237,8 +199,7 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * This method provides arbitrary conversion between PColor objects. It
-	 * reuses the memory allocated for color.
+	 * This method provides arbitrary conversion between PColor objects.
 	 * 
 	 * @param color
 	 *            The color to be converted
@@ -273,7 +234,10 @@ public abstract class PColor implements Cloneable {
 	}
 
 	@Override
-	public abstract PColor clone();
+	protected PColor clone() {
+		// PColors are immutable
+		return this;
+	}
 	
 	/**
 	 * Convert a PColor instance to another color space, optimising the case

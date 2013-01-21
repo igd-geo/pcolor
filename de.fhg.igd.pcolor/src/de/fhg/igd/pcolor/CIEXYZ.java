@@ -88,8 +88,4 @@ public class CIEXYZ extends PColor {
 		return new CIEXYZ(color);
 	}
 
-	@Override
-	public CIEXYZ clone() {
-		return new CIEXYZ(this);
-	}
 }
