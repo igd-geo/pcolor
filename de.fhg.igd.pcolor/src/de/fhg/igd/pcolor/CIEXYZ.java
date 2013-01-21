@@ -25,22 +25,23 @@ import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 
 /**
  * This class contains colors in the CIE XYZ colorspace. While the XYZ
- * colorspace serves as the interchange format between all others, it is
- * not suitable for perceptual tasks.
+ * colorspace serves as the interchange space between all others, it is not
+ * suitable for perceptual tasks. It is a linear intensity space based on (and
+ * not to be confused with) the L, M, S primaries found in the human retina.
  */
 public class CIEXYZ extends PColor {
 	/**
-	 * Red
+	 * X tristimulus value
 	 */
-	public static final int X = 0;
+	public static final int X = CS_CIEXYZ.X;
 	/**
-	 * Green
+	 * Y tristimulus value, also known as luminance
 	 */
-	public static final int Y = 1;
+	public static final int Y = CS_CIEXYZ.Y;
 	/**
-	 * Blue
+	 * Z tristimulus value
 	 */
-	public static final int Z = 2;
+	public static final int Z = CS_CIEXYZ.Z;
 
 	/**
 	 * Creates a CIEXYZ instance which reflects the input color.

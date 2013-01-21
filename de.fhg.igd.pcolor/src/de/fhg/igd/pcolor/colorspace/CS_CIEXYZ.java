@@ -32,16 +32,17 @@ import java.awt.color.ColorSpace;
 public class CS_CIEXYZ extends ColorSpace {
 
 	private static final long serialVersionUID = -7923913005471667746L;
+	
 	/**
-	 * Red
+	 * X tristimulus value
 	 */
 	public static final int X = 0;
 	/**
-	 * Green
+	 * Y tristimulus value, also known as luminance
 	 */
 	public static final int Y = 1;
 	/**
-	 * Blue
+	 * Z tristimulus value
 	 */
 	public static final int Z = 2;
 

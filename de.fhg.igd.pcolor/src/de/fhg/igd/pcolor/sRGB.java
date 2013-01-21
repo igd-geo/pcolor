@@ -25,8 +25,10 @@ import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 
 /**
  * sRGB is a prevalent colorspace in computer graphics, the standard on the web
- * also adopted by Java's libraries. If you don't know which color space your're
- * in, you're likely in sRGB. Normalised to 0..1.
+ * also adopted by Java's libraries.
+ * <p>
+ * If you don't know which color space you're in, you're likely in sRGB. Note
+ * this class works normalised to 0..1, not 0..255.
  */
 public class sRGB extends PColor {
 	/**

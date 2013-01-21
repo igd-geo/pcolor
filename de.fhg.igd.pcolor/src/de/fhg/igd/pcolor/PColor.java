@@ -27,26 +27,31 @@ import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
 
 /**
- * PColors, like java.awt.Colors, consist of two major components: The color
- * itself as represented by an array of float components as well as an alpha
- * channel, and a colorspace object that is responsible for transforming these
- * components to and from the CIE XYZ colorspace.
+ * PColors represent single colors and provide operations on them.
+ * <p>
+ * PColors, like {@link java.awt.Color}s, consist of two major components: The
+ * color itself as represented by an array of float components as well as an
+ * alpha channel, and a colorspace object that describes the color space in
+ * which the components are to be interpreted. Unlike its cousin, it avoids
+ * simplistic operations such as darker(). It is also responsible for
+ * transforming the components to and from the CIE XYZ reference colorspace.
  * <p>
  * PColors typically use a whitepoint of D65 (the same as sRGB), an average
  * surround luminance La of 64 cd/m2, and a background Yb of 20% gray (CIECAM02
  * convention).
- * 
+ * <p>
  * PColors can be converted freely, for which there are type-safe convertFrom
  * methods and a static {@link #convert(PColor, ColorSpace)} helper. These
- * mostly avoid actual conversion if possible and if they perform, they use XYZ
- * as the intermediary. Conversion retains lighting but not necessarily
- * appearance correlates.
- * 
- * PColors based on CIECAM02 (Jab and JCh, currently) may also be (re)interpreted,
- * i.e. one may try to reproduce appearance correlates under different viewing
- * conditions. This is currently possible only using the
- * {@link JCh#JCh(float, float, float, float, CS_JCh)} and
- * {@link Jab#Jab(float, float, float, float, CS_Jab)} constructors.
+ * mostly avoid actual conversion if possible and if not, they use XYZ as the
+ * intermediary. This means conversion maintains lighting but not necessarily
+ * appearance correlates, i.e. the stimulus remains the same without addressing
+ * the appearance.
+ * <p>
+ * PColors based on CIECAM02 (Jab and JCh, currently) may also be transposed,
+ * i.e. one may try to reproduce identical appearance correlates under different
+ * viewing conditions. This usually leads to another color stimulus that,
+ * however, is perceived to look the same given it appears in the target viewing
+ * conditions. See {@link #transpose(ColorSpace)}.
  */
 public abstract class PColor implements Cloneable {
 
@@ -242,12 +247,12 @@ public abstract class PColor implements Cloneable {
 	public abstract PColor convertFrom(PColor color);
 
 	/**
-	 * Converts this color to the colorspace specified by c1
+	 * Converts this color to the colorspace specified by the color parameter.
 	 * 
 	 * @param color -
 	 *            a PColor containing the colorspace to which this color will be
 	 *            converted.
-	 * @return A new PColor<E> in the ColorSpace of c1.
+	 * @return A new PColor<E> in the ColorSpace of color.
 	 */
 	@SuppressWarnings("unchecked")
 	public <C extends PColor> C convertTo(C color) {
@@ -261,7 +266,7 @@ public abstract class PColor implements Cloneable {
 	 * Convert a PColor instance to another color space, optimising the case
 	 * where no actual conversion has to take place. In that case, the color is
 	 * just returned. The conversion goes over XYZ, i.e. will try to preserve
-	 * physical lighting not appearance.
+	 * optical lighting not appearance.
 	 * 
 	 * Implementation note: the targetSpace is assumed as default for Lab, sRGB
 	 * and XYZ. Except for Lab, that is intentional as there is a single

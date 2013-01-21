@@ -20,15 +20,24 @@
 
 package de.fhg.igd.pcolor;
 
+import java.awt.color.ColorSpace;
+
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
 
 /**
- * Jab is a three-component space derived from the CIECAM02 color appearance
- * model, where J represents lightness, a represents red-green color, and b
- * represents yellow-blue color. The advantage of using CIECAM02's red-green (a)
- * and yellow-blue (b) correlates is that the colorspace is Euclidian (as
- * opposed to JCh, which uses a polar coordinate system) and can therefore be
- * used for convolution filtering or rescaling.
+ * Jab is a three-component sub-space of the CIECAM02 color appearance model,
+ * where J represents lightness, a represents red-green color, and b represents
+ * yellow-blue color. The advantage of using CIECAM02's red-green (a) and
+ * yellow-blue (b) correlates is that the colorspace is Euclidian (as opposed to
+ * JCh, which uses a polar coordinate system) and can therefore be used for
+ * color distance measurement or perceptual interpolation.
+ * <p>
+ * Note that optical (light-based) processes such as casting shadows or
+ * determining the average light response of a distant phenomenon (scaling)
+ * <b>do happen in the optical domain</b>. We just perceive the end result. In
+ * other words, <b>do NOT filter, scale, convolve etc. in this space</b> unless
+ * you have very specific reasons to do so. Most likely, <b>doing so is just
+ * plain wrong!<b/>
  */
 public class Jab extends PColor {
 	/**
@@ -47,7 +56,8 @@ public class Jab extends PColor {
 	public static final int b = 2;
 
 	/**
-	 * Construct a Jab from any PColor, eventually including a light-preserving conversion.
+	 * Construct a Jab from any PColor, eventually involving a 
+	 * stimulus-preserving conversion.
 	 * @param color color
 	 * @param cspace Jab color space
 	 */
@@ -56,7 +66,8 @@ public class Jab extends PColor {
 	}
 
 	/**
-	 * with 1 as alpha value
+	 * Creates a Jab instance which reflects the input appearance under default
+	 * viewing conditions with opaque alpha.
 	 * @param J Lightness
 	 * @param a Red-Green
 	 * @param b Yellow-Blue
@@ -66,7 +77,8 @@ public class Jab extends PColor {
 	}
 	
 	/**
-	 * Creates a Jab instance which reflects the input appearance.
+	 * Creates a Jab instance which reflects the input appearance under default
+	 * viewing conditions.
 	 * @param color color
 	 */
 	public Jab(float[] color) {
@@ -74,7 +86,8 @@ public class Jab extends PColor {
 	}
 
 	/**
-	 * 
+	 * Creates a Jab instance which reflects the input appearance under default
+	 * viewing conditions.
 	 * @param J Lightness
 	 * @param a Red-Green
 	 * @param b Yellow-Blue

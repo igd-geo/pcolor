@@ -28,30 +28,31 @@ import de.fhg.igd.pcolor.util.ColorTools;
 /**
  * JCh is a three-component space derived from the CIECAM02 color appearance
  * model, where J represents lightness, C represents chroma, and h represents
- * hue angle. It is thought to be the best currently-implemented means of
- * representing value, and so it is employed wherever value is used as a metric.
+ * hue angle.
  * <p>
  * Note the the conversion to and from CIECAM02 is somewhat expensive; it is
  * best to code such that it need be performed as infrequently as possible.
  */
 public class JCh extends PColor {
+
 	/**
 	 * Lightness
 	 */
-	public static final int J = 0;
+	public static final int J = CS_JCh.J;
 
 	/**
 	 * Chroma
 	 */
-	public static final int C = 1;
+	public static final int C = CS_JCh.C;
 
 	/**
 	 * Hue
 	 */
-	public static final int h = 2;
+	public static final int h = CS_JCh.h;
 
 	/**
-	 * 
+	 * Construct a JCh from any PColor, eventually involving a 
+	 * stimulus-preserving conversion.
 	 * @param color color
 	 * @param cspace JCh color space
 	 */
@@ -60,7 +61,8 @@ public class JCh extends PColor {
 	}
 
 	/**
-	 * with 1 as alpha
+	 * Creates a Jab instance which reflects the input appearance under default
+	 * viewing conditions with opaque alpha.
 	 * @param J Lightness
 	 * @param C Chroma
 	 * @param h Hue
@@ -70,8 +72,8 @@ public class JCh extends PColor {
 	}
 
 	/**
-	 * 
-	 * 
+	 * Creates a Jab instance which reflects the input appearance under default
+	 * viewing conditions.
 	 * @param J Lightness
 	 * @param C Chroma
 	 * @param h Hue
