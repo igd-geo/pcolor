@@ -20,6 +20,7 @@
 
 package de.fhg.igd.pcolor;
 
+import java.awt.color.ColorSpace;
 import java.util.Comparator;
 
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
@@ -250,6 +251,22 @@ public class JCh extends PColor {
 			}
 		}
     }
+    
+	@Override
+	public PColor transpose(ColorSpace to) {
+		// TODO prepend conversion so we can transpose to any perceptual space
+		if (to instanceof CS_JCh) {
+			float[] components = getComponents();
+			return new JCh(
+					components[J],
+					components[C],
+					components[h],
+					getAlpha(),
+					(CS_JCh) to);
+		} else {
+			throw new UnsupportedOperationException("this method supports only JCh target spaces");
+		}
+	}
 
     @Override
 	public JCh convertFrom(PColor color) {

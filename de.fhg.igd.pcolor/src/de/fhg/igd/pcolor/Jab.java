@@ -108,6 +108,22 @@ public class Jab extends PColor {
 	public Jab(float J, float a, float b, float alpha, CS_Jab cspace) {
 		super(cspace, new float[] {J, a, b}, alpha);
 	}
+	
+	@Override
+	public PColor transpose(ColorSpace to) {
+		// TODO prepend conversion so we can transpose to any perceptual space
+		if (to instanceof CS_Jab) {
+			float[] components = getComponents();
+			return new Jab(
+					components[J],
+					components[a],
+					components[b],
+					getAlpha(),
+					(CS_Jab) to);
+		} else {
+			throw new UnsupportedOperationException("this method supports only Jab target spaces");
+		}
+	}
 
 	@Override
 	public Jab convertFrom(PColor color) {

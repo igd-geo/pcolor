@@ -258,6 +258,20 @@ public abstract class PColor implements Cloneable {
 	public <C extends PColor> C convertTo(C color) {
 		return (C)(color.convertFrom(this));
 	}
+	
+	/**
+	 * Transposes (n.b. the term may not be established) this color (iff defined
+	 * by appearance correlates) to another color which has the same appearance
+	 * correlates within other viewing conditions, as represented by the given
+	 * color space.
+	 * 
+	 * @param to
+	 *            the target color space (and viewing conditions)
+	 * @return the transposed color
+	 */
+	public PColor transpose(ColorSpace to) {
+		throw new UnsupportedOperationException("transposing is only available for perceptually uniform color spaces, e.g. CIECAM02-based ones.");
+	}
 
 	@Override
 	public abstract PColor clone();
