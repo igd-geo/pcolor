@@ -223,12 +223,13 @@ public class JCh extends PColor {
     	double[] result = new double[4];
 
     	CS_JCh cspace1 = (CS_JCh)color.getColorSpace();
-    	double M = cspace1.calculateM(color.get(1));
+    	double M = cspace1.calculateM(color.get(JCh.C));
     	double MPrime = (1d / 0.0228) * Math.log(1d + 0.0228 * M);
 
-    	result[0] = ((1 + 100 * 0.007) * color.get(0)) / (1d + 0.007 * color.get(0));
-    	result[1] = MPrime * Math.cos(Math.toRadians(color.get(2)));
-    	result[2] = MPrime * Math.sin(Math.toRadians(color.get(2)));
+    	result[0] = ((1 + 100 * 0.007) * color.get(JCh.J)) / (1d + 0.007 * color.get(JCh.J));
+    	float hue = color.get(JCh.h);
+		result[1] = MPrime * Math.cos(Math.toRadians(hue));
+    	result[2] = MPrime * Math.sin(Math.toRadians(hue));
     	result[3] = color.getAlpha();
 
     	return result;

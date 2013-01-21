@@ -45,7 +45,7 @@ public class sRGB extends PColor {
 	public static final int B = 2;
 	
 	/**
-	 * 
+	 * Create an sRGB representation of any PColor.
 	 * @param color color
 	 */
 	public sRGB(PColor color) {
@@ -53,7 +53,7 @@ public class sRGB extends PColor {
 	}
 	
 	/**
-	 * with 1 as alpha
+	 * Construct an opaque sRGB instance.
 	 * @param R Red
 	 * @param G Green
 	 * @param B Blue
@@ -63,7 +63,7 @@ public class sRGB extends PColor {
 	}
 	
 	/**
-	 * 
+	 * Full ctor.
 	 * @param R Red 
 	 * @param G Green
 	 * @param B Blue
@@ -77,7 +77,7 @@ public class sRGB extends PColor {
 	 * @param rgba array of floats in rgba order (a is optional) 
 	 */
 	public sRGB(float[] rgba) {
-		super(CS_sRGB.instance, new float[] {rgba[0], rgba[1], rgba[2]}, rgba.length > 3 ? rgba[3] : 1);
+		super(CS_sRGB.instance, new float[] {rgba[R], rgba[G], rgba[B]}, rgba.length > 3 ? rgba[3] : 1);
 	}
 	
 	/**

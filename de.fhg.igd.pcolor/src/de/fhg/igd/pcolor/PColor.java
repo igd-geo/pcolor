@@ -260,10 +260,9 @@ public abstract class PColor implements Cloneable {
 	}
 	
 	/**
-	 * Transposes (n.b. the term may not be established) this color (iff defined
-	 * by appearance correlates) to another color which has the same appearance
-	 * correlates within other viewing conditions, as represented by the given
-	 * color space.
+	 * Transposes this color (if defined by appearance correlates) to another
+	 * color which has the same appearance correlates within other viewing
+	 * conditions, as represented by the given color space.
 	 * 
 	 * @param to
 	 *            the target color space (and viewing conditions)

@@ -28,7 +28,7 @@ import de.fhg.igd.pcolor.JCh;
  * color appearance correlates. The advantage of using CIECAM02's red-green (a) and
  * yellow-blue (b) correlates is that the colorspace is Euclidian (as opposed to
  * JCh, which uses a polar coordinate system) and can therefore be used for
- * perceptual difference estimation and other perceptually linear operations.
+ * perceptual difference estimation and other perceptually proportional operations.
  */
 public class CS_Jab extends CS_CIECAM02 {
 

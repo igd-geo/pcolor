@@ -104,7 +104,7 @@ public class ColorTools {
 	 * "delta E" distance based on Lab, i.e, is closer to the ideal that unity
 	 * is equivalent to a "just noticeable distance". The Jab space is the one
 	 * defined by {@link CS_Jab#defaultInstance} If you want to compare across
-	 * viewing conditions, use the {@link #perceptualDifference(Jab, Jab)}
+	 * viewing conditions, use the {@link #distance(Jab, Jab)}
 	 * overload.
 	 * 
 	 * @see JCh#distance(JCh, JCh)
@@ -122,7 +122,7 @@ public class ColorTools {
 	 * "delta E" distance based on Lab, i.e, is closer to the ideal that unity
 	 * is equivalent to a "just noticeable distance". The Jab space is wholly
 	 * defined by the CIECAM viewing conditions. If you want to compare across
-	 * viewing conditions, use the {@link #perceptualDifference(Jab, Jab)}
+	 * viewing conditions, use the {@link #distance(Jab, Jab)}
 	 * overload.
 	 * 
 	 * @see JCh#distance(JCh, JCh)
