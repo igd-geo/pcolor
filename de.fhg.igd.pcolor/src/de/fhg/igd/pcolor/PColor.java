@@ -70,11 +70,13 @@ public abstract class PColor implements Cloneable {
 
 	/**
 	 * This constructor creates a PColor, converting if necessary.
-	 * @param cspace color space
-	 * @param color color
+	 * @param cspace color space in which the constructed color shall be
+	 * @param color the source color
 	 */
 	public PColor(ColorSpace cspace, PColor color) {
 		ColorSpace space = color.getColorSpace();
+		if (color.getComponents().length != cspace.getNumComponents())
+			throw new IllegalArgumentException("No. of components in array does not match colorspace components");
 		if(space.equals(cspace)) {
 			this.colorspace = cspace;
 			float[] colorComponents = color.getComponents();
@@ -91,12 +93,14 @@ public abstract class PColor implements Cloneable {
 	}
 
 	/**
-	 * This constructor creates a PColor with strictly the values given.
+	 * This constructor creates a PColor with strictly the values/objects given.
 	 * @param cspace color space
 	 * @param components components
 	 * @param alpha alpha value
 	 */
 	public PColor(ColorSpace cspace, float[] components, float alpha) {
+		if (components.length != cspace.getNumComponents())
+			throw new IllegalArgumentException("No. of components in array does not match colorspace components");
 		this.colorspace = cspace;
 		this.components = components;
 		this.alpha = alpha;
@@ -175,7 +179,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * A quick check if the color and alpha are in range, allowing
 	 * for head/footroom WRT the colorspace's range. Alpha is always
-	 * checked to fall in the 0..1 range.
+	 * checked to fall within the 0..1 range.
 	 * @param footroom the footroom to allow for
 	 * @param headroom the headroom to allow for
 	 * @return
@@ -319,6 +323,60 @@ public abstract class PColor implements Cloneable {
 			return new sRGB(in /*, (CS_sRGB)targetSpace */ );
 		else if (targetSpace.getType() == ColorSpace.CS_CIEXYZ)
 			return new CIEXYZ(in /*, (CS_CIEXYZ)targetSpace*/ );
+		else 
+			throw new IllegalStateException(
+					"Target space not supported: " + targetSpace.toString());
+	}
+	
+	/**
+	 * Creates PColor instances based on components and one of the PColor colorspaces.
+	 * @param targetSpace the target colorspace (from the PColor suite)
+	 * @param components the components
+	 * @return a {@link PColor} instance
+	 */
+	public static PColor create(ColorSpace targetSpace, float[] components) {
+		if (components.length == targetSpace.getNumComponents()) {
+			return create(targetSpace, components, 1);
+		} else if (components.length == targetSpace.getNumComponents() + 1) {
+			float[] comps = new float[targetSpace.getNumComponents()];
+			System.arraycopy(components, 0,
+					comps, 0, targetSpace.getNumComponents());
+			return create(targetSpace, comps, components[targetSpace.getNumComponents()] );
+		} else {
+			throw new IllegalArgumentException("Number of components in array does not match " +
+					"the colorspace, even when accounting for alpha.");
+		}
+	}
+	
+	/**
+	 * Creates PColor instances based on components and one of the PColor colorspaces.
+	 * @param targetSpace the target colorspace (from the PColor suite)
+	 * @param components the components
+	 * @param alpha the alpha value
+	 * @return a {@link PColor} instance
+	 */
+	public static PColor create(ColorSpace targetSpace, float[] components, float alpha) {
+		if (targetSpace instanceof CS_Jab)
+			return new Jab(components, alpha, (CS_Jab)targetSpace);
+		else if (targetSpace instanceof CS_JCh)
+			return new JCh(components, alpha, (CS_JCh)targetSpace);
+		// we could check the getType() type for Lab but Lab has an illuminant
+		// we assume to be E. Better throw than pretend we handle this.
+		else if (targetSpace instanceof CS_CIELab)
+			return new CIELab(components[CS_CIELab.L], 
+					components[CS_CIELab.a], 
+					components[CS_CIELab.b],
+					alpha /*, (CS_CIELab)targetSpace*/ );
+		else if (targetSpace.isCS_sRGB())
+			return new sRGB(components[sRGB.R],
+					components[sRGB.G],
+					components[sRGB.B],
+					alpha);
+		else if (targetSpace.getType() == ColorSpace.CS_CIEXYZ)
+			return new CIEXYZ(components[CIEXYZ.X],
+					components[CIEXYZ.Y],
+					components[CIEXYZ.Z],
+					alpha);
 		else 
 			throw new IllegalStateException(
 					"Target space not supported: " + targetSpace.toString());

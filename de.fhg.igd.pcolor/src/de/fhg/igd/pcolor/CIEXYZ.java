@@ -56,8 +56,7 @@ public class CIEXYZ extends PColor {
 	 * @param color color
 	 */
 	public CIEXYZ(float[] color) {
-		super(CS_CIEXYZ.instance, color, 
-				color.length == 4 ? color[3] : 1);
+		super(CS_CIEXYZ.instance, color, 1);
 	}
 
 	/**

@@ -95,6 +95,16 @@ public class JCh extends PColor {
 	public JCh(float J, float C, float h, float alpha, CS_JCh cspace) {
 		super(cspace, new float[] {J, C, h}, alpha);
 	}
+	
+	/**
+	 * Full ctor. Interprets correlates in the given space.
+	 * @param cspace JCh color space
+	 * @param alpha alpha value
+	 * @param comp the components array
+	 */
+	public JCh(float[] comp, float alpha, CS_JCh cspace) {
+		super(cspace, comp.clone(), alpha);
+	}
 
 	/**
 	 * Calculates the mean JCh color in an array of JCh colors.

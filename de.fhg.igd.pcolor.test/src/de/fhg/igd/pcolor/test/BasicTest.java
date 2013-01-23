@@ -4,9 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import de.fhg.igd.pcolor.JCh;
+import de.fhg.igd.pcolor.Jab;
+import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
+import de.fhg.igd.pcolor.colorspace.CS_JCh;
+import de.fhg.igd.pcolor.colorspace.CS_Jab;
+import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 
-public class CheckTest {
+public class BasicTest {
 
 	@Test
 	public void testisInRange() {
@@ -30,6 +36,13 @@ public class CheckTest {
 		
 		assertEquals(-0.1, new sRGB(-0.1f, 0.237f, 0.946f).outOfSpace(0, 0)[0], 0.0001);
 		assertEquals(0.0, new sRGB(-0.1f, 0.237f, 0.946f).outOfSpace(0.1f, 0)[0], 0.0001);
+	}
+	
+	@Test
+	public void testCreation() {
+		assertTrue(PColor.create(CS_sRGB.instance, new float[] {1,1,1,0.5f}) instanceof sRGB);
+		assertTrue(PColor.create(CS_JCh.defaultInstance, new float[] {1,1,1,0.5f}) instanceof JCh);
+		assertTrue(PColor.create(CS_Jab.defaultInstance, new float[] {1,1,1,0.5f}) instanceof Jab);
 	}
 
 }

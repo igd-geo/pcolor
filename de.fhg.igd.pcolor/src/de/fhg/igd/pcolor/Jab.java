@@ -82,7 +82,7 @@ public class Jab extends PColor {
 	 * @param color color
 	 */
 	public Jab(float[] color) {
-		super(CS_Jab.defaultInstance, color, color.length == 4 ? color[3] : 1);
+		super(CS_Jab.defaultInstance, color, 1);
 	}
 
 	/**
@@ -109,13 +109,23 @@ public class Jab extends PColor {
 		super(cspace, new float[] {J, a, b}, alpha);
 	}
 	
+	/**
+	 * Full ctor. Interprets correlates in the given space. The array
+	 * is cloned to prevent shared state.
+	 * @param comp the components
+	 * @param alpha alpha value
+	 * @param cspace Jab color space
+	 */
+	public Jab(float[] comp, float alpha, CS_Jab cspace) {
+		super(cspace, comp.clone(), alpha);
+	}
+	
 	@Override
 	public PColor transpose(ColorSpace to) {
 		// TODO prepend conversion so we can transpose to any perceptual space
 		if (to instanceof CS_Jab) {
 			float[] components = getComponents();
-			return new Jab(
-					components[J],
+			return new Jab(components[J],
 					components[a],
 					components[b],
 					getAlpha(),
