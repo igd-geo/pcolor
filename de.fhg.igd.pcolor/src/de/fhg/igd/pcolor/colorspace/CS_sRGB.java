@@ -93,9 +93,7 @@ public class CS_sRGB extends ColorSpace {
 	 * fall between 0 and 1. This is done by rescaling any OOG points back
 	 * towards the center of the gamut (0.5, 0.5, 0.5) such that they fall just
 	 * within the gamut. This is a widely used but relatively stupid method of
-	 * gamut mapping, meant to be efficient rather than accurate; however, since
-	 * we starting from RGB data in the first place we can expect not to have
-	 * too many insanely OOG colors to deal with.
+	 * gamut mapping, meant to be efficient rather than accurate.
 	 * 
 	 * @param rgb -
 	 *            An sRGB component array, to be modified inplace.

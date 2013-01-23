@@ -171,6 +171,55 @@ public abstract class PColor implements Cloneable {
 	public float getAlpha() {
 		return alpha;
 	}
+	
+	/**
+	 * A quick check if the color and alpha are in range, allowing
+	 * for head/footroom WRT the colorspace's range. Alpha is always
+	 * checked to fall in the 0..1 range.
+	 * @param footroom the footroom to allow for
+	 * @param headroom the headroom to allow for
+	 * @return
+	 */
+	public boolean isInRange(float footroom, float headroom) {
+		for (int i = 0; i < colorspace.getNumComponents(); i++) {
+			if (offRange(i, footroom, headroom) != 0)
+				return false;
+		}
+		if (alpha < 0 || alpha > 1f)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Gets an array indicating how much each component is out of the color
+	 * space's declared range. Each axis is represents by a float which is above
+	 * or below zero by the amount the axis is out of range, including the
+	 * head/footroom.
+	 * 
+	 * @param footroom the footroom to allow for
+	 * @param headroom the headroom to allow for
+	 * @return an array (as described)
+	 */
+	public float[] outOfSpace(float footroom, float headroom) {
+		float[] res = new float[colorspace.getNumComponents()];
+		for (int i = 0; i < colorspace.getNumComponents(); i++) {
+			res[i] = offRange(i, footroom, headroom);
+		}
+		// alpha?
+		return res;
+	}
+	
+	private float offRange(int i, float footroom, float headroom) {
+		if (components[i] < colorspace.getMinValue(i) && 
+			components[i] < (colorspace.getMinValue(i) - footroom)) {
+			return components[i] - (colorspace.getMinValue(i) - footroom);
+		}
+		if (components[i] > colorspace.getMaxValue(i) && 
+			components[i] > (colorspace.getMaxValue(i) + headroom)) {
+			return components[i] - (colorspace.getMaxValue(i) + headroom);
+		}
+		return 0;
+	}
 
 	/**
 	 * Returns a String containing this color's components and alpha value in
