@@ -35,13 +35,11 @@ which are outlined in the next section.
   - Estimating how visually distant different colours are (delta E-like)
   - Exploiting colour relations for visualization of value relations
 
-** API
-   
-   TODO add html and java for use cases
-   
+** API   
    The API is not considered stable. It largely builds upon the AWT
    color management API for interoperability, and partly the (defunct)
-   Painterly project this was derived from.
+   Painterly project this was derived from. However in the 1.1.0 release
+   the API is heading where it should.
 
    This is NOT a high performance implemetation. It favours
    correctness, precision and idiomatic APIs over speed. You need to
