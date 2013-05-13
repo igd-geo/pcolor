@@ -33,8 +33,7 @@ import de.fhg.igd.pcolor.colorspace.CS_Jab;
  * color itself as represented by an array of float components as well as an
  * alpha channel, and a colorspace object that describes the color space in
  * which the components are to be interpreted. Unlike its cousin, it avoids
- * simplistic operations such as darker(). It is also responsible for
- * transforming the components to and from the CIE XYZ reference colorspace.
+ * simplistic operations such as darker().
  * <p>
  * PColors typically use a whitepoint of D65 (the same as sRGB), an average
  * surround luminance La of 64 cd/m2, and a background Yb of 20% gray (CIECAM02
@@ -331,7 +330,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * Creates PColor instances based on components and one of the PColor colorspaces.
 	 * @param targetSpace the target colorspace (from the PColor suite)
-	 * @param components the components
+	 * @param components the components, optionally including alpha
 	 * @return a {@link PColor} instance
 	 */
 	public static PColor create(ColorSpace targetSpace, float[] components) {

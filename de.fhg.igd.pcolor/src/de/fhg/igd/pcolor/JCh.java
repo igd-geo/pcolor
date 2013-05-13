@@ -47,7 +47,7 @@ public class JCh extends PColor {
 	public static final int C = CS_JCh.C;
 
 	/**
-	 * Hue
+	 * Hue in degrees
 	 */
 	public static final int h = CS_JCh.h;
 
