@@ -26,8 +26,50 @@ import java.util.Arrays;
  * Represents CIEVAM02 Viewing Conditions.
  * 
  * @author Thu Huong Luu
+ * @author Simon Thum
  */
 public class ViewingConditions {
+	
+	/**
+	 * The XYZ whitepoint of standard illuminant D50, which is what JAI and ICC Profiles use.
+	 */
+	public static final double[] IlluminantD50 = new double[] {96.422, 100.0, 82.521};
+
+	/**
+	 * The XYZ whitepoint of standard illuminant D65, which is what sRGB uses.
+	 */
+	public static final double[] IlluminantD65 = new double[] {95.047, 100.0, 108.883};
+	
+	/**
+	 * The XYZ whitepoint E (equilibrium), useful for relative colorimetry
+	 */
+	public static final double[] IlluminantE = new double[] {100.0, 100.0, 100.0};
+	
+	/**
+	 * Viewing conditions modelled after sRGB's "encoding" (would-be ideal)
+	 * viewing environment with 64 cd/m2 average luminance and 20 % adaption
+	 * luminance. The dim surrounding matches the dim viewing environment
+	 * assumed when video standards were crafted in the 70s (see Charles
+	 * Pontyon).
+	 */
+	public static final ViewingConditions sRGB_encoding_envirnonment =
+			new ViewingConditions(IlluminantD50, 64.0, 64/5, Surrounding.dimSurrounding);
+
+	/**
+	 * Viewing conditions modelled after sRGB's "typical" viewing environment
+	 * with 200 cd/m2.
+	 */
+	public static final ViewingConditions sRGB_typical_envirnonment = 
+			new ViewingConditions(IlluminantD50, 200, 200/5, Surrounding.averageSurrounding);
+	
+	/**
+	 * Viewing conditions modelled after Adobe RGB (1998) whitepoint luminance.
+	 * Adobe specifies the adapted whitepoint to be equal. See
+	 * http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf
+	 */
+	public static final ViewingConditions AdobeRGB_envirnonment = 
+			new ViewingConditions(IlluminantD65, 160, 160/5, Surrounding.averageSurrounding);
+
 
 	// environment parameters
 	private final double L_A, Y_b;
