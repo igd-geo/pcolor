@@ -100,7 +100,7 @@ public class CS_sRGB extends ColorSpace {
 	 * @return true if the color was clipped, or false if it wasn't necessary.
 	 */
 	public static boolean clipToGamut(double[] rgb) {
-		if(isInGamut(rgb)) {
+		if(!isInGamut(rgb)) {
 			// set origin to [0.5 0.5 0.5]
 			rgb[0] -= 0.5;
 			rgb[1] -= 0.5;
@@ -124,7 +124,7 @@ public class CS_sRGB extends ColorSpace {
 		}
 	}
 
-	public static boolean isInGamut(double[] rgb) {
+	private static boolean isInGamut(double[] rgb) {
 		return !(rgb[0] < 0d || rgb[0] > 1d || rgb[1] < 0d || rgb[1] > 1d || rgb[2] < 0d || rgb[2] > 1d);
 	}
 
