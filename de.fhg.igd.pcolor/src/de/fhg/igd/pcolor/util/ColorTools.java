@@ -159,4 +159,82 @@ public class ColorTools {
 		return (float) Math.sqrt(error);
 	}
 	
+	/**
+	 * Calculates the distance between two JCh colors using the CIE's
+	 * recommended CAM02-UCS calculation.
+	 * 
+	 * @param color1
+	 *            the first color
+	 * @param color2
+	 *            the second color
+	 * @return the distance between two JCh colors.
+	 */
+	public static float distance(JCh color1, JCh color2) {
+		return (float) JCh.distance(color1, color2);
+	}
+	
+	/**
+	 * Create a new color which has one channel changed in comparison to the
+	 * argument color.
+	 * 
+	 * @param color
+	 *            the color
+	 * @param channel
+	 *            the channel index
+	 * @param value
+	 *            the value to set
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <P extends PColor> P setChannel(P color, int channel, float value) {
+		if (channel >= 0 && channel <= color.getColorSpace().getNumComponents()) {
+			float[] arr = color.getRawComponents();
+			arr[channel] = value;
+			return (P) PColor.create(color.getColorSpace(), arr);
+		} else {
+			throw new IllegalArgumentException("channel " + channel + " is not in range");
+		}
+	}
+	
+	/**
+	 * Performs a binary search for a boundary of an implicitly defined
+	 * partition in an arbitrary color space. For example, this can be used to
+	 * find the most saturated or brightest possible color of a given hue.
+	 * 
+	 * Assuming that col is actually part of the partition identified by the
+	 * predicate and the lower, upper boundary contains exactly one such boundary,
+	 * this method tests the boundary until an answer with an error of at most e
+	 * is found.
+	 * 
+	 * @param col
+	 *            the color at the lower bound
+	 * @param channel
+	 *            the channel whose boundary is being tested
+	 * @param lower
+	 *            the lower bound on the channel
+	 * @param upper
+	 *            the upper bound on the channel
+	 * @param e
+	 *            the distance in JCh to allow for
+	 * @param inside
+	 *            a predicate defining a space whose boundary is tested
+	 * @return
+	 */
+	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
+			float upper, float e, Predicate<? super C> inside) {
+		float middleValue = (upper + lower) / 2f;
+		C middleColor = ColorTools.setChannel(col, channel, middleValue);
+		// if we woudn't move far anyway, treat as found as col is
+		// always assumed to be inside the space identified by the predicate
+		if (distance(col, middleColor) < e)
+			return col;
+		if (inside.apply(middleColor))
+			return determineBoundaryColor(middleColor, channel, middleValue, upper,
+					e, inside);
+		else
+			return determineBoundaryColor(col, channel, lower, middleValue, e, inside);
+	}
+
+	
+	
 }
