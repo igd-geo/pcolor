@@ -108,6 +108,7 @@ public abstract class PColor implements Cloneable {
 	/**
 	 * Converts this color to sRGB and packs it into a single 32 bit int value
 	 * in format ARGB.
+	 * @see sRGB#fromArgb(int)
 	 */
 	public int getARGB() {
 		if(this.getColorSpace().isCS_sRGB()) {
@@ -123,10 +124,18 @@ public abstract class PColor implements Cloneable {
 	 * containing an alpha value into a single int.
 	 */
 	private int packARGB(float[] rgb, float alpha) {
-		return Math.round(alpha * 255f) << 24 |
-		Math.round(rgb[0] * 255f) << 16 |
-		Math.round(rgb[1] * 255f) << 8 |
-		Math.round(rgb[2] * 255f);
+		return toi(alpha) << 24 |
+			   toi(rgb[0]) << 16 |
+			   toi(rgb[1]) << 8 |
+			   toi(rgb[2]);
+	}
+
+	private static int toi(float f) {
+		if (f <= 0)
+			return 0;
+		if (f >= 1)
+			return 255;
+		return Math.round(f * 255f);
 	}
 
 	/**

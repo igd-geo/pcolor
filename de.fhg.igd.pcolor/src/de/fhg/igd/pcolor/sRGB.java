@@ -80,19 +80,31 @@ public class sRGB extends PColor {
 		super(CS_sRGB.instance, new float[] {rgba[R], rgba[G], rgba[B]}, rgba.length > 3 ? rgba[3] : 1);
 	}
 	
-	/**
-	 * Unpack a 32-Bit ARGB int, normalising to 0..1
-	 * @param argb argb color
-	 */
-	public sRGB(int argb) {
-		this((argb >> 16 & 0xff) / 255f, (argb >> 8 & 0xff) / 255f, (argb & 0xff) / 255f, (argb >> 24 & 0xff) / 255f);
-	}
-
     @Override
 	public sRGB convertFrom(PColor color) {
     	if (color.getColorSpace().equals(this.getColorSpace()))
 			return (sRGB)color;
 		return new sRGB(color);
+	}
+    
+    /**
+	 * Unpack a 32-Bit ARGB int, normalising to 0..1
+	 * @param argb argb color
+	 */
+	public static sRGB fromArgb(int argb) {
+		return new sRGB((argb >> 16 & 0xff) / 255f, (argb >> 8 & 0xff) / 255f, (argb & 0xff) / 255f, (argb >> 24 & 0xff) / 255f);
+	}
+	
+	/**
+	 * Create sRGB from RGBA bytes (given as integers)
+	 * @param rgba the bytes in RGBA order
+	 */
+	public static sRGB fromBytes(int... rgba) {
+		if (rgba.length == 3)
+			return new sRGB(rgba[0] / 255.0f, rgba[1] / 255.0f, rgba[2] / 255.0f);
+		else if (rgba.length == 4)
+			return new sRGB(rgba[0] / 255.0f, rgba[1] / 255.0f, rgba[2] / 255.0f, rgba[3] / 255.0f);
+		else throw new IllegalArgumentException("3 or 4 integers needed");
 	}
 
 }

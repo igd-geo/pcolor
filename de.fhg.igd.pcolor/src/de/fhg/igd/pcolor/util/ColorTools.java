@@ -22,6 +22,7 @@ package de.fhg.igd.pcolor.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import de.fhg.igd.pcolor.JCh;
 import de.fhg.igd.pcolor.Jab;
@@ -286,6 +287,29 @@ public class ColorTools {
 		return setChannel(palette.clone(), channel, common_max);
 	}
 
+	private static String formatSrgbColor(int argb, String format) {
+		return String.format(Locale.US, format,
+				argb >> 16 & 0xff, argb >> 8 & 0xff, argb & 0xff, argb >> 24 & 0xff);
+	}
 	
+	/**
+	 * Format a color as HTML sRGB string ("#aabbcc") with 24/32 bit.
+	 * @param c the color
+	 * @param alpha whether to include alpha
+	 * @return a string representing c in sRGB, clipped if needed
+	 */
+	public static String toHtml(PColor c, boolean alpha) {
+		return formatSrgbColor(c.getARGB(), alpha?"#%02x%02x%02x%02x":"#%02x%02x%02x");
+	}
+	
+	/**
+	 * Format a color as CSS sRGB "functional notation" string ("rgb(1, 2, 3)") with 24/32 bit.
+	 * @param c the color
+	 * @param alpha whether to include alpha
+	 * @return a string representing c in sRGB, clipped if needed
+	 */
+	public static String toCss(PColor c, boolean alpha) {
+		return formatSrgbColor(c.getARGB(), alpha?"rgba(%3d, %3d, %3d, %3d)":"rgb(%3d, %3d, %3d)");
+	}
 	
 }
