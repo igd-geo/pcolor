@@ -197,6 +197,20 @@ public class ColorTools {
 	}
 	
 	/**
+	 * Set a channel on an array of colors, the palette.
+	 * @param palette an array of colors
+	 * @param channel the channel to set
+	 * @param value the value to set the channel to, on each color.
+	 * @return the input palette array (for convenience)
+	 */
+	public static <C extends PColor> C[] setChannel(C[] palette, int channel, float value) {
+		for (int i = 0; i < palette.length; i++) {
+			palette[i] = setChannel(palette[i], channel, value);
+		}
+		return palette;
+	}
+	
+	/**
 	 * Performs a binary search for a boundary of an implicitly defined
 	 * partition in an arbitrary color space. For example, this can be used to
 	 * find the most saturated or brightest possible color of a given hue.
@@ -233,6 +247,43 @@ public class ColorTools {
 					e, inside);
 		else
 			return determineBoundaryColor(col, channel, lower, middleValue, e, inside);
+	}
+	
+	/**
+	 * Optimize a specific channel of a palette such that all colours in the
+	 * palette satisfy the predicate while sharing the same value for this
+	 * channel. This assumes that any more lower value for that channel than
+	 * already established to satisfy the predicate will also satisfy the
+	 * predicate. In other words, it will optimize towards upper,
+	 * but it is not required that lower < upper.
+	 * 
+	 * Not that the whole idea only makes sense if the predicate's space is smaller
+	 * than can be represented in the color space. For example, JCh values that
+	 * satisfy sRGB are a useful predicate.
+	 * 
+	 * @param palette the palette to optimize; the values in the optimized channel will be ignored
+	 * @param channel the channel to optimize
+	 * @param lower the lower bound for which all colors must satisfy the predicate
+	 * @param upper the upper bound, which may satisfy the predicate for most colors
+	 * @param e the distance in JCh to allow for
+	 * @param predicate a predicate defining a color space whose boundary is tested
+	 * @return
+	 */
+	public static <C extends PColor> C[] optimizePalette(C[] palette,
+			int channel, float lower, float upper, float e, Predicate<? super C> predicate) {
+		// find the common maximum value that satisfies the predicate
+		float common_max = upper;
+		for (C color : palette) {
+			// check if lower satisfies predicate; this is strictly an assumption
+			// to this method but it is better to check than be wrong.
+			C ctemp = setChannel(color, channel, lower);
+			if (!predicate.apply(ctemp))
+				throw new IllegalArgumentException("lower bound does not satisfy predicate for " + color.toString());
+			// lower the common maximum if we need to
+			if (!predicate.apply(setChannel(color, channel, common_max)))
+				common_max = determineBoundaryColor(ctemp, channel, lower, common_max, e, predicate).get(channel);
+		}
+		return setChannel(palette.clone(), channel, common_max);
 	}
 
 	
