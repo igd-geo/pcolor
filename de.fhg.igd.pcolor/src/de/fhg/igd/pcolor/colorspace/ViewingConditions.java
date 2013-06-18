@@ -22,6 +22,8 @@ package de.fhg.igd.pcolor.colorspace;
 
 import java.util.Arrays;
 
+import de.fhg.igd.pcolor.util.MathTools;
+
 /**
  * Represents CIEVAM02 Viewing Conditions.
  * 
@@ -130,6 +132,10 @@ public class ViewingConditions {
 			}
 		}
 		A_w = (2.0 * RGBPrime_aw[0] + RGBPrime_aw[1] + RGBPrime_aw[2] / 20.0 - 0.305) * N_bb;
+	}
+	
+	public ViewingConditions(float[] XYZ_w, float L_A, float Y_b, Surrounding sur) {
+		this(MathTools.floatToDoubleArray(XYZ_w), L_A, Y_b, sur);
 	}
 
 	@Override
