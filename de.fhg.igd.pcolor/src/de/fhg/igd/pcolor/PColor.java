@@ -52,7 +52,7 @@ import de.fhg.igd.pcolor.colorspace.CS_Jab;
  * however, is perceived to look the same given it appears in the target viewing
  * conditions. See {@link #transpose(ColorSpace)}.
  */
-public abstract class PColor implements Cloneable {
+public abstract class PColor {
 
 	/**
 	 * the color space
@@ -294,12 +294,6 @@ public abstract class PColor implements Cloneable {
 		throw new UnsupportedOperationException("transposing is only available for perceptually uniform color spaces, e.g. CIECAM02-based ones.");
 	}
 
-	@Override
-	protected PColor clone() {
-		// PColors are immutable
-		return this;
-	}
-	
 	/**
 	 * Convert a PColor instance to another color space, optimising the case
 	 * where no actual conversion has to take place. In that case, the color is
