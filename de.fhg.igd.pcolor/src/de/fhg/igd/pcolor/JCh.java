@@ -57,7 +57,8 @@ public class JCh extends PColor {
 
 	/**
 	 * Construct a JCh from any PColor, eventually involving a 
-	 * stimulus-preserving conversion.
+	 * stimulus-preserving conversion. This is true even if the
+	 * color is a JCh color.
 	 * @param color color
 	 * @param cspace JCh color space
 	 */

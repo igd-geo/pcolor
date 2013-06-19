@@ -253,7 +253,9 @@ public class ColorTools {
 	/**
 	 * Optimize a specific channel of a palette such that all colours in the
 	 * palette satisfy the predicate while sharing the same value for this
-	 * channel. This assumes that any more lower value for that channel than
+	 * channel.
+	 * <p>
+	 * This assumes that any "more lower" value for that channel than
 	 * already established to satisfy the predicate will also satisfy the
 	 * predicate. In other words, it will optimize towards upper,
 	 * but it is not required that lower < upper.
@@ -262,13 +264,14 @@ public class ColorTools {
 	 * than can be represented in the color space. For example, JCh values that
 	 * satisfy sRGB are a useful predicate.
 	 * 
-	 * @param palette the palette to optimize; the values in the optimized channel will be ignored
+	 * @param palette the palette to optimize. Will not be modified. The values in
+	 * 		  the optimized channel are ignored.
 	 * @param channel the channel to optimize
 	 * @param lower the lower bound for which all colors must satisfy the predicate
 	 * @param upper the upper bound, which may satisfy the predicate for most colors
 	 * @param e the distance in JCh to allow for
 	 * @param predicate a predicate defining a color space whose boundary is tested
-	 * @return
+	 * @return new new array of optimized colors
 	 */
 	public static <C extends PColor> C[] optimizePalette(C[] palette,
 			int channel, float lower, float upper, float e, Predicate<? super C> predicate) {
@@ -293,7 +296,7 @@ public class ColorTools {
 	}
 	
 	/**
-	 * Format a color as HTML sRGB string ("#aabbcc") with 24/32 bit.
+	 * Format a color as HTML hex color string ("simple color", i.e. "#aabbcc") with 24/32 bit sRGB.
 	 * @param c the color
 	 * @param alpha whether to include alpha
 	 * @return a string representing c in sRGB, clipped if needed
@@ -303,7 +306,7 @@ public class ColorTools {
 	}
 	
 	/**
-	 * Format a color as CSS sRGB "functional notation" string ("rgb(1, 2, 3)") with 24/32 bit.
+	 * Format a color as CSS "functional notation" color specification ("rgb(1, 2, 3)") with 24/32 bit sRGB.
 	 * @param c the color
 	 * @param alpha whether to include alpha
 	 * @return a string representing c in sRGB, clipped if needed
