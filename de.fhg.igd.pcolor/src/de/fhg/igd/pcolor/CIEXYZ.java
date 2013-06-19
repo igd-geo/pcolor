@@ -86,5 +86,50 @@ public class CIEXYZ extends PColor {
 			return (CIEXYZ)color;
 		return new CIEXYZ(color);
 	}
+	
+	/**
+	 * Calculates the mean JCh color in an array of JCh colors. Differences in
+	 * their individual color spaces are not being accounted for.
+	 * 
+	 * @param jchColors
+	 * 			An array of JCh colors
+	 * @return A new average JCh color in the colorspace of the first input color.
+	 */
+    public static CIEXYZ average(CIEXYZ[] colors) {
+    	return blend(colors, null);
+    }
+	
+	/**
+	 * Returns a new XYZ color blending an array of JCh colors. weights[] should be
+	 * an array of floats equal of length equal to colors[], with each value
+	 * representing that color's weight in the blend. For example, if a color is
+	 * weighted 1.0 blend() will return just that color, whereas if two
+	 * colors are both weighted 0.5 the result will be optically halfway between them.
+	 * <P>
+	 * Note that weights[] must be normalized such that total sum of all values
+	 * in the array == 1.0; otherwise, the result will be distorted.
+	 * 
+	 * @param colors
+	 *            The array of colors to be blended together
+	 * @param weights
+	 *            The array of weights specifying how much each color figures in
+	 *            the final result
+	 * @return A new optically blended XYZ color.
+	 */
+    public static CIEXYZ blend(CIEXYZ[] colors, float[] weights) {
+        double X = 0, Y = 0, Z = 0, alpha = 0;
+
+        // perform blending in XYZ space
+    	for(int i = 0; i < colors.length; i++) {
+    		float w = weights == null ? (float)(1.0/colors.length) : weights[i];
+    		X += colors[i].get(CIEXYZ.X) * w;
+    		Y += colors[i].get(CIEXYZ.Y) * w;
+    		Z += colors[i].get(CIEXYZ.Z) * w;
+    		alpha += colors[i].getAlpha() * w;
+    	}
+    	
+    	// return result
+    	return new CIEXYZ((float)X, (float)Y, (float)Z, (float)alpha);
+    }
 
 }

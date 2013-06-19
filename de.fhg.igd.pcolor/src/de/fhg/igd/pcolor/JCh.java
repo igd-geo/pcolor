@@ -31,8 +31,12 @@ import de.fhg.igd.pcolor.util.ColorTools;
  * model, where J represents lightness, C represents chroma, and h represents
  * hue angle.
  * <p>
- * Note the the conversion to and from CIECAM02 is somewhat expensive; it is
- * best to code such that it need be performed as infrequently as possible.
+ * Note that optical (light-based) processes such as casting shadows or
+ * determining the average light response of a distant phenomenon (scaling)
+ * <b>do happen in the optical domain</b>. We just perceive the end result. In
+ * other words, please <b>do NOT filter, scale, convolve etc. in this space</b>
+ * unless you have very specific reasons to do so. Most likely, <b>doing so is
+ * just plain wrong!<b/> Please use XYZ ({@link CIEXYZ}) for that.
  */
 public class JCh extends PColor {
 
@@ -107,11 +111,12 @@ public class JCh extends PColor {
 	}
 
 	/**
-	 * Calculates the mean JCh color in an array of JCh colors.
+	 * Calculates the mean JCh color in an array of JCh colors. Differences in
+	 * their individual color spaces are not being accounted for.
 	 * 
-	 * @param jchColors -
-	 *            An array of JCh colors
-	 * @return A new average JCh color in the default colorspace.
+	 * @param jchColors
+	 * 			An array of JCh colors
+	 * @return A new average JCh color in the colorspace of the first input color.
 	 */
     public static JCh average(JCh[] jchColors) {
     	double J = 0, a = 0, b = 0, alpha = 0;
@@ -138,36 +143,42 @@ public class JCh extends PColor {
     	double h = ColorTools.calculateAtan(a, b);
     	float C = (float)(a / Math.cos(Math.toRadians(h)));
 
-		return new JCh((float)J, (float)C, (float)h, (float)alpha);
+		return new JCh((float)J, (float)C, (float)h, (float)alpha, (CS_JCh) jchColors[0].getColorSpace());
     }
 
     /**
-	 * Returns a new array blending an array of JCh colors. weights[] should be
+	 * Returns a new color blending an array of JCh colors. weights[] should be
 	 * an array of floats equal of length equal to colors[], with each value
 	 * representing that color's weight in the blend. For example, if a color is
-	 * weighted 1.0 colorBlend() will return just that color, whereas if two
-	 * colors are both weighted 0.5 the result will be halfway between them.
+	 * weighted 1.0 blend() will return just that color, whereas if two
+	 * colors are both weighted 0.5 the result will be perceptually halfway between them.
 	 * <P>
 	 * Note that weights[] must be normalized such that total sum of all values
-	 * in the array == 1.0; otherwise, the result will be distorted.
+	 * in the array == 1.0; otherwise, the result will be distorted. Also note that
+	 * differences in the individual color spaces are not being accounted for.
 	 * 
-	 * @param colors -
+	 * @param colors
 	 *            The array of colors to be blended together
-	 * @param weights -
+	 * @param weights
 	 *            The array of weights specifying how much each color figures in
 	 *            the final result
-	 * @return A new blended JCh color in the default colorspace.
+	 * @return A new perceptually blended JCh color in the colorspace of the first input color.
+	 * @see CIEXYZ#blend(CIEXYZ[], float[])
 	 */
-    public static JCh colorBlend(JCh[] colors, float[] weights) {
-        double J = 0, a = 0, b = 0;
+    public static JCh blend(JCh[] colors, float[] weights) {
+        double J = 0, a = 0, b = 0, alpha = 0;
 
         // perform blending in Jab space
     	for(int i = 0; i < colors.length; i++) {
-    		J += colors[i].get(0) * weights[i];
+    		float w = weights == null ? (float)(1.0/colors.length) : weights[i];
+    		J += colors[i].get(0) * w;
 
     		double hRad = Math.toRadians(colors[i].get(2));
-    		a += (colors[i].get(1) * Math.cos(hRad)) * weights[i];
-    		b += (colors[i].get(1) * Math.sin(hRad)) * weights[i];
+    		a += (colors[i].get(1) * Math.cos(hRad)) * w;
+    		b += (colors[i].get(1) * Math.sin(hRad)) * w;
+    		
+    		// handle alpha
+    		alpha += colors[i].getAlpha() * w;
     	}
 
     	// return to JCh
@@ -175,7 +186,7 @@ public class JCh extends PColor {
     	double C = a / Math.cos(Math.toRadians(h));
 
     	// return result
-    	return new JCh((float)J, (float)C, (float)h, 1f);
+    	return new JCh((float)J, (float)C, (float)h, (float)alpha, (CS_JCh) colors[0].getColorSpace());
     }
 
 	/**

@@ -35,9 +35,9 @@ import de.fhg.igd.pcolor.colorspace.CS_Jab;
  * Note that optical (light-based) processes such as casting shadows or
  * determining the average light response of a distant phenomenon (scaling)
  * <b>do happen in the optical domain</b>. We just perceive the end result. In
- * other words, <b>do NOT filter, scale, convolve etc. in this space</b> unless
- * you have very specific reasons to do so. Most likely, <b>doing so is just
- * plain wrong!<b/>
+ * other words, please <b>do NOT filter, scale, convolve etc. in this space</b>
+ * unless you have very specific reasons to do so. Most likely, <b>doing so is
+ * just plain wrong!<b/>. Please use {@link CIEXYZ} for that.
  */
 public class Jab extends PColor {
 	/**
