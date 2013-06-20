@@ -27,7 +27,9 @@ import java.util.Locale;
 import de.fhg.igd.pcolor.JCh;
 import de.fhg.igd.pcolor.Jab;
 import de.fhg.igd.pcolor.PColor;
+import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
+import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 
 /**
  * A series of methods and utilities for dealing with various color operations.
@@ -314,5 +316,32 @@ public class ColorTools {
 	public static String toCss(PColor c, boolean alpha) {
 		return formatSrgbColor(c.getARGB(), alpha?"rgba(%3d, %3d, %3d, %3d)":"rgb(%3d, %3d, %3d)");
 	}
+	
+	/**
+	 * Format a CSS3 color "unclipped" which is not precisely defined but may,
+	 * under circumstances, allow a compliant browser to use an extended gamut
+	 * beyond sRGB. However, it should be expected some browsers will simply
+	 * fail.
+	 * <p>
+	 * See <a
+	 * href="http://www.w3.org/TR/css3-color/#rgb-color">http://www.w3.org
+	 * /TR/css3-color/#rgb-color</a> Section 4.2.1
+	 * 
+	 * @param c
+	 *            the color
+	 * @param alpha
+	 *            whether to include alpha
+	 * @return an unclipped functional notation css3 color
+	 */
+	public static String toCssUnclipped(PColor c, boolean alpha) {
+		sRGB rgb = (sRGB) PColor.convert(c, CS_sRGB.instance);
+		return String.format(Locale.US,
+				alpha?"rgba(%3d, %3d, %3d, %3d)":"rgb(%3d, %3d, %3d)",
+				Math.round(rgb.get(sRGB.R) * 255),
+				Math.round(rgb.get(sRGB.G) * 255),
+				Math.round(rgb.get(sRGB.B) * 255),
+				Math.round(rgb.getAlpha() * 255));
+	}
+	
 	
 }

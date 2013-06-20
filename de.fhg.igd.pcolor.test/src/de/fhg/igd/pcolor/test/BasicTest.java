@@ -58,6 +58,8 @@ public class BasicTest {
 		assertEquals("#01020304", ColorTools.toHtml(sRGB.fromArgb(0x04010203), true));
 		assertEquals("rgba(  1,   2,   3,   4)", ColorTools.toCss(sRGB.fromArgb(0x04010203), true));
 		
+		// test unclipped
+		assertEquals("rgba( -1,  20, 300,   4)", ColorTools.toCssUnclipped(sRGB.fromBytes(-1, 20, 300, 4), true));
 	}
 
 }
