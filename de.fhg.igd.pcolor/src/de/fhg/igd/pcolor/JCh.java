@@ -24,7 +24,7 @@ import java.awt.color.ColorSpace;
 import java.util.Comparator;
 
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
-import de.fhg.igd.pcolor.util.ColorTools;
+import de.fhg.igd.pcolor.util.MathTools;
 
 /**
  * JCh is a three-component space derived from the CIECAM02 color appearance
@@ -141,7 +141,7 @@ public class JCh extends PColor {
     	alpha /= jchColors.length;
 
     	// convert back to JCh
-    	double h = ColorTools.calculateAtan(a, b);
+    	double h = MathTools.calculateAtan(a, b);
     	float C = (float)(a / Math.cos(Math.toRadians(h)));
 
 		return new JCh((float)J, (float)C, (float)h, (float)alpha, (CS_JCh) jchColors[0].getColorSpace());
@@ -183,7 +183,7 @@ public class JCh extends PColor {
     	}
 
     	// return to JCh
-        double h = ColorTools.calculateAtan(a, b);
+        double h = MathTools.calculateAtan(a, b);
     	double C = a / Math.cos(Math.toRadians(h));
 
     	// return result

@@ -24,7 +24,7 @@ import java.awt.color.ColorSpace;
 
 import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.PColor;
-import de.fhg.igd.pcolor.util.ColorTools;
+import de.fhg.igd.pcolor.util.MathTools;
 
 /**
  * This class implements the CIECAM02 color appearance model, providing forward
@@ -632,7 +632,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * @return hue
 	 */
 	public static double calculateh(double a, double b) {
-		return ColorTools.calculateAtan(a, b);
+		return MathTools.calculateAtan(a, b);
 	}
 
 	/**

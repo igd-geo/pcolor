@@ -104,4 +104,16 @@ public class MathTools {
         return true;
     }
 
+	/**
+	 * Calculates an angle, in degrees, between 0 and 360 given its sine and
+	 * cosine values.
+	 */
+	public static double calculateAtan(double cos, double sin) {
+		double result = Math.toDegrees(Math.atan2(sin , cos)); 
+		if(result < 0) 
+			return 360 + result;
+		else
+			return result; 
+	}
+
 }

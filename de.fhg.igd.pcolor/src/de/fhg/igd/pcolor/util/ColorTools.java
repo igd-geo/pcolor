@@ -61,18 +61,6 @@ public class ColorTools {
     }
 
     /**
-	 * Calculates an angle, in degrees, between 0 and 360 given its sine and
-	 * cosine values.
-	 */
-    public static double calculateAtan(double cos, double sin) {
-    	double result = Math.toDegrees(Math.atan2(sin , cos)); 
-    	if(result < 0) 
-    		return 360 + result;
-    	else
-    		return result; 
-    }
-
-    /**
 	 * Returns the smallest difference between two hues as a positive float
 	 * (in degrees).
 	 * 
