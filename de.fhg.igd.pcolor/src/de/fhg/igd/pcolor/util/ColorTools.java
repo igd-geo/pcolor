@@ -23,6 +23,8 @@ package de.fhg.igd.pcolor.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.fhg.igd.pcolor.JCh;
 import de.fhg.igd.pcolor.Jab;
@@ -343,5 +345,63 @@ public class ColorTools {
 				Math.round(rgb.getAlpha() * 255));
 	}
 	
+	private final static Pattern rgbColorPatternX1 = Pattern.compile("#(\\p{XDigit}{1})(\\p{XDigit}{1})(\\p{XDigit}{1})");
+	private final static Pattern rgbColorPatternX1A = Pattern.compile("#(\\p{XDigit}{1})(\\p{XDigit}{1})(\\p{XDigit}{1})(\\p{XDigit}{1})");
+	private final static Pattern rgbColorPatternX2 = Pattern.compile("#(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})");
+	private final static Pattern rgbColorPatternX2A = Pattern.compile("#(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})");
+	
+	private final static String intP = "\\s*(-?\\d+)\\s*";
+	private final static Pattern rgbColorPatternD = Pattern.compile("rgb\\(" + intP + "," + intP + "," + intP + "\\)");
+	private final static Pattern rgbColorPatternDA = Pattern.compile("rgba\\(" + intP + "," + intP + "," + intP + "," + intP +"\\)");
+
+	/**
+	 * Parses the HTML/CSS sRGB "simple colors", some "legacy colors" and CSS
+	 * colors with notations such as #111, #222F, #33445566, rgb(2, 6, 111).
+	 * 
+	 * @param c the color string
+	 * @return a corresponding {@link sRGB} color
+	 */
+	public static sRGB parseColor(String c) {
+		Matcher m = rgbColorPatternX1.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1), 16) * 17,
+					Integer.parseInt(m.group(2), 16) * 17,
+					Integer.parseInt(m.group(3), 16) * 17);
+		}
+		m = rgbColorPatternX1A.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1), 16) * 17,
+					Integer.parseInt(m.group(2), 16) * 17,
+					Integer.parseInt(m.group(3), 16) * 17,
+					Integer.parseInt(m.group(4), 16) * 17);
+		}
+		m = rgbColorPatternX2.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1), 16),
+					Integer.parseInt(m.group(2), 16),
+					Integer.parseInt(m.group(3), 16));
+		}
+		m = rgbColorPatternX2A.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1), 16),
+					Integer.parseInt(m.group(2), 16),
+					Integer.parseInt(m.group(3), 16),
+					Integer.parseInt(m.group(4), 16));
+		}
+		m = rgbColorPatternD.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1)),
+					Integer.parseInt(m.group(2)),
+					Integer.parseInt(m.group(3)));
+		}
+		m = rgbColorPatternDA.matcher(c);
+		if (m.matches()) {
+			return sRGB.fromBytes(Integer.parseInt(m.group(1)),
+					Integer.parseInt(m.group(2)),
+					Integer.parseInt(m.group(3)),
+					Integer.parseInt(m.group(4)));
+		}
+		throw new IllegalArgumentException("Found none of the supported color notations");
+	}
 	
 }

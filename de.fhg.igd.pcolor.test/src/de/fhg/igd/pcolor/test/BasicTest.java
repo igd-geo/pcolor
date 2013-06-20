@@ -11,7 +11,8 @@ import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
-import de.fhg.igd.pcolor.util.ColorTools;
+import static de.fhg.igd.pcolor.util.ColorTools.*;
+import de.fhg.igd.pcolor.util.MathTools;
 
 public class BasicTest {
 
@@ -46,20 +47,40 @@ public class BasicTest {
 		assertTrue(PColor.create(CS_Jab.defaultInstance, new float[] {1,1,1,0.5f}) instanceof Jab);
 	}
 	
+	private static boolean compareColor(PColor c1, PColor c2) {
+		return MathTools.floatArrayEquals(c1.getComponents(), c2.getComponents(), 0.001f);
+	}
+	
 	@Test
 	public void testSrgbHelpers() {
 		assertEquals(1.0, sRGB.fromArgb(0xaaffeedd).get(sRGB.R), /*delta*/ 0f);
-		assertEquals("#ffeeddaa", ColorTools.toHtml(sRGB.fromArgb(0xaaffeedd), true));
-		assertEquals("#ffeedd", ColorTools.toHtml(sRGB.fromArgb(0xaaffeedd), false));
-		assertEquals("rgba(255, 238, 221, 170)", ColorTools.toCss(sRGB.fromArgb(0xaaffeedd), true));
-		assertEquals("rgb(255, 238, 221)", ColorTools.toCss(sRGB.fromArgb(0xaaffeedd), false));
+		assertEquals("#ffeeddaa", toHtml(sRGB.fromArgb(0xaaffeedd), true));
+		assertEquals("#ffeedd", toHtml(sRGB.fromArgb(0xaaffeedd), false));
+		assertEquals("rgba(255, 238, 221, 170)", toCss(sRGB.fromArgb(0xaaffeedd), true));
+		assertEquals("rgb(255, 238, 221)", toCss(sRGB.fromArgb(0xaaffeedd), false));
 		
 		// test padding
-		assertEquals("#01020304", ColorTools.toHtml(sRGB.fromArgb(0x04010203), true));
-		assertEquals("rgba(  1,   2,   3,   4)", ColorTools.toCss(sRGB.fromArgb(0x04010203), true));
+		sRGB tc1 = sRGB.fromArgb(0x04010203);
+		sRGB tc1A = sRGB.fromArgb(0xFF010203); // opaque reference for no-alpha text notations
+		assertEquals("#01020304", toHtml(tc1, true));
+		assertEquals("rgba(  1,   2,   3,   4)", toCss(tc1, true));
 		
 		// test unclipped
-		assertEquals("rgba( -1,  20, 300,   4)", ColorTools.toCssUnclipped(sRGB.fromBytes(-1, 20, 300, 4), true));
+		sRGB tc2 = sRGB.fromBytes(-1, 20, 300, 4);
+		assertEquals("rgba( -1,  20, 300,   4)", toCssUnclipped(tc2, true));
+		
+		assertTrue(compareColor(tc1, parseColor(toHtml(tc1, true))));
+		assertTrue(compareColor(tc1A, parseColor(toHtml(tc1, false))));
+		assertTrue(compareColor(tc1, parseColor(toCss(tc1, true))));
+		assertTrue(compareColor(tc1A, parseColor(toCss(tc1, false))));
+
+		// character expansion
+		assertTrue(compareColor(sRGB.fromArgb(0x44332211), parseColor("#3214")));
+		
+		// unclipped
+		assertTrue(compareColor(tc2, parseColor(toCssUnclipped(tc2, true))));
 	}
+	
+	
 
 }

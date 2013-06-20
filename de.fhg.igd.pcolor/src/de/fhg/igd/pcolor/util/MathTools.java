@@ -85,5 +85,23 @@ public class MathTools {
 		}
 		return vr;
 	}
+	
+	
+	public static boolean floatArrayEquals(float[] a, float[] a2, float eps) {
+        if (a==a2)
+            return true;
+        if (a==null || a2==null)
+            return false;
+
+        int length = a.length;
+        if (a2.length != length)
+            return false;
+
+        for (int i=0; i<length; i++)
+            if (Math.abs(a[i] - a2[i]) > eps)
+                return false;
+
+        return true;
+    }
 
 }
