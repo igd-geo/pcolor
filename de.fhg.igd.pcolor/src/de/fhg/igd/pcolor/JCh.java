@@ -24,6 +24,7 @@ import java.awt.color.ColorSpace;
 import java.util.Comparator;
 
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
+import de.fhg.igd.pcolor.util.ColorTools;
 import de.fhg.igd.pcolor.util.MathTools;
 
 /**
@@ -255,6 +256,31 @@ public class JCh extends PColor {
     	result[3] = color.getAlpha();
 
     	return result;
+    }
+    
+	/**
+	 * Blends two JCh colors in JCh such that the shortest angular hue
+	 * difference is blended.
+	 * 
+	 * @param a the first color
+	 * @param b the second color
+	 * @param b_weight the weight of b, ranging from 0..1 
+	 * @return a blended JCh color
+	 */
+    public static JCh blendJch(JCh a, JCh b, float b_weight) {
+    	if (b_weight <= 0)
+    		return a;
+    	else if (b_weight >= 1)
+    		return b;
+    	float hdiff = ColorTools.hueDifference(a.get(JCh.h), b.get(JCh.h));
+    	float Jdiff = b.get(JCh.J) - a.get(JCh.J);
+    	float Cdiff = b.get(JCh.C) - a.get(JCh.C);
+    	float adiff = b.getAlpha() - a.getAlpha();
+    	return new JCh(a.get(JCh.J) + Jdiff * b_weight,
+    			a.get(JCh.C) + Cdiff * b_weight,
+    			a.get(JCh.h) + hdiff * b_weight,
+    			a.getAlpha() + adiff * b_weight,
+    			(CS_JCh)a.getColorSpace());
     }
 
     /**
