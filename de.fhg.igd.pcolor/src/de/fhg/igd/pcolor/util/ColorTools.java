@@ -68,12 +68,7 @@ public class ColorTools {
 	 */
     public static float hueDistance(float hue1, float hue2)
     {
-	    float difference = (hue1 - hue2) % 360;
-		if (difference > 180)
-			difference -= 360;
-		if (difference < -180)
-			difference += 360;
-		return Math.abs(difference);
+		return Math.abs(hueDifference(hue1, hue2));
     }
 
 	/**

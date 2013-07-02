@@ -2,6 +2,8 @@ package de.fhg.igd.pcolor.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.Test;
 
 import de.fhg.igd.pcolor.JCh;
@@ -12,6 +14,7 @@ import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.CS_Jab;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 import static de.fhg.igd.pcolor.util.ColorTools.*;
+import de.fhg.igd.pcolor.util.ColorTools;
 import de.fhg.igd.pcolor.util.MathTools;
 
 public class BasicTest {
@@ -81,6 +84,16 @@ public class BasicTest {
 		assertTrue(compareColor(tc2, parseColor(toCssUnclipped(tc2, true))));
 	}
 	
-	
+	@Test
+	public void testHueDifference() {
+		Random r = new Random();
+		for (int i = 0; i < 1000; i++) {
+			float hue1 = r.nextFloat() * 720 - 360;
+			float hue2 = r.nextFloat() * 720 - 360;
+			float d = ColorTools.hueDifference(hue1, hue2);
+			assertTrue(d <= 180 && d >= -180);
+			assertTrue(hueDistance(hue2, hue1 + hueDifference(hue1, hue2)) < 0.0001);
+		}
+	}
 
 }
