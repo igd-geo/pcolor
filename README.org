@@ -25,7 +25,16 @@ interesting tasks can be tackled. Most color management systems use
 CIECAM02, but they use it to answer the question outlined above, just
 more precisely. This leaves the richer capabilities of CAMs aside, some of
 which are outlined in the next section.
+* Building
+Currently there is no build system, meaning you can use the Eclipse IDE
+to produce java libaries, OSGi bundles or runnable jars from the IDE.
 
+There are three bundle projects:
+| de.fhg.igd.pcolor          | The PColor library |
+| de.fhg.igd.pcolor.examples | see below          |
+| de.fhg.igd.pcolor.test     | Unit tests         |
+
+I plan to add a gradle-based build though.
 * Use cases
   CIECAM02, and potential related models, offer a host of new or improved
   capabilities. This library aims to provide an idiomatic java API to
@@ -34,8 +43,8 @@ which are outlined in the next section.
   - Finding a set of equidistant colours
   - Estimating how visually distant different colours are (delta E-like)
   - Exploiting colour relations for visualization of value relations
-
-** API   
+  - creating color palettes for the web
+** API
    The API is not considered stable. It largely builds upon the AWT
    color management API for interoperability, and partly the (defunct)
    Painterly project this was derived from. However in the 1.1.0 release
@@ -109,9 +118,9 @@ ends are:
 - perceptually linear color spaces
 
 This library deals with both ends of the spectrum. The in-betweens,
-such as non-linear RGB/sRGB, YCbCr/YUV, and CYMK are great to store
-and transmit colors but a total mess if you want to properly work with
-colors.
+such as non-linear RGB/sRGB, YCbCr/YUV, and CYMK are great to store,
+transmit and reproduce colors but a total mess if you want to properly
+work with colors.
 
 *Optically* linear color spaces relate to an amount of light, e.g. as
 might be expressed in cd/m^2 (candela per square meter). They can be
@@ -142,7 +151,12 @@ Their downside is that as a vector space, they're pretty odd in shape.
 However it is easy to test if your colour is out of gamut and how far.
 
 This library fully implements CIECAM02 and partly CIE L*a*b*.
-
+* Examples
+The archive contains some examples:
+| MixingIllustration | an overview of results from different color mixing methods |
+| sRgbInCiecam02     | in-Browser 3D hull of sRGB in the CIECAM02 JCh space       |
+| RandomPalette      | determines colors which are distinct from given colors     |
+  
 * Thanks
 Thanks go to the team creating http://costar.sfu.ca/painterly for
 open-sourcing their CIECAM02 implementation, from which this work was
