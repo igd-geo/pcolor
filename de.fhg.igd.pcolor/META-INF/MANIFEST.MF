@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Perceptual Color Calculation
 Bundle-SymbolicName: de.fhg.igd.pcolor
-Bundle-Version: 1.1.0.0
+Bundle-Version: 1.2.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: de.fhg.igd.pcolor;version="1.1.0.0",
- de.fhg.igd.pcolor.colorspace;version="1.1.0.0",
- de.fhg.igd.pcolor.util;version="1.1.0.0"
+Export-Package: de.fhg.igd.pcolor;version="1.2.0.0",
+ de.fhg.igd.pcolor.colorspace;version="1.2.0.0",
+ de.fhg.igd.pcolor.util;version="1.2.0.0"
 Bundle-Vendor: Fraunhofer IGD
