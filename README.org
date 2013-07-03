@@ -155,6 +155,7 @@ This library fully implements CIECAM02 and partly CIE L*a*b*.
 The archive contains some examples:
 | MixingIllustration | an overview of results from different color mixing methods |
 | sRgbInCiecam02     | in-Browser 3D hull of sRGB in the CIECAM02 JCh space       |
+| TwoDColorMatrix    | emits a Hue-Colorfulness table for a given J (brigtness)   |
 | RandomPalette      | determines colors which are distinct from given colors     |
   
 * Thanks
