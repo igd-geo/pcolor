@@ -38,7 +38,7 @@ public class RandomPalette {
 	 * @throws Exception on error :P
 	 */
 	public static void main(String[] args) throws NumberFormatException, Exception {
-		if (args.length < 2) {
+		if (args.length < 3) {
 			System.err.println("Please specify a file, a number of colors to create, a background color and any colors that should be considered pre-occupied.");
 			return;
 		}
