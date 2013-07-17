@@ -80,6 +80,20 @@ public class sRGB extends PColor {
 		super(CS_sRGB.instance, new float[] {rgba[R], rgba[G], rgba[B]}, rgba.length > 3 ? rgba[3] : 1);
 	}
 	
+	/**
+	 * returns the component at the given index
+	 * as a sRGB byte component. Unlike get(), this method
+	 * uses 3 as an index to the alpha channel.
+	 * @param component component index
+	 * @return component as a 0..255 integer
+	 */
+	public int getByte(int component) {
+		if (component == 3)
+			return (short)toi(getAlpha());
+		else
+			return (short)toi(get(component));
+	}
+	
     @Override
 	public sRGB convertFrom(PColor color) {
     	if (color.getColorSpace().equals(this.getColorSpace()))

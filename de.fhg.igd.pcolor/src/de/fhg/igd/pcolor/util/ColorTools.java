@@ -277,11 +277,6 @@ public class ColorTools {
 		return setChannel(palette.clone(), channel, common_max);
 	}
 
-	private static String formatSrgbColor(int argb, String format) {
-		return String.format(Locale.US, format,
-				argb >> 16 & 0xff, argb >> 8 & 0xff, argb & 0xff, argb >> 24 & 0xff);
-	}
-	
 	/**
 	 * Format a color as HTML hex color string ("simple color", i.e. "#aabbcc") with 24/32 bit sRGB.
 	 * @param c the color
@@ -289,7 +284,9 @@ public class ColorTools {
 	 * @return a string representing c in sRGB, clipped if needed
 	 */
 	public static String toHtml(PColor c, boolean alpha) {
-		return formatSrgbColor(c.getARGB(), alpha?"#%02x%02x%02x%02x":"#%02x%02x%02x");
+		int argb = c.getARGB();
+		return String.format(Locale.US, alpha ? "#%02x%02x%02x%02x" : "#%02x%02x%02x",
+				argb >> 16 & 0xff, argb >> 8 & 0xff, argb & 0xff, argb >> 24 & 0xff);
 	}
 	
 	/**
@@ -299,7 +296,14 @@ public class ColorTools {
 	 * @return a string representing c in sRGB, clipped if needed
 	 */
 	public static String toCss(PColor c, boolean alpha) {
-		return formatSrgbColor(c.getARGB(), alpha?"rgba(%3d, %3d, %3d, %3d)":"rgb(%3d, %3d, %3d)");
+		sRGB rgb = (sRGB) PColor.convert(c, CS_sRGB.instance);
+		return String.format(
+				Locale.US, 
+				alpha ? "rgba(%3d, %3d, %3d, %1.2f)" : "rgb(%3d, %3d, %3d)",
+				rgb.getByte(sRGB.R),
+				rgb.getByte(sRGB.G),
+				rgb.getByte(sRGB.B),
+				rgb.getAlpha());
 	}
 	
 	/**
@@ -321,11 +325,11 @@ public class ColorTools {
 	public static String toCssUnclipped(PColor c, boolean alpha) {
 		sRGB rgb = (sRGB) PColor.convert(c, CS_sRGB.instance);
 		return String.format(Locale.US,
-				alpha?"rgba(%3d, %3d, %3d, %3d)":"rgb(%3d, %3d, %3d)",
+				alpha?"rgba(%3d, %3d, %3d, %1.2f)":"rgb(%3d, %3d, %3d)",
 				Math.round(rgb.get(sRGB.R) * 255),
 				Math.round(rgb.get(sRGB.G) * 255),
 				Math.round(rgb.get(sRGB.B) * 255),
-				Math.round(rgb.getAlpha() * 255));
+				rgb.getAlpha());
 	}
 	
 	private final static Pattern rgbColorPatternX1 = Pattern.compile("#(\\p{XDigit}{1})(\\p{XDigit}{1})(\\p{XDigit}{1})");
@@ -334,8 +338,9 @@ public class ColorTools {
 	private final static Pattern rgbColorPatternX2A = Pattern.compile("#(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})");
 	
 	private final static String intP = "\\s*(-?\\d+)\\s*";
+	private final static String alphaP = "\\s*([\\d\\.]+)\\s*";
 	private final static Pattern rgbColorPatternD = Pattern.compile("rgb\\(" + intP + "," + intP + "," + intP + "\\)");
-	private final static Pattern rgbColorPatternDA = Pattern.compile("rgba\\(" + intP + "," + intP + "," + intP + "," + intP +"\\)");
+	private final static Pattern rgbColorPatternDA = Pattern.compile("rgba\\(" + intP + "," + intP + "," + intP + "," + alphaP +"\\)");
 
 	/**
 	 * Parses the HTML/CSS sRGB "simple colors", some "legacy colors" and CSS
@@ -382,7 +387,7 @@ public class ColorTools {
 			return sRGB.fromBytes(Integer.parseInt(m.group(1)),
 					Integer.parseInt(m.group(2)),
 					Integer.parseInt(m.group(3)),
-					Integer.parseInt(m.group(4)));
+					(int)(Float.parseFloat(m.group(4)) * 255));
 		}
 		throw new IllegalArgumentException("Found none of the supported color notations");
 	}

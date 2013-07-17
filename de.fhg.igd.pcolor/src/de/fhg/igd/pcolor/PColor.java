@@ -130,7 +130,7 @@ public abstract class PColor {
 			   toi(rgb[2]);
 	}
 
-	private static int toi(float f) {
+	protected static int toi(float f) {
 		if (f <= 0)
 			return 0;
 		if (f >= 1)

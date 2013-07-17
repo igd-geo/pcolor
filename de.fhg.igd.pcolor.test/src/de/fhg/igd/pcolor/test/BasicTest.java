@@ -59,23 +59,25 @@ public class BasicTest {
 		assertEquals(1.0, sRGB.fromArgb(0xaaffeedd).get(sRGB.R), /*delta*/ 0f);
 		assertEquals("#ffeeddaa", toHtml(sRGB.fromArgb(0xaaffeedd), true));
 		assertEquals("#ffeedd", toHtml(sRGB.fromArgb(0xaaffeedd), false));
-		assertEquals("rgba(255, 238, 221, 170)", toCss(sRGB.fromArgb(0xaaffeedd), true));
+		assertEquals("rgba(255, 238, 221, 0.67)", toCss(sRGB.fromArgb(0xaaffeedd), true));
 		assertEquals("rgb(255, 238, 221)", toCss(sRGB.fromArgb(0xaaffeedd), false));
 		
 		// test padding
 		sRGB tc1 = sRGB.fromArgb(0x04010203);
-		sRGB tc1A = sRGB.fromArgb(0xFF010203); // opaque reference for no-alpha text notations
+		sRGB tc1A = sRGB.fromArgb(0x7f010203); // opaque reference for no-alpha text notations
 		assertEquals("#01020304", toHtml(tc1, true));
-		assertEquals("rgba(  1,   2,   3,   4)", toCss(tc1, true));
+		assertEquals("rgba(  1,   2,   3, 0.02)", toCss(tc1, true));
 		
 		// test unclipped
-		sRGB tc2 = sRGB.fromBytes(-1, 20, 300, 4);
-		assertEquals("rgba( -1,  20, 300,   4)", toCssUnclipped(tc2, true));
+		sRGB tc2 = sRGB.fromBytes(-1, 20, 300, 8);
+		assertEquals("rgba( -1,  20, 300, 0.03)", toCssUnclipped(tc2, true));
 		
 		assertTrue(compareColor(tc1, parseColor(toHtml(tc1, true))));
 		assertTrue(compareColor(tc1A, parseColor(toHtml(tc1, false))));
+		assertTrue(compareColor(tc1A, parseColor(toHtml(tc1, true))));
 		assertTrue(compareColor(tc1, parseColor(toCss(tc1, true))));
 		assertTrue(compareColor(tc1A, parseColor(toCss(tc1, false))));
+		assertTrue(compareColor(tc1A, parseColor(toCss(tc1, true))));
 
 		// character expansion
 		assertTrue(compareColor(sRGB.fromArgb(0x44332211), parseColor("#3214")));
