@@ -43,8 +43,8 @@ import de.fhg.igd.pcolor.colorspace.ViewingConditions;
  * @author Simon Thum
  */
 public class ConversionTest {
-	ViewingConditions brightCond = new ViewingConditions(CS_CIECAM02.D65White, 318.31, 20.0, Surrounding.averageSurrounding);
-	ViewingConditions darkCond = new ViewingConditions(CS_CIECAM02.D65White, 31.83, 20.0, Surrounding.averageSurrounding);
+	ViewingConditions brightCond = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 318.31, 20.0, Surrounding.averageSurrounding);
+	ViewingConditions darkCond = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 31.83, 20.0, Surrounding.averageSurrounding);
 
 	/**
 	 * tests conversion from CIEXYZ to CIECAM02 and back.   

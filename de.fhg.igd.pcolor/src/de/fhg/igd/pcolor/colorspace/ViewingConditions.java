@@ -22,6 +22,7 @@ package de.fhg.igd.pcolor.colorspace;
 
 import java.util.Arrays;
 
+import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.util.MathTools;
 
 /**
@@ -35,17 +36,17 @@ public class ViewingConditions {
 	/**
 	 * The XYZ whitepoint of standard illuminant D50, which is what JAI and ICC Profiles use.
 	 */
-	public static final double[] IlluminantD50 = new double[] {96.422, 100.0, 82.521};
+	public static final float[] IlluminantD50 = new float[] {96.422f, 100.0f, 82.521f};
 
 	/**
 	 * The XYZ whitepoint of standard illuminant D65, which is what sRGB uses.
 	 */
-	public static final double[] IlluminantD65 = new double[] {95.047, 100.0, 108.883};
+	public static final float[] IlluminantD65 = new float[] {95.047f, 100.0f, 108.883f};
 	
 	/**
 	 * The XYZ whitepoint E (equilibrium), useful for relative colorimetry
 	 */
-	public static final double[] IlluminantE = new double[] {100.0, 100.0, 100.0};
+	public static final float[] IlluminantE = new float[] {100.0f, 100.0f, 100.0f};
 	
 	/**
 	 * Viewing conditions modelled after sRGB's "encoding" (would-be ideal)
@@ -55,14 +56,14 @@ public class ViewingConditions {
 	 * Pontyon).
 	 */
 	public static final ViewingConditions sRGB_encoding_envirnonment =
-			new ViewingConditions(IlluminantD50, 64.0, 64/5, Surrounding.dimSurrounding);
+			createAdapted(IlluminantD50, 64.0, 64/5, Surrounding.dimSurrounding);
 
 	/**
 	 * Viewing conditions modelled after sRGB's "typical" viewing environment
 	 * with 200 cd/m2.
 	 */
 	public static final ViewingConditions sRGB_typical_envirnonment = 
-			new ViewingConditions(IlluminantD50, 200, 200/5, Surrounding.averageSurrounding);
+			createAdapted(IlluminantD50, 200, 200/5, Surrounding.averageSurrounding);
 	
 	/**
 	 * Viewing conditions modelled after Adobe RGB (1998) whitepoint luminance.
@@ -70,7 +71,7 @@ public class ViewingConditions {
 	 * http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf
 	 */
 	public static final ViewingConditions AdobeRGB_envirnonment = 
-			new ViewingConditions(IlluminantD65, 160, 160/5, Surrounding.averageSurrounding);
+			createAdapted(IlluminantD65, 160, 160/5, Surrounding.averageSurrounding);
 
 
 	// environment parameters
@@ -83,27 +84,19 @@ public class ViewingConditions {
 	private final double[] D_RGB;
 
 	/**
-	 * Construct a new ViewingConditions instance
+	 * Construct a new ViewingConditions instance. This constructor is for internal use.
 	 * @param XYZ_w XYZ whitepoint
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
+	 * @param RGB_c the adapted RGB values (equations 7.4-6)
+	 * @param RGB_w the white point in RGB values (equations 7.4-6)
 	 */
-	public ViewingConditions(double[] XYZ_w, double L_A, double Y_b, Surrounding sur) {
+	private ViewingConditions(double[] XYZ_w, double L_A, double Y_b, Surrounding sur, double[] RGB_w, double[] RGB_c) {
 		this.XYZ_w = XYZ_w; // XYZ whitepoint
 		this.L_A = L_A; // average luminance of visual surround
 		this.Y_b = Y_b; // adaptation luminance of color background
 		this.surrounding = sur;
-
-		// calculate RGB whitepoint
-		double[] RGB_w = CS_CIECAM02.XYZtoCAT02(XYZ_w);
-
-		// calculate luminance adaptation factor (level of chromatic adaptation, 1.0 means total)
-		double D = Math.max(0.0, Math.min(1.0, surrounding.getF() * (1.0 - (1.0 / 3.6) * Math.pow(Math.E, (-L_A - 42.0) / 92.0))));
-		D_RGB = new double[3];
-		for(int i = 0; i < D_RGB.length; i++) {
-			D_RGB[i] = D * XYZ_w[1] / RGB_w[i] + 1.0 - D;
-		}
 
 		// calculate increase in brightness and colorfulness caused by brighter viewing environments
 		double L_Ax5 = 5.0 * L_A;
@@ -119,7 +112,7 @@ public class ViewingConditions {
 		N_cb = N_bb; // chromatic contrast factors (calculate increase in J, Q, and C caused by dark backgrounds)
 
 		// calculate achromatic response to white
-		double[] RGB_wc = new double[] {D_RGB[0] * RGB_w[0], D_RGB[1] * RGB_w[1], D_RGB[2] * RGB_w[2]};
+		double[] RGB_wc = new double[] {RGB_c[0] * RGB_w[0], RGB_c[1] * RGB_w[1], RGB_c[2] * RGB_w[2]};
 		double[] RGBPrime_w = CS_CIECAM02.CAT02toHPE(RGB_wc);
 		double[] RGBPrime_aw = new double[3];
 		for(int channel = 0; channel < RGBPrime_w.length; channel++) {
@@ -132,10 +125,62 @@ public class ViewingConditions {
 			}
 		}
 		A_w = (2.0 * RGBPrime_aw[0] + RGBPrime_aw[1] + RGBPrime_aw[2] / 20.0 - 0.305) * N_bb;
+		D_RGB = RGB_c;
 	}
 	
-	public ViewingConditions(float[] XYZ_w, float L_A, float Y_b, Surrounding sur) {
-		this(MathTools.floatToDoubleArray(XYZ_w), L_A, Y_b, sur);
+	/**
+	 * Construct a new ViewingConditions instance. The adaption is derived from the background. This
+	 * is the standard case treated in CIE 159:2004.
+	 * @param XYZ_w XYZ whitepoint
+	 * @param L_A average luminance of visual surround
+	 * @param Y_b adaptation luminance of color background
+	 * @param sur the surrounding
+	 */
+	public static ViewingConditions createAdapted(float[] XYZ_w, double L_A, double Y_b, Surrounding sur) {
+		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w);
+		// calculate RGB whitepoint
+		double[] RGB_w = CS_CIECAM02.XYZtoCAT02(xyz_w);
+		double D = calcD(L_A, sur);
+		double[] RGB_c = calcAdaptedRGBc(xyz_w, RGB_w, D);
+		return new ViewingConditions(xyz_w, L_A, Y_b, sur, RGB_w, RGB_c);
+	}
+
+	/**
+	 * Create viewing conditions assuming full adaption.
+	 * @param XYZ_w XYZ whitepoint
+	 * @param L_A average luminance of visual surround
+	 * @param Y_b adaptation luminance of color background
+	 * @param sur the surrounding
+	 * @return
+	 */
+	public static ViewingConditions createFullyAdapted(float[] XYZ_w, float L_A, float Y_b, Surrounding sur) {
+		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w);
+		double[] RGB_w = CS_CIECAM02.XYZtoCAT02(xyz_w);
+		double[] RGB_c = calcAdaptedRGBc(xyz_w, RGB_w, 1.0);
+		return new ViewingConditions(xyz_w, L_A, Y_b, sur, RGB_w, RGB_c);
+	}
+
+	private static double[] calcAdaptedRGBc(double[] XYZ_w, double[] RGB_w, double D) {
+		double[] RGB_c = new double[3];
+		for(int i = 0; i < RGB_c.length; i++) {
+			RGB_c[i] = (D * XYZ_w[1] / RGB_w[i]) + (1.0 - D);
+		}
+		return RGB_c;
+	}
+	
+	private static double calcD(double L_A, Surrounding sur) {
+		return Math.max(0.0, Math.min(1.0, sur.getF() * (1.0 - (1.0 / 3.6) * Math.pow(Math.E, (-L_A - 42.0) / 92.0))));
+	}
+	
+	/**
+	 * Derive viewing conditions for self-luminous displays.
+	 * Here the adopted white point is estimated as a mixture
+	 * of the display white and the background white.
+	 * See CIE:159:2004, section 5.
+	 * @return
+	 */
+	public float[] selfLuminousDisplayWhitepoint(CIEXYZ display_white, CIEXYZ surround_white, float mix) {
+		return CIEXYZ.blend(new CIEXYZ[] {display_white, surround_white}, new float[]{mix, 1 - mix}).getComponents();
 	}
 
 	@Override

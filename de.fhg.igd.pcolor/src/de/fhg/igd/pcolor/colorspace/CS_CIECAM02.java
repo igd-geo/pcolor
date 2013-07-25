@@ -73,24 +73,9 @@ public class CS_CIECAM02 extends ColorSpace {
 	public static final int h = 6;
 
 	/**
-	 * The XYZ whitepoint of standard illuminant D50, which is what JAI and ICC Profiles use.
-	 */
-	public static double[] D50White = new double[] {96.422, 100.0, 82.521};
-
-	/**
-	 * The XYZ whitepoint of standard illuminant D65, which is what sRGB uses.
-	 */
-	public static double[] D65White = new double[] {95.047, 100.0, 108.883};
-	
-	/**
-	 * The XYZ whitepoint E, useful for relative colorimetry
-	 */
-	public static double[] E = new double[] {100.0, 100.0, 100.0};
-
-	/**
 	 * default viewing conditions for D65 white-point, 64 cd/m2 average luminance and 20 cd/m2 adaption luminance
 	 */
-	protected static ViewingConditions defaultContext = new ViewingConditions(D65White, 64.0, 20.0, Surrounding.averageSurrounding);
+	protected static ViewingConditions defaultContext = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 64.0, 20.0, Surrounding.averageSurrounding);
 
 	/**
 	 * context
@@ -108,9 +93,9 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur surrounding
 	 */
-	public CS_CIECAM02(double[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
+	public CS_CIECAM02(float[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(TYPE_7CLR, 7);
-		this.context = new ViewingConditions(XYZWhitePoint, L_A, Y_b, sur);
+		this.context = ViewingConditions.createAdapted(XYZWhitePoint, L_A, Y_b, sur);
 	}
 
 	/**

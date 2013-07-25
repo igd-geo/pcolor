@@ -49,7 +49,7 @@ public class RandomPalette {
 		// construct colorspace using background color
 		sRGB bgCol = ColorTools.parseColor(args[2]);
 		CS_JCh cspace = new CS_JCh(
-				new ViewingConditions(bgCol.getColorSpace().toCIEXYZ(bgCol.getComponents()),
+				ViewingConditions.createAdapted(bgCol.getColorSpace().toCIEXYZ(bgCol.getComponents()),
 						200,
 						200/5,
 						Surrounding.averageSurrounding));

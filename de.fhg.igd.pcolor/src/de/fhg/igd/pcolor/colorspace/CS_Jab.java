@@ -60,7 +60,7 @@ public class CS_Jab extends CS_CIECAM02 {
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur surrounding
 	 */
-	public CS_Jab(double[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
+	public CS_Jab(float[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(XYZWhitePoint, L_A, Y_b, sur);
 	}
 
