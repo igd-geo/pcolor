@@ -260,28 +260,6 @@ public abstract class PColor {
 	}
 
 	/**
-	 * This method provides arbitrary conversion between PColor objects.
-	 * 
-	 * @param color
-	 *            The color to be converted
-	 * @return A PColor in its native colorspace.
-	 */
-	public abstract PColor convertFrom(PColor color);
-
-	/**
-	 * Converts this color to the colorspace specified by the color parameter.
-	 * 
-	 * @param color -
-	 *            a PColor containing the colorspace to which this color will be
-	 *            converted.
-	 * @return A new PColor<E> in the ColorSpace of color.
-	 */
-	@SuppressWarnings("unchecked")
-	public <C extends PColor> C convertTo(C color) {
-		return (C)(color.convertFrom(this));
-	}
-	
-	/**
 	 * Transposes this color (if defined by appearance correlates) to another
 	 * color which has the same appearance correlates within other viewing
 	 * conditions, as represented by the given color space.

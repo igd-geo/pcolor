@@ -135,11 +135,4 @@ public class Jab extends PColor {
 		}
 	}
 
-	@Override
-	public Jab convertFrom(PColor color) {
-		if (color.getColorSpace().equals(this.getColorSpace()))
-			return (Jab)color;
-		return new Jab(color, (CS_Jab)this.getColorSpace());
-	}
-
 }

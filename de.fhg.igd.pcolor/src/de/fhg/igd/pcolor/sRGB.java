@@ -93,13 +93,6 @@ public class sRGB extends PColor {
 		else
 			return (short)toi(get(component));
 	}
-	
-    @Override
-	public sRGB convertFrom(PColor color) {
-    	if (color.getColorSpace().equals(this.getColorSpace()))
-			return (sRGB)color;
-		return new sRGB(color);
-	}
     
     /**
 	 * Unpack a 32-Bit ARGB int, normalising to 0..1

@@ -70,9 +70,4 @@ public class CIELab extends PColor {
 		super(CS_CIELab.instance, new float[] {L, a, b}, alpha);
 	}
 
-	@Override
-	public CIELab convertFrom(PColor color) {
-		return new CIELab(color);
-	}
-
 }

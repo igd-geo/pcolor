@@ -78,12 +78,6 @@ public class CIEXYZ extends PColor {
 	public CIEXYZ(float X, float Y, float Z, float alpha) {
 		super(CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
 	}
-
-	@Override
-	public CIEXYZ convertFrom(PColor color) {
-		if (color.getColorSpace().equals(this.getColorSpace()))
-			return (CIEXYZ)color;
-		return new CIEXYZ(color);
 	}
 	
 	/**
