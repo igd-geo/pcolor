@@ -61,19 +61,18 @@ public class CIEXYZ extends PColor {
 
 	/**
 	 * with 1 as alpha value
-	 * @param X Red
-	 * @param Y Green
-	 * @param Z Blue
+	 * @param X tristimulus value
+	 * @param Y tristimulus value, also known as luminance
+	 * @param Z tristimulus value
 	 */
 	public CIEXYZ(float X, float Y, float Z) {
 		this(X, Y, Z, 1f);
 	}
 
 	/**
-	 * 
-	 * @param X Red
-	 * @param Y Green
-	 * @param Z Blue
+	 * @param X tristimulus value
+	 * @param Y tristimulus value, also known as luminance
+	 * @param Z tristimulus value
 	 * @param alpha alpha value
 	 */
 	public CIEXYZ(float X, float Y, float Z, float alpha) {
