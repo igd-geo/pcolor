@@ -22,8 +22,9 @@ package de.fhg.igd.pcolor.colorspace;
 
 /**
  * The surrounding coarsely characterises the viewing conditions as
- * modelled in CIECAM02.
+ * modelled in CIECAM02. See CIE 159:2004 section 4.5 for details.
  * @author Thu Huong Luu
+ * @author Simon Thum
  */
 public class Surrounding {
 
@@ -48,7 +49,7 @@ public class Surrounding {
 
 	public final static Surrounding averageSurrounding = new Surrounding(1.0, 0.69, 1.0);
 
-	public final static Surrounding dimSurrounding = new Surrounding(0.9, 0.59, 0.95);
+	public final static Surrounding dimSurrounding = new Surrounding(0.9, 0.59, 0.9);
 
 	public final static Surrounding darkSurrounding = new Surrounding(0.8, 0.525, 0.8);
 
