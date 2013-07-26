@@ -78,6 +78,12 @@ public class CIEXYZ extends PColor {
 	public CIEXYZ(float X, float Y, float Z, float alpha) {
 		super(CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
 	}
+	
+	public static CIEXYZ fromxyY(float x, float y, float Y) {
+		if (y == 0)
+			return new CIEXYZ(0,0,0);
+		else
+			return new CIEXYZ(x*Y/y, Y, (1-x-y)*Y/y);
 	}
 	
 	/**

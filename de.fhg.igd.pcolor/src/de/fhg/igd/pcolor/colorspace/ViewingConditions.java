@@ -49,6 +49,22 @@ public class ViewingConditions {
 	public static final float[] IlluminantE = new float[] {100.0f, 100.0f, 100.0f};
 	
 	/**
+	 * CIE F2, a common fluorescent illuminant. Also known as F, F02,
+	 * Fcw, CFW, CFW2, cool white fluorescent. 4230K.
+	 */
+	public static final float[] IlluminantF2 = CIEXYZ.fromxyY(0.3721f, 0.3751f, 100f).getComponents();
+	
+	/**
+	 * CIE F7, a broadband fluorescent illuminant. Approximates D65. 6500K.
+	 */
+	public static final float[] IlluminantF7 = CIEXYZ.fromxyY(0.3129f, 0.3292f, 100f).getComponents();
+	
+	/**
+	 * CIE F11, a narrow tri-band fluorescent illuminant. 4000K.
+	 */
+	public static final float[] IlluminantF11 = CIEXYZ.fromxyY(0.3805f, 0.3769f, 100f).getComponents();
+	
+	/**
 	 * Viewing conditions modelled after sRGB's "encoding" (would-be ideal)
 	 * viewing environment with 64 cd/m2 average luminance and 20 % adaption
 	 * luminance. The dim surrounding matches the dim viewing environment
