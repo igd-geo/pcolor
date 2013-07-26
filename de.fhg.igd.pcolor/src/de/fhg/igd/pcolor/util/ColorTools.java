@@ -348,6 +348,7 @@ public class ColorTools {
 	 * 
 	 * @param c the color string
 	 * @return a corresponding {@link sRGB} color
+	 * @throws IllegalArgumentException is the input cannot be parsed
 	 */
 	public static sRGB parseColor(String c) {
 		Matcher m = rgbColorPatternX1.matcher(c);

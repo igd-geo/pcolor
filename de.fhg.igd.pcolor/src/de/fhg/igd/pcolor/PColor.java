@@ -259,6 +259,9 @@ public abstract class PColor {
 	 * Transposes this color (if defined by appearance correlates) to another
 	 * color which has the same appearance correlates within other viewing
 	 * conditions, as represented by the given color space.
+	 * The term "transpose" is not established for this operation, but is
+	 * shorter than "compute corresponding colors", and is
+	 * not otherwise taken in color.
 	 * 
 	 * @param to
 	 *            the target color space (and viewing conditions)
