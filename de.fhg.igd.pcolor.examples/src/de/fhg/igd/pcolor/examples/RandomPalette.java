@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.JCh;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
+import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.Surrounding;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
@@ -49,7 +51,7 @@ public class RandomPalette {
 		// construct colorspace using background color
 		sRGB bgCol = ColorTools.parseColor(args[2]);
 		CS_JCh cspace = new CS_JCh(
-				ViewingConditions.createAdapted(bgCol.getColorSpace().toCIEXYZ(bgCol.getComponents()),
+				ViewingConditions.createAdapted((CIEXYZ) PColor.convert(bgCol, CS_CIEXYZ.instance),
 						200,
 						200/5,
 						Surrounding.averageSurrounding));

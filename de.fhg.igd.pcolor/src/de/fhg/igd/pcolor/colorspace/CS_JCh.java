@@ -20,6 +20,7 @@
 
 package de.fhg.igd.pcolor.colorspace;
 
+import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 
 
@@ -52,14 +53,13 @@ public class CS_JCh extends CS_CIECAM02 {
 	public static final CS_JCh defaultInstance = new CS_JCh(defaultContext);
 
 	/**
-	 * 
-	 * @param XYZWhitePoint XYZ white point
+	 * @param whitePoint XYZ white point
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur surrounding
 	 */
-	public CS_JCh(float[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
-		super(XYZWhitePoint, L_A, Y_b, sur);
+	public CS_JCh(CIEXYZ whitePoint, double L_A, double Y_b, Surrounding sur) {
+		super(whitePoint, L_A, Y_b, sur);
 	}
 
 	/**

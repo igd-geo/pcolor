@@ -79,11 +79,36 @@ public class CIEXYZ extends PColor {
 		super(CS_CIEXYZ.instance, new float[] {X, Y, Z}, alpha);
 	}
 	
-	public static CIEXYZ fromxyY(float x, float y, float Y) {
+	/**
+	 * Construct XYZ from the xy chrominance and Y luminance
+	 * @param xyY  xy chrominance and Y luminance
+	 * @return the corresponding XYZ
+	 */
+	public static CIEXYZ fromxyY(float... xyY) {
+		float x = xyY[0];
+		float y = xyY[1];
+		float Y = xyY[2];
 		if (y == 0)
-			return new CIEXYZ(0,0,0);
+			return new CIEXYZ(0, 0, 0);
 		else
 			return new CIEXYZ(x*Y/y, Y, (1-x-y)*Y/y);
+	}
+	
+	/**
+	 * Convert to xyY. This is a minor derived helper space so it has no own type.
+	 * @return a float array containing xyY respectively
+	 * @see CIEXYZ#fromxyY(float...)
+	 */
+	public float[] toxyY() {
+		float s = get(X) + get(Y) + get(Z);
+		if (s == 0) {
+			return new float[] {0f,0f,0f};
+		}
+		return new float[] {
+			get(X) / s,
+			get(Y) / s,
+			get(Y)
+		};
 	}
 	
 	/**

@@ -23,6 +23,7 @@ package de.fhg.igd.pcolor.colorspace;
 import java.awt.color.ColorSpace;
 
 import de.fhg.igd.pcolor.CIEXYZ;
+import de.fhg.igd.pcolor.Illuminant;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.util.MathTools;
 
@@ -75,7 +76,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	/**
 	 * default viewing conditions for D65 white-point, 64 cd/m2 average luminance and 20 cd/m2 adaption luminance
 	 */
-	protected static ViewingConditions defaultContext = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 64.0, 20.0, Surrounding.averageSurrounding);
+	protected static ViewingConditions defaultContext = ViewingConditions.createAdapted(Illuminant.D65, 64.0, 20.0, Surrounding.averageSurrounding);
 
 	/**
 	 * context
@@ -88,14 +89,14 @@ public class CS_CIECAM02 extends ColorSpace {
 	public static final CS_CIECAM02 defaultInstance = new CS_CIECAM02(defaultContext);
 
 	/**
-	 * @param XYZWhitePoint XYZ white point
+	 * @param whitePoint XYZ white point
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur surrounding
 	 */
-	public CS_CIECAM02(float[] XYZWhitePoint, double L_A, double Y_b, Surrounding sur) {
+	public CS_CIECAM02(CIEXYZ whitePoint, double L_A, double Y_b, Surrounding sur) {
 		super(TYPE_7CLR, 7);
-		this.context = ViewingConditions.createAdapted(XYZWhitePoint, L_A, Y_b, sur);
+		this.context = ViewingConditions.createAdapted(whitePoint, L_A, Y_b, sur);
 	}
 
 	/**

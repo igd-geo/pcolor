@@ -27,6 +27,7 @@ import java.awt.color.ColorSpace;
 import org.junit.Test;
 
 import de.fhg.igd.pcolor.CIEXYZ;
+import de.fhg.igd.pcolor.Illuminant;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_CIECAM02;
@@ -43,8 +44,8 @@ import de.fhg.igd.pcolor.colorspace.ViewingConditions;
  * @author Simon Thum
  */
 public class ConversionTest {
-	ViewingConditions brightCond = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 318.31, 20.0, Surrounding.averageSurrounding);
-	ViewingConditions darkCond = ViewingConditions.createAdapted(ViewingConditions.IlluminantD65, 31.83, 20.0, Surrounding.averageSurrounding);
+	ViewingConditions brightCond = ViewingConditions.createAdapted(Illuminant.D65, 318.31, 20.0, Surrounding.averageSurrounding);
+	ViewingConditions darkCond = ViewingConditions.createAdapted(Illuminant.D65, 31.83, 20.0, Surrounding.averageSurrounding);
 
 	/**
 	 * tests conversion from CIEXYZ to CIECAM02 and back.   
