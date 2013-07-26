@@ -146,14 +146,10 @@ public abstract class PColor {
 	}
 
 	/**
-	 * Returns a reference to this color's components array. <b>This array MUST
-	 * NOT BE MODIFED! Behaviour is undefined if you modify this array.</b>
-	 * <p>
-	 * PColors are designed to be immutable, this loophole merely exists for
-	 * performance reasons. Modify at your peril.
+	 * Returns a copy of this color's components array.
 	 */
 	public float[] getComponents() {
-		return components;
+		return components.clone();
 	}
 
     /**
