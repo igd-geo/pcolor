@@ -110,7 +110,15 @@ public class CS_CIECAM02 extends ColorSpace {
 	@Override
 	public float[] fromCIEXYZ(float[] colorvalue) {
 		double[] XYZ = new double[] {colorvalue[0] * 100.0, colorvalue[1] * 100.0, colorvalue[2] * 100.0};
+		return forwardTransform(XYZ);
+	}
 
+	/**
+	 * Implements the CIECAM02 forward transform.
+	 * @param XYZ the XYZ tristimulus coordinates to transform
+	 * @return the CIECAM02 appearance correlates
+	 */
+	protected float[] forwardTransform(double[] XYZ) {
 		// calculate sharpened cone response
 		double[] RGB = forwardPreAdaptationConeResponse(XYZ);
 
@@ -295,22 +303,76 @@ public class CS_CIECAM02 extends ColorSpace {
 	protected double forwardC(double J, double t) {
 		return Math.signum(t) * Math.pow(Math.abs(t), 0.9) * Math.sqrt(J / 100.0) * Math.pow(1.64-Math.pow(0.29, context.getN()), 0.73);
 	}
+	
+	/**
+	 * @param d a double
+	 * @return true if the double is a real number
+	 */
+	protected boolean isGiven(double d) {
+		return !Double.isNaN(d) && !Double.isInfinite(d); 
+	}
 
 	@Override
 	public float[] toCIEXYZ(float[] colorvalue) {
-		// calculate e
-		double e = gete(colorvalue[h]);
+		// routine is destructive; prevent chaos
+		colorvalue = colorvalue.clone();
+		
+		double[] XYZ = reverseTransform(colorvalue);
 
-		// calculate achromatic response
+		float[] result = new float[] {(float)(XYZ[0] / 100.0), (float)(XYZ[1] / 100.0), (float)(XYZ[2] / 100.0)};
+		return result;
+	}
+
+	/**
+	 * Implements the CIECAM02 inverse (or reverse) transform. colorvalue may contain NaNs, in which case this
+	 * routine fill them with derived correlates if possible. If not, an {@link IllegalArgumentException}
+	 * will be thrown.
+	 * @param colorvalue an array of floats (and NaNs if applicable)
+	 * @return the reversed XYZ coordinates in the range 0-100
+	 */
+	private double[] reverseTransform(float[] colorvalue) {
+		// if starting from Q, derive J (8.1)
+		if (isGiven(colorvalue[Q]) && !isGiven(colorvalue[J]))
+			colorvalue[J] = (float) calculateJ(colorvalue[Q]);
+		else if (isGiven(colorvalue[J]) && !isGiven(colorvalue[Q]))
+			colorvalue[Q] = (float) calculateQ(colorvalue[J]); // or vice versa (8.3)
+		else if (!isGiven(colorvalue[J]) && !isGiven(colorvalue[Q]))
+			throw new IllegalArgumentException("J or Q have to be given.");
+		
+		// if starting from M, derive C (8.2)
+		if (isGiven(colorvalue[M]) && !isGiven(colorvalue[C]))
+			colorvalue[C] = (float) calculateC(colorvalue[M]);
+		
+		// if starting from s, derive C (8.3/4)
+		if (isGiven(colorvalue[s]) && !isGiven(colorvalue[C])) {
+			colorvalue[C] = (float) calculateC(colorvalue[s], colorvalue[Q]);
+		}
+		
+		if (!isGiven(colorvalue[C]))
+			throw new IllegalArgumentException("C, M, or s have to be given.");
+		
+		// if starting from H derive h (8.5)
+		if (isGiven((double) colorvalue[H]) && !isGiven(colorvalue[h]))
+			colorvalue[h] = (float) calculateh(colorvalue[H]);
+		
+		// calculate e (8.7)
+		double e = gete(colorvalue[h]);
+		
+		// calculate achromatic response (8.8)
 		double A = reverseA(colorvalue[J]);
 
 		// calculate a and b
 		double t = reverset(colorvalue[J], colorvalue[C]);
 		double p2 = reversep2(A);
-		double[] ab = reverseab(colorvalue[h], e, t, p2);
-		double a = ab[0]; double b = ab[1];
+		double a, b;
+		if (t > 0) { // see note before 8.7
+			double[] ab = reverseab(colorvalue[h], e, t, p2);
+			a = ab[0]; b = ab[1];
+		} else {
+			a = 0; b = 0;
+		}
 
-		// calculate postadaptation cone response (resulting in dynamic range compression)
+		// calculate post-adaptation cone response (resulting in dynamic range compression)
 		double[] RGBPrime_a = reverseResponseCompression(a, b, p2);
 
 		// calculate HPE response
@@ -320,10 +382,7 @@ public class CS_CIECAM02 extends ColorSpace {
 		double[] RGB = reversePreAdaptationConeResponse(RGBPrime);
 
 		// calculate XYZ tristimulus values
-		double[] XYZ = reverseXYZ(RGB);
-
-		float[] result = new float[] {(float)(XYZ[0] / 100.0), (float)(XYZ[1] / 100.0), (float)(XYZ[2] / 100.0)};
-		return result;
+		return reverseXYZ(RGB);
 	}
 
 	/**
