@@ -11,9 +11,9 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import de.fhg.igd.pcolor.JCh;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.PColor;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 import de.fhg.igd.pcolor.util.ColorPredicates;
 import de.fhg.igd.pcolor.util.ColorTools;
@@ -29,42 +29,42 @@ import de.fhg.igd.pcolor.util.MathTools;
  */
 public class SrgbInCiecam02 {
 	
-	static SortedMap<Float, List<JCh>> create3DColorMap(CS_JCh jchSpace) {
-		TreeMap<Float, List<JCh>> rings = new TreeMap<>(); 
+	static SortedMap<Float, List<CAMLch>> create3DColorMap(CS_CAMLch jchSpace) {
+		TreeMap<Float, List<CAMLch>> rings = new TreeMap<>(); 
 		for (float L = 0; L <= 100; L += 4 /* lower than 4 scares x3dom */) {
-			ArrayList<JCh> ring = new ArrayList<>(360);
+			ArrayList<CAMLch> ring = new ArrayList<>(360);
 			// create a ring (0-360 degree) with maximum colorfulness
 			for (float hue = 0; hue < 360; hue += 1) {
-				JCh startColor = new JCh(new float[]{L, 0, hue}, 1f, jchSpace);
+				CAMLch startColor = new CAMLch(new float[]{L, 0, hue}, 1f, jchSpace);
 				assert ColorPredicates.is_sRGB.apply(startColor);
-				ring.add(ColorTools.determineBoundaryColor(startColor, JCh.C, 0f, 150f, 0.01f, ColorPredicates.is_sRGB));
+				ring.add(ColorTools.determineBoundaryColor(startColor, CAMLch.c, 0f, 150f, 0.01f, ColorPredicates.is_sRGB));
 			}
 			rings.put(L, ring);
 		}
 		return rings;
 	}
 	
-	static float[] getCoords(JCh col) {
+	static float[] getCoords(CAMLch col) {
 		float[] c = new float[3];
-		c[0] = (col.get(JCh.J)/100f) - 0.5f;
-		c[1] = (float) (Math.sin(Math.toRadians(col.get(JCh.h))) * col.get(JCh.C) / 100f); 
-		c[2] = (float) (Math.cos(Math.toRadians(col.get(JCh.h))) * col.get(JCh.C) / 100f);
+		c[0] = (col.get(CAMLch.L)/100f) - 0.5f;
+		c[1] = (float) (Math.sin(Math.toRadians(col.get(CAMLch.h))) * col.get(CAMLch.c) / 100f); 
+		c[2] = (float) (Math.cos(Math.toRadians(col.get(CAMLch.h))) * col.get(CAMLch.c) / 100f);
 		return c;
 	}
 	
 	// create a ring in 3D space by connecting corresponding ring elements (same index)
 	// with triangles. It actually creates two arrays, one for linearized coordinates and one for RGB values
-	static float[][] create3DRing(List<JCh> lower, List<JCh> upper) {
+	static float[][] create3DRing(List<CAMLch> lower, List<CAMLch> upper) {
 		int ringsize = lower.size();
 		float[] coordinates = new float[3*3*2*ringsize];
 		float[] colors = new float[3*3*2*ringsize];
 		assert ringsize == upper.size();
 		for (int idx = 0; idx < ringsize; idx ++) {
 			int offset = 3*3*2*idx;
-			JCh ll = lower.get(idx);
-			JCh lr = lower.get(MathTools.modulo(idx+1, ringsize));
-			JCh ul = upper.get(idx);
-			JCh ur = upper.get(MathTools.modulo(idx+1, ringsize));
+			CAMLch ll = lower.get(idx);
+			CAMLch lr = lower.get(MathTools.modulo(idx+1, ringsize));
+			CAMLch ul = upper.get(idx);
+			CAMLch ur = upper.get(MathTools.modulo(idx+1, ringsize));
 			// 1st triangle (ll-ul-ur)
 			System.arraycopy(getCoords(ll), 0, coordinates, offset+0, 3);
 			System.arraycopy(getCoords(ul), 0, coordinates, offset+3, 3);
@@ -84,9 +84,9 @@ public class SrgbInCiecam02 {
 		return new float[][]{coordinates, colors};
 	}
 	
-	static void emitRings(SortedMap<Float, List<JCh>> rings, PrintWriter w) {
-		List<JCh> lowerRing = null;
-		for(Entry<Float, List<JCh>> r : rings.entrySet()) {
+	static void emitRings(SortedMap<Float, List<CAMLch>> rings, PrintWriter w) {
+		List<CAMLch> lowerRing = null;
+		for(Entry<Float, List<CAMLch>> r : rings.entrySet()) {
 			if (lowerRing != null) {
 				w.append("<shape><indexedFaceSet lit='false' ");
 				float[][] ring3d = create3DRing(lowerRing, r.getValue());
@@ -132,7 +132,7 @@ public class SrgbInCiecam02 {
 	public static void writeX3domHtmlFile(PrintWriter w) {
 		X3domWriter.putHtmlX3domScene(w);
 		
-		SortedMap<Float, List<JCh>> rings = create3DColorMap(CS_JCh.defaultInstance);
+		SortedMap<Float, List<CAMLch>> rings = create3DColorMap(CS_CAMLch.defaultJChInstance);
 		emitRings(rings, w);
 		
 		// emit J coordinate axis

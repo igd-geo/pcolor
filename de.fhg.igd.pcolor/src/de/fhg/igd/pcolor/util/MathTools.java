@@ -81,7 +81,7 @@ public class MathTools {
 	public static double[] floatToDoubleArray(float[] v) {
 		double[] vr = new double[v.length];
 		for (int i = 0; i < v.length; i++) {
-			vr[i] = (double) v[i];
+			vr[i] = v[i];
 		}
 		return vr;
 	}
@@ -127,18 +127,30 @@ public class MathTools {
 	
 	/**
 	 * @param d a double
-	 * @return true if the double is a real number
+	 * @return true if the double represents a real number
 	 */
 	public static boolean isReal(double d) {
 		return !Double.isNaN(d) && !Double.isInfinite(d); 
 	}
 	
 	/**
-	 * @param d a double
-	 * @return true if the double is a real number
+	 * @param f a float
+	 * @return true if the float represents a real number
 	 */
-	public static boolean isReal(float d) {
-		return !Double.isNaN(d) && !Double.isInfinite(d); 
+	public static boolean isReal(float f) {
+		return !Double.isNaN(f) && !Double.isInfinite(f); 
+	}
+	
+	/**
+	 * @param floats a float array
+	 * @return true if the float array contains only real numbers
+	 */
+	public static boolean isReal(float[] floats) {
+		for(float f : floats) {
+			if (!isReal(f))
+				return false;
+		}
+		return true;
 	}
 
 }

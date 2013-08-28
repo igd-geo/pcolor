@@ -22,9 +22,10 @@ package de.fhg.igd.pcolor;
 
 import java.awt.color.ColorSpace;
 
+import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
+import de.fhg.igd.pcolor.colorspace.CS_CIECAM02;
 import de.fhg.igd.pcolor.colorspace.CS_CIELab;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
-import de.fhg.igd.pcolor.colorspace.CS_Jab;
 
 /**
  * PColors represent single colors and provide operations on them.
@@ -277,12 +278,27 @@ public abstract class PColor {
 	 * @return a PColor object hat conforms to the target color space
 	 */
 	public static PColor convert(PColor in, ColorSpace targetSpace) {
+		// optimize no conversion
 		if (in.getColorSpace().equals(targetSpace))
 			return in;
-		if (targetSpace instanceof CS_Jab)
-			return new Jab(in, (CS_Jab)targetSpace);
-		else if (targetSpace instanceof CS_JCh)
-			return new JCh(in, (CS_JCh)targetSpace);
+
+		// check if this conversion can be optimized as a degenerate transpose
+		if (in.getColorSpace() instanceof CS_CIECAM02 && targetSpace instanceof CS_CIECAM02) {
+			CS_CIECAM02 csCamTo = (CS_CIECAM02) targetSpace;
+			CS_CIECAM02 csCamFrom = (CS_CIECAM02) in.getColorSpace();
+			// when viewing conditions match, all we have to do is transpose
+			// to get to a new set of correlates. This saves some CPU, and
+			// really has better precision for the intra-CAM cases.
+			if (csCamFrom.getViewingconditions().equals(csCamTo.getViewingconditions())) {
+				return in.transpose(csCamTo);
+			}
+		}
+
+		// convert over XYZ
+		if (targetSpace instanceof CS_CAMLab)
+			return new CAMLab(in, (CS_CAMLab)targetSpace);
+		else if (targetSpace instanceof CS_CAMLch)
+			return new CAMLch(in, (CS_CAMLch)targetSpace);
 		// we could check the getType() type for Lab but Lab has an illuminant
 		// we assume to be E. Better throw than pretend we handle this.
 		else if (targetSpace instanceof CS_CIELab)
@@ -324,10 +340,10 @@ public abstract class PColor {
 	 * @return a {@link PColor} instance
 	 */
 	public static PColor create(ColorSpace targetSpace, float[] components, float alpha) {
-		if (targetSpace instanceof CS_Jab)
-			return new Jab(components, alpha, (CS_Jab)targetSpace);
-		else if (targetSpace instanceof CS_JCh)
-			return new JCh(components, alpha, (CS_JCh)targetSpace);
+		if (targetSpace instanceof CS_CAMLab)
+			return new CAMLab(components, alpha, (CS_CAMLab)targetSpace);
+		else if (targetSpace instanceof CS_CAMLch)
+			return new CAMLch(components, alpha, (CS_CAMLch)targetSpace);
 		// we could check the getType() type for Lab but Lab has an illuminant
 		// we assume to be E. Better throw than pretend we handle this.
 		else if (targetSpace instanceof CS_CIELab)

@@ -65,7 +65,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	public static final int s = 4;
 
 	/**
-	 * Hue Composition
+	 * Hue Composition / Hue Quadrature
 	 */
 	public static final int H = 5;
 
@@ -80,7 +80,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	protected static ViewingConditions defaultContext = ViewingConditions.createAdapted(Illuminant.D65, 64.0, 20.0, Surrounding.averageSurrounding);
 
 	/**
-	 * context
+	 * The viewing conditions
 	 */
 	protected ViewingConditions context;
 	
@@ -341,8 +341,8 @@ public class CS_CIECAM02 extends ColorSpace {
 	private double[] reverseTransform(float[] colorvalue) {
 		fillReverse(colorvalue);
 		
-		if (!isReal(colorvalue[C]))
-			throw new IllegalArgumentException("C, M, or s have to be given.");
+		if (!isReal(colorvalue[C]) || !isReal(colorvalue[J]) || !isReal(colorvalue[h]))
+			throw new IllegalArgumentException("Insufficient correlates were present.");
 		
 		// calculate e (8.7)
 		double e = gete(colorvalue[h]);
@@ -398,7 +398,7 @@ public class CS_CIECAM02 extends ColorSpace {
 		}
 		
 		// if starting from H derive h (8.5)
-		if (isReal((double) colorvalue[H]) && !isReal(colorvalue[h]))
+		if (isReal(colorvalue[H]) && !isReal(colorvalue[h]))
 			colorvalue[h] = (float) calculateh(colorvalue[H]);
 	}
 
@@ -726,6 +726,30 @@ public class CS_CIECAM02 extends ColorSpace {
 	 */
 	public ViewingConditions getViewingconditions() {
 		return context;
+	}
+	
+	@Override
+	public float getMaxValue(int component) {
+		switch (component) {
+		case J:
+		case Q:
+			return 100f;
+		case s:
+		case M:
+		case C:
+			return 120f;
+		case H:
+			return 400f;
+		case h:
+			return 360f;
+		default:
+			throw new IllegalArgumentException(Integer.toString(component));
+		}
+	}
+
+	@Override
+	public float getMinValue(int component) {
+		return 0;
 	}
 
 	@Override

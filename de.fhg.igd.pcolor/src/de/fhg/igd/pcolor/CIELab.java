@@ -23,8 +23,8 @@ package de.fhg.igd.pcolor;
 import de.fhg.igd.pcolor.colorspace.CS_CIELab;
 
 /**
- * This class contains PColors in the CIE L*a*b* colorspace. It is not currently
- * used; JCh is preferred, since it corrects many of CIE Lab's issues with bent
+ * This class contains PColors in the 1964 CIE L*a*b* colorspace. It is not currently
+ * used; CAM Lab/LCh is preferred, since it corrects many of CIE Lab's issues with bent
  * lines of consistent hue and uneven chroma spacing.
  */
 public class CIELab extends PColor {

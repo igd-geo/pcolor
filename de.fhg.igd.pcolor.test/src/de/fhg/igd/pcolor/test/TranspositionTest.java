@@ -1,22 +1,21 @@
 package de.fhg.igd.pcolor.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import de.fhg.igd.pcolor.CAMLab;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.Illuminant;
-import de.fhg.igd.pcolor.JCh;
-import de.fhg.igd.pcolor.Jab;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
-import de.fhg.igd.pcolor.colorspace.CS_Jab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 import de.fhg.igd.pcolor.colorspace.Surrounding;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 import de.fhg.igd.pcolor.util.ColorTools;
-import de.fhg.igd.pcolor.util.MathTools;
 
 // these could probably become more precise, but seemingly CIECAM02
 // itself has some open issues with numerical stability. Until these
@@ -26,21 +25,20 @@ public class TranspositionTest {
 
 	@Test
 	public void testThatssRGBWhiteLooksWhite() {
-		Jab jab = new Jab(new sRGB(1.0f, 1.0f, 1.0f), CS_Jab.defaultInstance);
-		assertEquals(100.0, jab.get(Jab.J), 0.0001);
-		assertEquals(0.0, jab.get(Jab.a), 0.02);
-		assertEquals(0.0, jab.get(Jab.b), 0.02);
+		CAMLab jab = new CAMLab(new sRGB(1.0f, 1.0f, 1.0f), CS_CAMLab.defaultJaMbMInstance);
+		assertEquals(100.0, jab.get(CAMLab.L), 0.0001);
+		assertEquals(0.0, jab.get(CAMLab.a), 0.02);
+		assertEquals(0.0, jab.get(CAMLab.b), 0.02);
 		
-		JCh jch = new JCh(new sRGB(1.0f, 1.0f, 1.0f), CS_JCh.defaultInstance);
-		assertEquals(100.0, jch.get(JCh.J), 0.0001);
-		// this is quite substantial
-		assertEquals(0.0, jch.get(JCh.C), 2);
-		// hue is irrelevant in white
+		CAMLch jch = new CAMLch(new sRGB(1.0f, 1.0f, 1.0f), CS_CAMLab.defaultJaMbMInstance);
+		assertEquals(100.0, jch.get(CAMLch.L), 0.0001);
+		// irrelevant but substantial
+		assertEquals(0.0, jch.get(CAMLch.c), 2);
 	}
 	
 	@Test
 	public void testSomethingThatLooksWhiteBecomesWhite() {
-		Jab jab = new Jab(100.0f, 0.0f, 0.0f, 1.0f, CS_Jab.defaultInstance);
+		CAMLab jab = new CAMLab(new float[] {100.0f, 0.0f, 0.0f}, 1.0f, CS_CAMLab.defaultJaMbMInstance);
 		sRGB rgb = (sRGB) PColor.convert(jab, CS_sRGB.instance);
 		assertEquals(rgb.get(sRGB.R), 1.0, 0.01);
 		assertEquals(rgb.get(sRGB.G), 1.0, 0.01);
@@ -65,11 +63,11 @@ public class TranspositionTest {
 		// scene white luminance
 		ViewingConditions vcWhite = ViewingConditions.createAdapted(
 				CIEXYZ.fromxyY(mixedWhitepoint[0], mixedWhitepoint[1], 80f), 16, 159, Surrounding.averageSurrounding);
-		CS_JCh cs_white = new CS_JCh(vcWhite);
+		CS_CAMLab cs_white = new CS_CAMLab(vcWhite, CS_CAMLab.JCh);
 		
 		ViewingConditions vcBlack = ViewingConditions.createAdapted(
 				CIEXYZ.fromxyY(mixedWhitepoint[0], mixedWhitepoint[1], 40f), 20/*very invariant*/, 159, Surrounding.averageSurrounding);
-		CS_JCh cs_black = new CS_JCh(vcBlack);
+		CS_CAMLab cs_black = new CS_CAMLab(vcBlack, CS_CAMLab.JCh);
 		
 		// assertArrayEquals(p1[0].getComponents(), ColorTools.parseColor("#444").getComponents(), 0.00001f);
 		
@@ -79,12 +77,12 @@ public class TranspositionTest {
 	}
 
 	// test that g1 becomes g2 when transposed from cs1 to cs2 
-	private void testTransposition(sRGB g1, sRGB g2, CS_JCh cs1, CS_JCh cs2, float d) {
+	private void testTransposition(sRGB g1, sRGB g2, CS_CAMLab cs1, CS_CAMLab cs2, float d) {
 		// to JCh w/ black BG
-		JCh jch1 = new JCh(g1, cs2);
+		CAMLch jch1 = new CAMLch(g1, cs2);
 		
 		// transpose
-		jch1 = (JCh) jch1.transpose(cs1);
+		jch1 = (CAMLch) jch1.transpose(cs1);
 		
 		// to RGB
 		sRGB c2 = (sRGB) PColor.convert(jch1, CS_sRGB.instance);

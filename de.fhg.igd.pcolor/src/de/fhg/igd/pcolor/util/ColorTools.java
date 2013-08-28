@@ -20,17 +20,15 @@
 
 package de.fhg.igd.pcolor.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.fhg.igd.pcolor.JCh;
-import de.fhg.igd.pcolor.Jab;
+import de.fhg.igd.pcolor.CAMLab;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
-import de.fhg.igd.pcolor.colorspace.CS_Jab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 
 /**
@@ -55,89 +53,77 @@ public class ColorTools {
 	 * negative values mean that hue2 is closer in the 'negative' direction (for
 	 * instance, if hue1 is 5.0, and hue2 is 0.0, this function will return
 	 * -5.0).
+     * @param hue1 the first hue
+     * @param hue2 the second hue
+	 * @return Smallest difference between two hues.
 	 */
     public static float hueDifference(float hue1, float hue2)
     {
-	    float difference = (hue2 - hue1) % 360;
-		if (difference > 180)
-			difference -= 360;
-		if (difference < -180)
-			difference += 360;
+	    return hueDifference(hue1, hue2, 360);
+    }
+    
+    /**
+	 * Returns the smallest difference between two hues as a float where c is
+	 * the length of the full circle;
+	 * negative values mean that hue2 is closer in the 'negative' direction (for
+	 * instance, if hue1 is 5.0, and hue2 is 0.0, this function will return
+	 * -5.0).
+     * @param hue1 the first hue
+     * @param hue2 the second hue
+     * @param c the length of the full circle
+	 * @return Smallest difference between two hues.
+	 */
+    public static float hueDifference(float hue1, float hue2, float c)
+    {
+	    float difference = (hue2 - hue1) % c;
+	    float ch = c / 2;
+		if (difference > ch)
+			difference -= c;
+		if (difference < -ch)
+			difference += c;
 		return difference;
     }
     
 	/**
-	 * Calculate the distance in Jab. This is similar to and often better than a
-	 * "delta E" distance based on Lab, i.e, is closer to the ideal that unity
-	 * is equivalent to a "just noticeable distance". The Jab space is the one
-	 * defined by {@link CS_Jab#defaultInstance} If you want to compare across
-	 * viewing conditions, use the {@link #distance(Jab, Jab)}
-	 * overload.
+	 * Calculate the distance in Jab (more precisely JaMbM via {@link CAMLab}).
+	 * This is similar to and often better than a "delta E" distance based on
+	 * CIELab, i.e, is closer to the ideal that unity is equivalent to a
+	 * "just noticeable distance". The Jab space is the one defined by
+	 * {@link CS_CAMLab#defaultJaMbMInstance} If you want to compare across
+	 * viewing conditions, use the {@link CAMLab#distance(CAMLab, CAMLab)} overload.
 	 * 
-	 * @see JCh#distance(JCh, JCh)
+	 * @see CAMLch#distance(CAMLch, CAMLch)
 	 * @param col1
 	 *            the first colour
 	 * @param col2
 	 *            the second colour
+	 * @return the distance in JaMbM
 	 */
 	public static float distance(PColor col1, PColor col2) {
-		return distance(col1, col2, CS_Jab.defaultInstance);
+		return distance(col1, col2, CS_CAMLab.defaultJaMbMInstance);
 	}
     
 	/**
-	 * Calculate the distance in Jab. This is similar to and often better than a
-	 * "delta E" distance based on Lab, i.e, is closer to the ideal that unity
-	 * is equivalent to a "just noticeable distance". The Jab space is wholly
-	 * defined by the CIECAM viewing conditions. If you want to compare across
-	 * viewing conditions, use the {@link #distance(Jab, Jab)}
-	 * overload.
+	 * Calculate the distance in the given {@link CS_CAMLab}. This is similar to
+	 * and often better than a "delta E" distance based on Lab, i.e, is closer
+	 * to the ideal that unity is equivalent to a "just noticeable distance".
+	 * The comparison space is defined by the CIECAM viewing conditions.
+	 * If you want to compare across viewing conditions, use
+	 * {@link CAMLab#distance(CAMLab, CAMLab)}.
 	 * 
-	 * @see JCh#distance(JCh, JCh)
+	 * @see CAMLch#distance(CAMLch, CAMLch)
 	 * @param col1
 	 *            the first colour
 	 * @param col2
 	 *            the second colour
 	 * @param cspace
 	 *            the Jab-based colour space to use
+	 * @return the distance
 	 */
-	public static float distance(PColor col1, PColor col2, CS_Jab cspace) {
-		Jab col1_ref = new Jab(col1, cspace);
-		Jab col2_ref = new Jab(col2, cspace);
-		return distance(col1_ref, col2_ref);
-	}
-	
-	/**
-	 * Calculate the distance in Jab. This is similar to and often better than a
-	 * "delta E" distance based on Lab, i.e, is closer to the ideal that unity
-	 * is equivalent to a "just noticeable distance".
-	 * 
-	 * @see JCh#distance(JCh, JCh)
-	 * @param col1
-	 *            the first colour
-	 * @param col2
-	 *            the second colour
-	 */
-	public static float distance(Jab col1, Jab col2) {
-		float error = 0;
-		for (int j = 0; j < 3; j++) {
-			float diff = col1.get(j) - col2.get(j);
-			error += diff * diff;
-		}
-		return (float) Math.sqrt(error);
-	}
-	
-	/**
-	 * Calculates the distance between two JCh colors using the CIE's
-	 * recommended CAM02-UCS calculation.
-	 * 
-	 * @param color1
-	 *            the first color
-	 * @param color2
-	 *            the second color
-	 * @return the distance between two JCh colors.
-	 */
-	public static float distance(JCh color1, JCh color2) {
-		return (float) JCh.distance(color1, color2);
+	public static float distance(PColor col1, PColor col2, CS_CAMLab cspace) {
+		CAMLab col1_ref = new CAMLab(col1, cspace);
+		CAMLab col2_ref = new CAMLab(col2, cspace);
+		return (float) CAMLab.distance(col1_ref, col2_ref);
 	}
 	
 	/**

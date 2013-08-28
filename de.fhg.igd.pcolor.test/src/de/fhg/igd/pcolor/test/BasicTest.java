@@ -1,19 +1,26 @@
 package de.fhg.igd.pcolor.test;
 
-import static org.junit.Assert.*;
+import static de.fhg.igd.pcolor.util.ColorTools.hueDifference;
+import static de.fhg.igd.pcolor.util.ColorTools.hueDistance;
+import static de.fhg.igd.pcolor.util.ColorTools.parseColor;
+import static de.fhg.igd.pcolor.util.ColorTools.toCss;
+import static de.fhg.igd.pcolor.util.ColorTools.toCssUnclipped;
+import static de.fhg.igd.pcolor.util.ColorTools.toHtml;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Test;
 
-import de.fhg.igd.pcolor.JCh;
-import de.fhg.igd.pcolor.Jab;
+import de.fhg.igd.pcolor.CAMLab;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
-import de.fhg.igd.pcolor.colorspace.CS_Jab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
-import static de.fhg.igd.pcolor.util.ColorTools.*;
 import de.fhg.igd.pcolor.util.ColorTools;
 import de.fhg.igd.pcolor.util.MathTools;
 
@@ -46,8 +53,8 @@ public class BasicTest {
 	@Test
 	public void testCreation() {
 		assertTrue(PColor.create(CS_sRGB.instance, new float[] {1,1,1,0.5f}) instanceof sRGB);
-		assertTrue(PColor.create(CS_JCh.defaultInstance, new float[] {1,1,1,0.5f}) instanceof JCh);
-		assertTrue(PColor.create(CS_Jab.defaultInstance, new float[] {1,1,1,0.5f}) instanceof Jab);
+		assertTrue(PColor.create(CS_CAMLch.defaultJChInstance, new float[] {1,1,1,0.5f}) instanceof CAMLch);
+		assertTrue(PColor.create(CS_CAMLab.defaultJaMbMInstance, new float[] {1,1,1,0.5f}) instanceof CAMLab);
 	}
 	
 	private static boolean compareColor(PColor c1, PColor c2) {

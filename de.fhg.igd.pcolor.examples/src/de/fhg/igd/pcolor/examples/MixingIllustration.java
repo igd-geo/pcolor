@@ -1,19 +1,21 @@
 package de.fhg.igd.pcolor.examples;
 
-import static de.fhg.igd.pcolor.util.ColorTools.toHtml;
 import static de.fhg.igd.pcolor.util.ColorTools.parseColor;
+import static de.fhg.igd.pcolor.util.ColorTools.toHtml;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Paths;
 
+import de.fhg.igd.pcolor.CAMLab;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.CIEXYZ;
-import de.fhg.igd.pcolor.JCh;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.util.ColorTools;
 
 /**
@@ -77,14 +79,17 @@ public class MixingIllustration {
 				+ "<th></th><th>sRGB<sup>3</sup></th></tr>\r\n");
 		for (MixingExample e : examples) {
 			out.write("<tr>\n");
-			JCh jch1 = (JCh)PColor.convert(e.c1, CS_JCh.defaultInstance);
-			JCh jch2 = (JCh)PColor.convert(e.c2, CS_JCh.defaultInstance);
+			CAMLch jch1 = (CAMLch)PColor.convert(e.c1, CS_CAMLch.defaultJChInstance);
+			CAMLch jch2 = (CAMLch)PColor.convert(e.c2, CS_CAMLch.defaultJChInstance);
 			CIEXYZ xyz1 = (CIEXYZ)PColor.convert(e.c1, CS_CIEXYZ.instance);
 			CIEXYZ xyz2 = (CIEXYZ)PColor.convert(e.c2, CS_CIEXYZ.instance);
 			sRGB bad_mix = broken_sRGB_mix(e);
 			
-			JCh psychoAverage = JCh.average(new JCh[] {jch1, jch2});
-			JCh psychoMidJCh = JCh.blendJch(jch1, jch2, 0.5f);
+			CAMLab psychoAverage = CAMLab.average(new CAMLab[] {
+					(CAMLab) PColor.convert(jch1, CS_CAMLab.defaultJaMbMInstance),
+					(CAMLab) PColor.convert(jch2, CS_CAMLab.defaultJaMbMInstance)}
+			);
+			CAMLch psychoMidJCh = CAMLch.blend(jch1, jch2, 0.5f);
 			CIEXYZ opticalAverage = CIEXYZ.average(new CIEXYZ[]{xyz1, xyz2});
 			
 			writeCell(out, e.c1, ColorTools.toCss(e.c1, false));

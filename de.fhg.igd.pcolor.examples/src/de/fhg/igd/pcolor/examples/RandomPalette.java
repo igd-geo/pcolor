@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.Random;
 
 import de.fhg.igd.pcolor.CIEXYZ;
-import de.fhg.igd.pcolor.JCh;
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
-import de.fhg.igd.pcolor.colorspace.CS_JCh;
 import de.fhg.igd.pcolor.colorspace.Surrounding;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 import de.fhg.igd.pcolor.util.ColorPredicates;
@@ -50,17 +50,17 @@ public class RandomPalette {
 		
 		// construct colorspace using background color
 		sRGB bgCol = ColorTools.parseColor(args[2]);
-		CS_JCh cspace = new CS_JCh(
+		CS_CAMLch cspace = new CS_CAMLch(
 				ViewingConditions.createAdapted((CIEXYZ) PColor.convert(bgCol, CS_CIEXYZ.instance),
 						200,
 						200/5,
 						Surrounding.averageSurrounding));
 		
 		
-		Collection<JCh> occ = new ArrayList<>();
+		Collection<CAMLch> occ = new ArrayList<>();
 		
 		for (int i = 3; i < args.length; i++) {
-			occ.add((JCh) PColor.convert(ColorTools.parseColor(args[i]), cspace));
+			occ.add((CAMLch) PColor.convert(ColorTools.parseColor(args[i]), cspace));
 		}
 		
 		new RandomPalette().write(file, occ, n);
@@ -69,30 +69,32 @@ public class RandomPalette {
 	/**
 	 * @return a randomly chosen JCH which is inside sRGB
 	 */
-	private JCh randCol() {
+	private CAMLch randCol() {
 		while(true) {
-			JCh c = new JCh(rand.nextFloat() * 100, rand.nextFloat() * 100, rand.nextFloat() * 360);
+			CAMLch c = new CAMLch(new float[] {
+										rand.nextFloat() * 100, rand.nextFloat() * 120, rand.nextFloat() * 360
+								  }, (float) 1.0, CS_CAMLch.defaultJChInstance);
 			if (ColorPredicates.is_sRGB.apply(c)) {
 				return c;
 			}
 		}
 	}
 	
-	private float findMinDistance(Collection<JCh> colors, JCh col) {
+	private float findMinDistance(Collection<CAMLch> colors, CAMLch col) {
 		float min = Float.MAX_VALUE;
-		for (JCh c : colors) {
-			float distance = ColorTools.distance(c, col);
+		for (CAMLch c : colors) {
+			float distance = (float) CAMLch.distance(c, col);
 			if (distance < min)
 				min = distance;
 		}
 		return min;
 	}
 	
-	private JCh findMostDistantRandomColor(Collection<JCh> colors, int n) {
+	private CAMLch findMostDistantRandomColor(Collection<CAMLch> colors, int n) {
 		float maxMin = 0;
-		JCh candidate = randCol(); //avoids null return, however unlikely 
+		CAMLch candidate = randCol(); //avoids null return, however unlikely 
 		for (int x = 0; x < n; x++) {
-			JCh r = randCol();
+			CAMLch r = randCol();
 			float d = findMinDistance(colors, r);
 			if (d > maxMin) {
 				maxMin = d;
@@ -102,9 +104,9 @@ public class RandomPalette {
 		return candidate;
 	}
 
-	private void write(OutputStreamWriter outputStreamWriter, Collection<JCh> preoccupied, int numberOfColors) {
+	private void write(OutputStreamWriter outputStreamWriter, Collection<CAMLch> preoccupied, int numberOfColors) {
 		for (int i = 0; i < numberOfColors; i++) {
-			JCh mostDistantRandomColor = findMostDistantRandomColor(preoccupied, 1000);
+			CAMLch mostDistantRandomColor = findMostDistantRandomColor(preoccupied, 1000);
 			System.out.println(ColorTools.toHtml(mostDistantRandomColor, false));
 			preoccupied.add(mostDistantRandomColor);
 		}
