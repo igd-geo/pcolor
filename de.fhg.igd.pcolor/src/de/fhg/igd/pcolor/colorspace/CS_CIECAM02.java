@@ -26,6 +26,7 @@ import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.Illuminant;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.util.MathTools;
+import static de.fhg.igd.pcolor.util.MathTools.isReal;
 
 /**
  * This class implements the CIECAM02 color appearance model, providing forward
@@ -137,9 +138,6 @@ public class CS_CIECAM02 extends ColorSpace {
 		// calculate lightness
 		double J = forwardJ(A);
 
-		// calculate brightness
-		double Q = calculateQ(J);
-
 		// calculate redness-greenness and yellowness-blueness color opponent values
 		double a = forwarda(RGBPrime_a);
 		double b = forwardb(RGBPrime_a);
@@ -147,22 +145,38 @@ public class CS_CIECAM02 extends ColorSpace {
 		// calculate hue angle
 		double h = calculateh(a, b);
 
-		// calculate hue composition
-		double H = calculateH(h);
-
 		// calculate eccentricity
 		double e = gete(h);
 
 		// get t
 		double t = forwardt(e, a, b, RGBPrime_a);
+		
+		double C = forwardC(J, t);
+		
+		float[] corr = new float[] {(float)J, Float.NaN, (float)C, Float.NaN, Float.NaN, Float.NaN, (float)h};
+		fillForward(corr);
+		return corr;
+	}
+
+	/**
+	 * Fill those correlates which are NaN and can be derived from existing correlates
+	 * and model parameters during a forward transform. These may be Q, M, s, H.
+	 * @param colorvalue the indexed correlates
+	 */
+	public void fillForward(float[] colorvalue) { 
+		// calculate brightness
+		if (isReal(colorvalue[J]) && !isReal(colorvalue[Q]))
+			colorvalue[Q] = (float) calculateQ(colorvalue[J]);
 
 		// calculate the correlates of chroma, colorfulness, and saturation
-		double C = forwardC(J, t);
-		double M = calculateM(C);
-		double s = calculates(M, Q);
-
-		float[] result = new float[] {(float)J, (float)Q, (float)C, (float)M, (float)s, (float)H, (float)h};
-		return result;
+		if (isReal(colorvalue[C]) && !isReal(colorvalue[M]))
+			colorvalue[M] = (float) calculateM(colorvalue[C]);
+		if (isReal(colorvalue[Q]) && !isReal(colorvalue[s]))
+			colorvalue[s] = (float) calculates(colorvalue[M], colorvalue[Q]);
+		
+		// calculate hue composition
+		if (isReal(colorvalue[h]) && !isReal(colorvalue[H]))
+			colorvalue[H] = (float) calculateH(colorvalue[h]);
 	}
 
 	/**
@@ -304,13 +318,7 @@ public class CS_CIECAM02 extends ColorSpace {
 		return Math.signum(t) * Math.pow(Math.abs(t), 0.9) * Math.sqrt(J / 100.0) * Math.pow(1.64-Math.pow(0.29, context.getN()), 0.73);
 	}
 	
-	/**
-	 * @param d a double
-	 * @return true if the double is a real number
-	 */
-	protected boolean isGiven(double d) {
-		return !Double.isNaN(d) && !Double.isInfinite(d); 
-	}
+	
 
 	@Override
 	public float[] toCIEXYZ(float[] colorvalue) {
@@ -331,29 +339,10 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * @return the reversed XYZ coordinates in the range 0-100
 	 */
 	private double[] reverseTransform(float[] colorvalue) {
-		// if starting from Q, derive J (8.1)
-		if (isGiven(colorvalue[Q]) && !isGiven(colorvalue[J]))
-			colorvalue[J] = (float) calculateJ(colorvalue[Q]);
-		else if (isGiven(colorvalue[J]) && !isGiven(colorvalue[Q]))
-			colorvalue[Q] = (float) calculateQ(colorvalue[J]); // or vice versa (8.3)
-		else if (!isGiven(colorvalue[J]) && !isGiven(colorvalue[Q]))
-			throw new IllegalArgumentException("J or Q have to be given.");
+		fillReverse(colorvalue);
 		
-		// if starting from M, derive C (8.2)
-		if (isGiven(colorvalue[M]) && !isGiven(colorvalue[C]))
-			colorvalue[C] = (float) calculateC(colorvalue[M]);
-		
-		// if starting from s, derive C (8.3/4)
-		if (isGiven(colorvalue[s]) && !isGiven(colorvalue[C])) {
-			colorvalue[C] = (float) calculateC(colorvalue[s], colorvalue[Q]);
-		}
-		
-		if (!isGiven(colorvalue[C]))
+		if (!isReal(colorvalue[C]))
 			throw new IllegalArgumentException("C, M, or s have to be given.");
-		
-		// if starting from H derive h (8.5)
-		if (isGiven((double) colorvalue[H]) && !isGiven(colorvalue[h]))
-			colorvalue[h] = (float) calculateh(colorvalue[H]);
 		
 		// calculate e (8.7)
 		double e = gete(colorvalue[h]);
@@ -383,6 +372,34 @@ public class CS_CIECAM02 extends ColorSpace {
 
 		// calculate XYZ tristimulus values
 		return reverseXYZ(RGB);
+	}
+
+	/**
+	 * Fill those correlates which are NaN and can be derived from existing correlates
+	 * and model parameters during a reverse transform. These may be J, Q, C, h.
+	 * @param colorvalue the indexed correlates
+	 */
+	public void fillReverse(float[] colorvalue) {
+		// if starting from Q, derive J (8.1)
+		if (isReal(colorvalue[Q]) && !isReal(colorvalue[J]))
+			colorvalue[J] = (float) calculateJ(colorvalue[Q]);
+		else if (isReal(colorvalue[J]) && !isReal(colorvalue[Q]))
+			colorvalue[Q] = (float) calculateQ(colorvalue[J]); // or vice versa (8.3)
+		else if (!isReal(colorvalue[J]) && !isReal(colorvalue[Q]))
+			throw new IllegalArgumentException("J or Q have to be given.");
+		
+		// if starting from M, derive C (8.2)
+		if (isReal(colorvalue[M]) && !isReal(colorvalue[C]))
+			colorvalue[C] = (float) calculateC(colorvalue[M]);
+		
+		// if starting from s, derive C (8.3/4)
+		if (isReal(colorvalue[s]) && !isReal(colorvalue[C])) {
+			colorvalue[C] = (float) calculateC(colorvalue[s], colorvalue[Q]);
+		}
+		
+		// if starting from H derive h (8.5)
+		if (isReal((double) colorvalue[H]) && !isReal(colorvalue[h]))
+			colorvalue[h] = (float) calculateh(colorvalue[H]);
 	}
 
 	/**

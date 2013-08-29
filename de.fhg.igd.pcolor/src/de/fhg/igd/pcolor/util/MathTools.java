@@ -115,5 +115,21 @@ public class MathTools {
 		else
 			return result; 
 	}
+	
+	/**
+	 * @param d a double
+	 * @return true if the double is a real number
+	 */
+	public static boolean isReal(double d) {
+		return !Double.isNaN(d) && !Double.isInfinite(d); 
+	}
+	
+	/**
+	 * @param d a double
+	 * @return true if the double is a real number
+	 */
+	public static boolean isReal(float d) {
+		return !Double.isNaN(d) && !Double.isInfinite(d); 
+	}
 
 }
