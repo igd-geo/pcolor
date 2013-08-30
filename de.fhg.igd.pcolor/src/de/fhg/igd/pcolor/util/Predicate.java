@@ -4,6 +4,7 @@ package de.fhg.igd.pcolor.util;
  * This models a predicate on a (colour) type. We could have used guava but
  * just this interface was deemed too little justification.
  * @author Simon Thum
+ * @param <T> the predicated type
  */
 public interface Predicate<T> {
 	/**

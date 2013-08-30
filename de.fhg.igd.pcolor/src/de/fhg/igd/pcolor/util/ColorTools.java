@@ -38,33 +38,12 @@ import de.fhg.igd.pcolor.colorspace.CS_sRGB;
  */
 public class ColorTools {
 
-	/**
-	 * Returns a new ArrayList<C> in which all duplicate instances of any
-	 * given color in list have been removed, leaving only unique colors.
-	 */
-    public static <C extends PColor> ArrayList<C> getUniqueColors(C[] list) {
-    	ArrayList<C> colorList = new ArrayList<C>();
-    	for(int i = 0; i < list.length; i++) {
-    		// get components
-    		float[] components = list[i].getRawComponents();
-    		// test for repeats
-    		boolean repeat = false;
-    		for(int j = 0; j < colorList.size(); j++) {
-    			if(Arrays.equals(colorList.get(j).getRawComponents(), components))
-    				repeat = true;
-    		}
-    		// if not, add to list
-    		if(!repeat)
-    			colorList.add(list[i]);
-    	}
-    	return colorList;
-    }
-
     /**
-	 * Returns the smallest difference between two hues as a positive float
+	 * Returns the smallest difference between two hues as a absolute float
 	 * (in degrees).
-	 * 
-	 * @return Smallest difference between two hues.
+     * @param hue1 the first hue
+     * @param hue2 the second hue
+	 * @return distance between two hues.
 	 */
     public static float hueDistance(float hue1, float hue2)
     {
@@ -171,7 +150,7 @@ public class ColorTools {
 	 *            the channel index
 	 * @param value
 	 *            the value to set
-	 * @return
+	 * @return a new pcolor with the new channel value
 	 */
 	@SuppressWarnings("unchecked")
 	public static <P extends PColor> P setChannel(P color, int channel, float value) {
@@ -220,7 +199,7 @@ public class ColorTools {
 	 *            the distance in JCh to allow for
 	 * @param inside
 	 *            a predicate defining a space whose boundary is tested
-	 * @return
+	 * @return the boundary color, when found
 	 */
 	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
 			float upper, float e, Predicate<? super C> inside) {

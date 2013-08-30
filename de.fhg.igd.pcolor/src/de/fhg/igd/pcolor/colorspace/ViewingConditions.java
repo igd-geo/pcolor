@@ -27,7 +27,7 @@ import de.fhg.igd.pcolor.Illuminant;
 import de.fhg.igd.pcolor.util.MathTools;
 
 /**
- * Represents CIEVAM02 Viewing Conditions.
+ * Represents CIECAM02 Viewing Conditions.
  * 
  * @author Thu Huong Luu
  * @author Simon Thum
@@ -121,6 +121,7 @@ public class ViewingConditions {
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
+	 * @return a ViewingConditions instance
 	 */
 	public static ViewingConditions createAdapted(CIEXYZ XYZ_w, double L_A, double Y_b, Surrounding sur) {
 		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.getComponents());
@@ -139,7 +140,7 @@ public class ViewingConditions {
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
-	 * @return
+	 * @return a fully adapted viewing conditions instance
 	 */
 	public static ViewingConditions createFullyAdapted(CIEXYZ XYZ_w, float L_A, float Y_b, Surrounding sur) {
 		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.getComponents());
@@ -167,7 +168,7 @@ public class ViewingConditions {
 	 * See CIE:159:2004, section 5.
 	 * @param background_white the whitepoint of the background
 	 * @param surround_white the whitepoint of the surround
-	 * @param bgFactor
+	 * @param bgFactor the background weight
 	 * @return XYZ mixed from background and surround 
 	 */
 	public static CIEXYZ mixedWhitepoint(CIEXYZ background_white, CIEXYZ surround_white, float bgFactor) {
@@ -195,46 +196,79 @@ public class ViewingConditions {
 		return hash;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getL_A() {
 		return L_A;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getY_b() {
 		return Y_b;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double[] getXYZ_w() {
 		return XYZ_w;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public Surrounding getSurrounding() {
 		return surrounding;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getZ() {
 		return z;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getN() {
 		return n;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getN_bb() {
 		return N_bb;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getN_cb() {
 		return N_cb;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getA_w() {
 		return A_w;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double getF_L() {
 		return F_L;
 	}
 
+	/**
+	 * @return a useful value
+	 */
 	public double[] getD_RGB() {
 		return D_RGB;
 	}

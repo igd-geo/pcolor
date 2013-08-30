@@ -115,7 +115,7 @@ public class CIEXYZ extends PColor {
 	 * Calculates the mean JCh color in an array of JCh colors. Differences in
 	 * their individual color spaces are not being accounted for.
 	 * 
-	 * @param jchColors
+	 * @param colors
 	 * 			An array of JCh colors
 	 * @return A new average JCh color in the colorspace of the first input color.
 	 */

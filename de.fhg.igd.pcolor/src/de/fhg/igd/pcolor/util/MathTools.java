@@ -87,6 +87,12 @@ public class MathTools {
 	}
 	
 	
+	/**
+	 * @param a a float arrray
+	 * @param a2 a float arrray
+	 * @param eps the epsion to tolerate as equal
+	 * @return true if both arrays equal
+	 */
 	public static boolean floatArrayEquals(float[] a, float[] a2, float eps) {
         if (a==a2)
             return true;
@@ -107,6 +113,9 @@ public class MathTools {
 	/**
 	 * Calculates an angle, in degrees, between 0 and 360 given its sine and
 	 * cosine values.
+	 * @param cos the cosine
+	 * @param sin the sine
+	 * @return a positive angle
 	 */
 	public static double calculateAtan(double cos, double sin) {
 		double result = Math.toDegrees(Math.atan2(sin , cos)); 

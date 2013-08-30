@@ -17,12 +17,12 @@ public class ColorPredicates {
 	 */
 	public static Predicate<PColor> is_sRGB = new Predicate<PColor>() {
 		/**
-		 * @param col
+		 * @param color any color
 		 * @return true if col converts to sRGB without loss
 		 */
 		@Override
-		public boolean apply(PColor col) {
-			sRGB rgb = (sRGB) PColor.convert(col, CS_sRGB.instance);
+		public boolean apply(PColor color) {
+			sRGB rgb = (sRGB) PColor.convert(color, CS_sRGB.instance);
 			return rgb.isInRange(0, 0);
 		}
 	};

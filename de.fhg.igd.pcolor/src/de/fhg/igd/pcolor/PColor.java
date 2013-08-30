@@ -109,6 +109,7 @@ public abstract class PColor {
 	 * Converts this color to sRGB and packs it into a single 32 bit int value
 	 * in format ARGB.
 	 * @see sRGB#fromArgb(int)
+	 * @return the packed color
 	 */
 	public int getARGB() {
 		if(this.getColorSpace().isCS_sRGB()) {
@@ -139,21 +140,21 @@ public abstract class PColor {
 	}
 
 	/**
-	 * Returns a reference to this color's ColorSpace.
+	 * @return a reference to this color's ColorSpace.
 	 */
 	public ColorSpace getColorSpace() {
 		return colorspace;
 	}
 
 	/**
-	 * Returns a copy of this color's components array.
+	 * @return a copy of this color's components array.
 	 */
 	public float[] getComponents() {
 		return components.clone();
 	}
 
     /**
-	 * Returns a new float array combining the color channels and alpha channel
+	 * @return a new float array combining the color channels and alpha channel
 	 * (in that order) of the given PColor.
 	 */
     public float[] getRawComponents() {
@@ -186,7 +187,7 @@ public abstract class PColor {
 	 * checked to fall within the 0..1 range.
 	 * @param footroom the footroom to allow for
 	 * @param headroom the headroom to allow for
-	 * @return
+	 * @return true if all components are in range including surplus 
 	 */
 	public boolean isInRange(float footroom, float headroom) {
 		for (int i = 0; i < colorspace.getNumComponents(); i++) {
@@ -244,18 +245,6 @@ public abstract class PColor {
 	}
 
 	/**
-	 * Returns this color's color component values in a space-separated String;
-	 * does not include alpha.
-	 */
-	public String implodeColor() {
-		StringBuilder sb = new StringBuilder();
-		for (float aColor : this.getComponents()) {
-			sb.append(aColor).append(" ");
-		}
-		return sb.toString().trim();
-	}
-
-	/**
 	 * Transposes this color (if defined by appearance correlates) to another
 	 * color which has the same appearance correlates within other viewing
 	 * conditions, as represented by the given color space.
@@ -279,7 +268,7 @@ public abstract class PColor {
 	 * 
 	 * Implementation note: the targetSpace is assumed as default for Lab, sRGB
 	 * and XYZ. Except for Lab, that is intentional as there is a single
-	 * reference for sRGB and XYZ. The Lab implementation is limited.
+	 * reference for sRGB and XYZ. The CIELab implementation is limited.
 	 * 
 	 * @param in
 	 *            the color to be converted

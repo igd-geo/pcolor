@@ -97,6 +97,7 @@ public class sRGB extends PColor {
     /**
 	 * Unpack a 32-Bit ARGB int, normalising to 0..1
 	 * @param argb argb color
+     * @return an sRGB instance representing the argb color
 	 */
 	public static sRGB fromArgb(int argb) {
 		return new sRGB((argb >> 16 & 0xff) / 255f, (argb >> 8 & 0xff) / 255f, (argb & 0xff) / 255f, (argb >> 24 & 0xff) / 255f);
@@ -105,6 +106,7 @@ public class sRGB extends PColor {
 	/**
 	 * Create sRGB from RGBA bytes (given as integers)
 	 * @param rgba the bytes in RGBA order
+	 * @return an sRGB instance representing the rgba color
 	 */
 	public static sRGB fromBytes(int... rgba) {
 		if (rgba.length == 3)

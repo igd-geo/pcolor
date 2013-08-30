@@ -41,16 +41,30 @@ public class Surrounding {
 	 */
 	private final double N_c;
 
+	/**
+	 * @param F factor determining degree of adaptation
+	 * @param c impact of surrounding
+	 * @param Nc chromatic induction factor
+	 */
 	public Surrounding(double F, double c, double Nc) {
 		this.F = F;
 		this.c = c;
 		this.N_c = Nc;
 	}
 
+	/**
+	 * The CIECAM02 average surrounding
+	 */
 	public final static Surrounding averageSurrounding = new Surrounding(1.0, 0.69, 1.0);
 
+	/**
+	 * The CIECAM02 dim surrounding
+	 */
 	public final static Surrounding dimSurrounding = new Surrounding(0.9, 0.59, 0.9);
 
+	/**
+	 * The CIECAM02 dark surrounding
+	 */
 	public final static Surrounding darkSurrounding = new Surrounding(0.8, 0.525, 0.8);
 
 	/**
