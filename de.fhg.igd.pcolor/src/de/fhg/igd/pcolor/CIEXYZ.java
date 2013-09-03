@@ -112,6 +112,28 @@ public class CIEXYZ extends PColor {
 	}
 	
 	/**
+	 * Creates XYZ instances using the conventional numerical range 0..100,
+	 * not 0..1 as AWT prefers.
+	 * @param colorvalue the color value as expected in a 0..100 range
+	 * @return a matching CIEXYZ instance
+	 */
+	public static CIEXYZ fromCIEXYZ100(float... colorvalue) {
+		return new CIEXYZ(colorvalue[0] / 100.0f, colorvalue[1] / 100.0f, colorvalue[2] / 100.0f);
+	}
+	
+	/**
+	 * Creates XYZ instances using the conventional numerical range 0..100, not 0..1 as
+	 * AWT does.
+	 * @return an array of floats in traditional scale 0..100
+	 */
+	public float[] toCIEXYZ100() {
+		return new float[] {
+				get(X) * 100.0f,
+				get(Y) * 100.0f,
+				get(Z) * 100.0f };
+	}
+	
+	/**
 	 * Calculates the mean JCh color in an array of JCh colors. Differences in
 	 * their individual color spaces are not being accounted for.
 	 * 

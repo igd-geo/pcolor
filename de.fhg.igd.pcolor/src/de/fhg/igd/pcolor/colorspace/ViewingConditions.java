@@ -124,7 +124,7 @@ public class ViewingConditions {
 	 * @return a ViewingConditions instance
 	 */
 	public static ViewingConditions createAdapted(CIEXYZ XYZ_w, double L_A, double Y_b, Surrounding sur) {
-		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.getComponents());
+		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.toCIEXYZ100());
 		// calculate RGB whitepoint
 		double[] RGB_w = CS_CIECAM02.XYZtoCAT02(xyz_w);
 		double D = calcD(L_A, sur);
@@ -143,7 +143,7 @@ public class ViewingConditions {
 	 * @return a fully adapted viewing conditions instance
 	 */
 	public static ViewingConditions createFullyAdapted(CIEXYZ XYZ_w, float L_A, float Y_b, Surrounding sur) {
-		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.getComponents());
+		double[] xyz_w = MathTools.floatToDoubleArray(XYZ_w.toCIEXYZ100());
 		double[] RGB_w = CS_CIECAM02.XYZtoCAT02(xyz_w);
 		double[] RGB_c = calcAdaptedRGBc(XYZ_w, RGB_w, 1.0);
 		return new ViewingConditions(xyz_w, L_A, Y_b, sur, RGB_w, RGB_c);
@@ -151,7 +151,7 @@ public class ViewingConditions {
 
 	private static double[] calcAdaptedRGBc(CIEXYZ XYZ_w, double[] RGB_w, double D) {
 		double[] RGB_c = new double[3];
-		double Yw = XYZ_w.get(CIEXYZ.Y);
+		double Yw = XYZ_w.get(CIEXYZ.Y) * 100;
 		for(int i = 0; i < RGB_c.length; i++) {
 			RGB_c[i] = (D * Yw / RGB_w[i]) + (1.0 - D);
 		}
