@@ -28,7 +28,7 @@ import de.fhg.igd.pcolor.util.ColorTools;
 
 /**
  * CAMLch models any three-component space derived from the CIECAM02 color appearance
- * model, where L represents J or Q, c represents chroma, colorfulness or daturation,
+ * model, where L represents J or Q, c represents chroma, colorfulness or saturation,
  * and h represents hue angle(h) or hue composition (H).
  * <p>
  * Note that optical (light-based) processes such as casting shadows or
