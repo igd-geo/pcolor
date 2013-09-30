@@ -668,22 +668,23 @@ public class CS_CIECAM02 extends ColorSpace {
 	 * @return hue composition
 	 */
 	public static double calculateH(double h) {
+		if (h < 20.14)
+			h = h + 360;
 		double i;
-		if (h < 20.14) {
-			i = (h + 122.47) / 1.2;
-			return 300.0 + 100.0 * i / (i + (20.14 - h) / 0.8);
-		} else if (h < 90.0) {
+		if (h >= 20.14 && h < 90.0) {  // index i = 1
 			i = (h - 20.14) / 0.8;
 			return 100.0 * i / (i + (90 - h) / 0.7);
-		} else if (h < 164.25) {
+		} else if (h < 164.25) { // index i = 2
 			i = (h - 90) / 0.7;
 			return 100.0 + 100.0 * i / (i + (164.25 - h) / 1);
-		} else if (h < 237.53) {
+		} else if (h < 237.53) {  // index i = 3
 			i = (h - 164.25) / 1.0;
 			return 200.0 + 100.0 * i / (i + (237.53 - h) / 1.2);
-		} else {
+		} else if (h <= 380.14) {  // index i = 4
 			i = (h - 237.53) / 1.2;
 			return 300.0 + 100.0 * i / (i + (380.14 - h) / 0.8);
+		} else {
+			throw new IllegalArgumentException("h outside assumed range 0..360: " + Double.toString(h));
 		}
 	}
 
@@ -704,7 +705,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	 */
 	public static double calculateh(double H) {
 		double i, h;
-		if (H < 100.0) {
+		if (H >= 0 && H < 100.0) {
 			i = H;
 			h = (i * -57.902 - 1409.8) / (i * -0.1 - 70.0);
 		} else if (H < 200.0) {
@@ -713,9 +714,11 @@ public class CS_CIECAM02 extends ColorSpace {
 		} else if (H < 300.0) {
 			i = H - 200.0;
 			h = (i * -40.43 - 19710.0) / (i * 0.2 - 120.0);
-		} else {
+		} else if (H < 400.0) {
 			i = H - 300.0;
 			h = (i * -266.144 - 19002.4) / (i * -0.4 - 80.0);
+		} else {
+			throw new IllegalArgumentException("H out of 0..400 range: " + Double.toString(H));
 		}
 		if(h > 360.0) return h - 360.0;
 		else return h;
