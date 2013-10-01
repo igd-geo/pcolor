@@ -682,7 +682,11 @@ public class CS_CIECAM02 extends ColorSpace {
 			return 200.0 + 100.0 * i / (i + (237.53 - h) / 1.2);
 		} else if (h <= 380.14) {  // index i = 4
 			i = (h - 237.53) / 1.2;
-			return 300.0 + 100.0 * i / (i + (380.14 - h) / 0.8);
+			double H = 300.0 + 100.0 * i / (i + (380.14 - h) / 0.8);
+			// don't use 400 if we can use 0
+			if (H <= 400.0f && H >= 399.999f)
+				H = 0;
+			return H;
 		} else {
 			throw new IllegalArgumentException("h outside assumed range 0..360: " + Double.toString(h));
 		}
@@ -714,14 +718,15 @@ public class CS_CIECAM02 extends ColorSpace {
 		} else if (H < 300.0) {
 			i = H - 200.0;
 			h = (i * -40.43 - 19710.0) / (i * 0.2 - 120.0);
-		} else if (H < 400.0) {
+		} else if (H <= 400.0) {
 			i = H - 300.0;
 			h = (i * -266.144 - 19002.4) / (i * -0.4 - 80.0);
 		} else {
 			throw new IllegalArgumentException("H out of 0..400 range: " + Double.toString(H));
 		}
-		if(h > 360.0) return h - 360.0;
-		else return h;
+		if(h > 360.0) h = h - 360.0;
+		if(h > 359.9999f) h = 0;
+		return h;
 	}
 
 	/**

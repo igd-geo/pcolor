@@ -26,6 +26,7 @@ import java.awt.color.ColorSpace;
 
 import org.junit.Test;
 
+import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.CIEXYZ;
 import de.fhg.igd.pcolor.Illuminant;
 import de.fhg.igd.pcolor.PColor;
@@ -184,6 +185,27 @@ public class ConversionTest {
 		sRGB test = new sRGB(0.736f, 0.237f, 0.946f);
 		testForwardBackward(test, csJab, 0.001f);
 		testRGBForwardBackward(test.getComponents(), csJab, 0.001f);
+	}
+	
+	/**
+	 * tests conversion from CAMLch to XYZ and back.
+	 */
+	@Test
+	public void CAMLabtoXYZ() {
+		CS_CAMLch csLcH = new CS_CAMLch(brightCond, CS_CAMLab.JCH);
+		CS_CAMLch csLch = new CS_CAMLch(brightCond, CS_CAMLab.JCh);
+		CAMLch test0 = new CAMLch(new float[]{50f, 80f, 0f}, 1f, csLcH);
+		CAMLch test1 = new CAMLch(new float[]{50f, 80f, 400f}, 1f, csLcH);
+		CAMLch test2 = new CAMLch(new float[]{50f, 80f, 0f}, 1f, csLch);
+		CAMLch test3 = new CAMLch(new float[]{50f, 80f, 360f}, 1f, csLch);
+		testForwardBackward(test0, CS_CIEXYZ.instance, 0.001f);
+		testForwardBackward(test2, CS_CIEXYZ.instance, 0.001f);
+		PColor t0xyz = PColor.convert(test0, CS_CIEXYZ.instance);
+		PColor t1xyz = PColor.convert(test1, CS_CIEXYZ.instance);
+		assertArrayEquals(t0xyz.getComponents(), t1xyz.getComponents(), 0.0001f);
+		PColor t2xyz = PColor.convert(test2, CS_CIEXYZ.instance);
+		PColor t3xyz = PColor.convert(test3, CS_CIEXYZ.instance);
+		assertArrayEquals(t2xyz.getComponents(), t3xyz.getComponents(), 0.0001f);
 	}
 
 	/**
