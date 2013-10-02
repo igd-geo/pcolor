@@ -26,7 +26,7 @@ import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
 import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 
 /**
- * CAMLab models a catesian mapping to any three-component space derived from
+ * CAMLab models a cartesian mapping to any three-component space derived from
  * the CIECAM02 color appearance model.
  * <p>
  * The name CAMLab is not established; it seeks to represent the concept
