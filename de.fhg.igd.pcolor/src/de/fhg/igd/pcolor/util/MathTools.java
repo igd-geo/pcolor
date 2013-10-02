@@ -109,6 +109,21 @@ public class MathTools {
 
         return true;
     }
+	
+	/**
+	 * @param a a float arrray
+	 * @param a2 a float arrray
+	 * @return the euklidean distance wehn considering both arrays as vectors.
+	 */
+	public static float vectorDistance(float[] a, float[] a2) {
+		assert a.length == a2.length;
+		double acc = 0;
+		
+        for (int i=0; i<a.length; i++)
+            acc += Math.pow(a[i] - a2[i], 2);
+
+        return (float) Math.sqrt(acc);
+    }
 
 	/**
 	 * Calculates an angle, in degrees, between 0 and 360 given its sine and

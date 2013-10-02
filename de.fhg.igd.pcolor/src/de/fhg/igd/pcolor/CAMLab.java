@@ -132,8 +132,7 @@ public class CAMLab extends PColor {
     }
 
 	/**
-	 * Calculates the distance between two CAMLab colors. If based on JCh
-	 * this resembles the CIE's recommended CAM02-UCS calculation.
+	 * Calculates the distance between two CAMLab colors.
 	 * 
 	 * @param color1
 	 *            the first color
@@ -146,8 +145,7 @@ public class CAMLab extends PColor {
     }
 
 	/**
-	 * Calculates the distance between two JCh colors using the CIE's
-	 * recommended CAM02-UCS calculation and the specified weights.
+	 * Calculates the distance between two Lab colors with weighted lightness/colorfulness weights.
 	 * 
 	 * @param color1
 	 *            the first color

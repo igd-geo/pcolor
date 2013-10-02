@@ -28,8 +28,9 @@ import de.fhg.igd.pcolor.CAMLab;
 import de.fhg.igd.pcolor.CAMLch;
 import de.fhg.igd.pcolor.PColor;
 import de.fhg.igd.pcolor.sRGB;
-import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
+import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
+import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 
 /**
  * A series of methods and utilities for dealing with various color operations.
@@ -83,47 +84,48 @@ public class ColorTools {
 			difference += c;
 		return difference;
     }
-    
+	
 	/**
-	 * Calculate the distance in Jab (more precisely JaMbM via {@link CAMLab}).
-	 * This is similar to and often better than a "delta E" distance based on
-	 * CIELab, i.e, is closer to the ideal that unity is equivalent to a
-	 * "just noticeable distance". The Jab space is the one defined by
-	 * {@link CS_CAMLab#defaultJaMbMInstance} If you want to compare across
-	 * viewing conditions, use the {@link CAMLab#distance(CAMLab, CAMLab)} overload.
-	 * 
-	 * @see CAMLch#distance(CAMLch, CAMLch)
-	 * @param col1
-	 *            the first colour
-	 * @param col2
-	 *            the second colour
-	 * @return the distance in JaMbM
+	 * Returns a delta E distance in CAM02-UCS as published in "Uniform Colour Spaces Based on
+	 * CIECAM02 Colour Appearance Model" (Luo et al.). This is shown to be a good
+	 * measure of perceptual distance.
+	 * @see CAMLab#distance(CAMLab, CAMLab)
+	 * @param col1 the first color.
+	 * @param col2 the second color
+	 * @param vc the viewing conditions the distance is to be evaluated under
+	 * @return a delta E, more accurately the CAM02-UCS distance between col1 and col2 
 	 */
-	public static float distance(PColor col1, PColor col2) {
-		return distance(col1, col2, CS_CAMLab.defaultJaMbMInstance);
+	public static float distance(PColor col1, PColor col2, ViewingConditions vc) {
+		CS_CAMLch compSpace = new CS_CAMLch(vc, CS_CAMLch.JMh);
+		CAMLch col1Lch = (CAMLch) PColor.convert(col1, compSpace);
+		CAMLch col2Lch = (CAMLch) PColor.convert(col2, compSpace);
+		return distance(col1Lch, col2Lch);
 	}
-    
+
 	/**
-	 * Calculate the distance in the given {@link CS_CAMLab}. This is similar to
-	 * and often better than a "delta E" distance based on Lab, i.e, is closer
-	 * to the ideal that unity is equivalent to a "just noticeable distance".
-	 * The comparison space is defined by the CIECAM viewing conditions.
-	 * If you want to compare across viewing conditions, use
-	 * {@link CAMLab#distance(CAMLab, CAMLab)}.
-	 * 
-	 * @see CAMLch#distance(CAMLch, CAMLch)
-	 * @param col1
-	 *            the first colour
-	 * @param col2
-	 *            the second colour
-	 * @param cspace
-	 *            the Jab-based colour space to use
-	 * @return the distance
+	 * Returns a delta E distance in CAM02-UCS as published in "Uniform Colour Spaces Based on
+	 * CIECAM02 Colour Appearance Model" (Luo et al.). This is shown to be a good
+	 * measure of perceptual distance.
+	 * @param col1 the first color.
+	 * @param col2 the second color
+	 * @return a delta E, more accurately the CAM02-UCS distance between col1 and col2 
 	 */
-	public static float distance(PColor col1, PColor col2, CS_CAMLab cspace) {
-		CAMLab col1_ref = new CAMLab(col1, cspace);
-		CAMLab col2_ref = new CAMLab(col2, cspace);
-		return (float) CAMLab.distance(col1_ref, col2_ref);
+	public static float distance(CAMLch col1, CAMLch col2) {
+		// check for JMh correlates?
+		float[] c1ucs = toUCSJab(col1);
+		float[] c2ucs = toUCSJab(col2);
+		return MathTools.vectorDistance(c1ucs, c2ucs);
+	}
+
+	private static float[] toUCSJab(CAMLch col) {
+		float J = col.get(CAMLch.L);
+		float M = col.get(CAMLch.c);
+		float h = col.get(CAMLch.h);
+		float sJ = ((1+100*0.007f)*J)/(1f + 0.007f * J);
+		float sM = (float)((1.0/0.0228)*Math.log(1 + 0.0228 * M));
+		float a = (float)(sM * Math.cos(Math.toRadians(h)));
+		float b = (float)(sM * Math.sin(Math.toRadians(h)));
+		return new float[] {sJ, a, b };
 	}
 	
 	/**
@@ -185,21 +187,52 @@ public class ColorTools {
 	 *            the distance in JCh to allow for
 	 * @param inside
 	 *            a predicate defining a space whose boundary is tested
+	 * @param vc the viewing conditions to use for comparison
 	 * @return the boundary color, when found
 	 */
 	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
-			float upper, float e, Predicate<? super C> inside) {
+			float upper, float e, Predicate<? super C> inside, ViewingConditions vc) {
 		float middleValue = (upper + lower) / 2f;
 		C middleColor = ColorTools.setChannel(col, channel, middleValue);
 		// if we woudn't move far anyway, treat as found as col is
 		// always assumed to be inside the space identified by the predicate
-		if (distance(col, middleColor) < e)
+		if (distance(col, middleColor, vc) < e)
 			return col;
 		if (inside.apply(middleColor))
 			return determineBoundaryColor(middleColor, channel, middleValue, upper,
-					e, inside);
+					e, inside, vc);
 		else
-			return determineBoundaryColor(col, channel, lower, middleValue, e, inside);
+			return determineBoundaryColor(col, channel, lower, middleValue, e, inside, vc);
+	}
+	
+	/**
+	 * Performs a binary search for a boundary of an implicitly defined
+	 * partition in an arbitrary color space. For example, this can be used to
+	 * find the most saturated or brightest possible color of a given hue.
+	 * 
+	 * Assuming that col is actually part of the partition identified by the
+	 * predicate and the lower, upper boundary contains exactly one such boundary,
+	 * this method tests the boundary until an answer with an error of at most e
+	 * is found.
+	 * 
+	 * @param col
+	 *            the color at the lower bound
+	 * @param channel
+	 *            the channel whose boundary is being tested
+	 * @param lower
+	 *            the lower bound on the channel
+	 * @param upper
+	 *            the upper bound on the channel
+	 * @param e
+	 *            the distance in JCh to allow for
+	 * @param inside
+	 *            a predicate defining a space whose boundary is tested
+	 * @return the boundary color, when found
+	 */
+	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
+			float upper, float e, Predicate<? super C> inside) {
+		return determineBoundaryColor(col, channel, lower, upper,
+				e, inside, ViewingConditions.sRGB_typical_envirnonment);
 	}
 	
 	/**
