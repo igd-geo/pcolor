@@ -1,0 +1,97 @@
+// PColor build file
+
+def packageVendor = 'Fraunhofer IGD'
+def packageDescription = 'PColor is a library for perceptual color calculation.';
+def packageVersion = '1.2';
+
+subprojects {
+    apply plugin: 'osgi'
+    apply plugin: 'java'
+
+    repositories {
+       mavenCentral()
+    }
+
+    version = packageVersion
+
+    jar {
+        manifest {
+	    instruction 'Bundle-Vendor', packageVendor
+	    instruction 'Bundle-Description', packageDescription
+	    symbolicName = name
+	}
+    }
+
+    sourceSets {
+       main {
+          java {
+	       srcDir 'src'
+	  }
+       }
+    }
+
+    // single build dir - nice but perhaps dangerous.
+    // buildDir = project(':').file('build')
+
+    task diag << {
+        sourceSets.all { 
+    		   println "classesDir of " + it.name
+		   println it.output.classesDir
+		   println "srcDirs: " + it.allSource.srcDirs
+		   println "allJava: " + it.allJava*.toString()
+        }
+    }
+}
+
+project(':de.fhg.igd.pcolor') {
+
+  task packageJavadoc(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+  }
+
+  task packageSources(type: Jar, dependsOn: assemble) {
+    from sourceSets.main.allSource
+    classifier = 'source'
+
+    manifest {
+      attributes['Bundle-Vendor'] = packageVendor
+      attributes['Bundle-Description'] = packageDescription
+      attributes['Eclipse-SourceBundle'] = project.name + ';version="' + project.version + '";roots:="."'
+      attributes['Bundle-SymbolicName'] = project.name + ".source"
+      attributes['Bundle-Version'] = project.version
+    }
+  }
+
+  // include doc and source in build
+  tasks.build.dependsOn += [packageSources, packageJavadoc]
+}
+
+project(':de.fhg.igd.pcolor.test') {
+  // this is cumulative, i.e. compiled twice but
+  // this way we don't need to adapt the test task.
+  sourceSets {
+     test {
+        //from sourceSets.main
+        java {
+          srcDir 'src'
+        }
+     }
+  }
+  dependencies {
+  	compile project(':de.fhg.igd.pcolor')
+   	compile 'junit:junit:4+'
+  }
+}
+
+project(':de.fhg.igd.pcolor.examples') {
+  dependencies {
+    compile project(':de.fhg.igd.pcolor')
+  }
+}
+
+// last build task (depending on all the subprojects' build tasks)
+task build (dependsOn: subprojects*.build) << {
+     println "Build complete."
+     println "The dist files are now in " + project(':de.fhg.igd.pcolor').libsDir
+}

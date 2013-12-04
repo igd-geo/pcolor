@@ -1,0 +1,2 @@
+// sub-projects for the actual bundles
+include 'de.fhg.igd.pcolor', 'de.fhg.igd.pcolor.test', 'de.fhg.igd.pcolor.examples'
