@@ -71,7 +71,7 @@ public class ViewingConditions {
 
 	/**
 	 * Construct a new ViewingConditions instance. This constructor is for internal use.
-	 * @param XYZ_w XYZ adopted whitepoint
+	 * @param XYZ_w XYZ of adopted whitepoint
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
@@ -115,9 +115,9 @@ public class ViewingConditions {
 	}
 	
 	/**
-	 * Construct a new ViewingConditions instance. The adaption is derived from the background and surround. This
-	 * is the standard case treated in CIE 159:2004.
-	 * @param XYZ_w XYZ whitepoint
+	 * Construct a new ViewingConditions instance. The degree of adaption (D) is derived
+	 * from the background and surround. This is the standard case treated in CIE 159:2004.
+	 * @param XYZ_w XYZ of adopted whitepoint
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
@@ -136,7 +136,7 @@ public class ViewingConditions {
 	 * Create viewing conditions assuming full adaption. This is primarily
 	 * useful in color management applications.
 	 * 
-	 * @param XYZ_w XYZ whitepoint
+	 * @param XYZ_w XYZ of adopted whitepoint
 	 * @param L_A average luminance of visual surround
 	 * @param Y_b adaptation luminance of color background
 	 * @param sur the surrounding
