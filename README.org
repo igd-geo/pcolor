@@ -34,6 +34,10 @@ There is a gradle build which should get you five artifacts;
 three bundles for the bundle projects (see table) and a source and javadoc
 jar for pcolor. The souce jar should work in eclipse.
 
+#+BEGIN_src
+gradlew build
+#+END_src
+
 There are three bundle projects:
 | de.fhg.igd.pcolor          | The PColor library |
 | de.fhg.igd.pcolor.examples | see below          |
@@ -160,10 +164,10 @@ However it is easy to test if your colour is out of gamut and how far.
 This library fully implements CIECAM02 and partly CIE L*a*b*.
 * Examples
 The archive contains some examples:
-| MixingIllustration | an overview of results from different color mixing methods |
-| sRgbInCiecam02     | in-Browser 3D hull of sRGB in the CIECAM02 JCh space       |
-| TwoDColorMatrix    | emits a Hue-Colorfulness table for a given J (brigtness)   |
-| RandomPalette      | determines colors which are distinct from given colors     |
+| MixingIllustration | an overview of results from different color mixing methods          |
+| sRgbInCiecam02     | in-Browser 3D maximum chroma hull of sRGB in the CIECAM02 JCh space |
+| TwoDColorMatrix    | emits a Hue-Colorfulness table for a given J (brigtness)            |
+| RandomPalette      | determines colors which are distinct from given colors              |
   
 * Thanks
 Thanks go to the team creating http://costar.sfu.ca/painterly for
