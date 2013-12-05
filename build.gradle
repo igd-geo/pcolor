@@ -5,7 +5,6 @@ def packageDescription = 'PColor is a library for perceptual color calculation.'
 def packageVersion = '1.2';
 
 subprojects {
-    apply plugin: 'osgi'
     apply plugin: 'java'
 
     repositories {
@@ -16,9 +15,11 @@ subprojects {
 
     jar {
         manifest {
-	    instruction 'Bundle-Vendor', packageVendor
-	    instruction 'Bundle-Description', packageDescription
-	    symbolicName = name
+	    // support the eclipse manifest-first style
+	    from file('META-INF/manifest.mf')
+	    attributes['Bundle-Vendor'] = packageVendor
+      	    attributes['Bundle-Description'] = packageDescription
+            attributes['Bundle-Version'] = project.version
 	}
     }
 
