@@ -16,7 +16,7 @@ subprojects {
     jar {
         manifest {
 	    // support the eclipse manifest-first style
-	    from file('META-INF/manifest.mf')
+	    from file('META-INF/MANIFEST.MF')
 	    attributes['Bundle-Vendor'] = packageVendor
       	    attributes['Bundle-Description'] = packageDescription
             attributes['Bundle-Version'] = project.version
