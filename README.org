@@ -26,15 +26,16 @@ CIECAM02, but they use it to answer the question outlined above, just
 more precisely. This leaves the richer capabilities of CAMs aside, some of
 which are outlined in the next section.
 * Building
-Currently there is no build system, meaning you can use the Eclipse IDE
-to produce java libaries, OSGi bundles or runnable jars from the IDE.
+
+There is a gradle build which should get you five artifacts;
+three bundles for the bundle projects (see table) and a source and javadoc
+jar for pcolor. The souce jar should work in eclipse.
 
 There are three bundle projects:
 | de.fhg.igd.pcolor          | The PColor library |
 | de.fhg.igd.pcolor.examples | see below          |
 | de.fhg.igd.pcolor.test     | Unit tests         |
 
-I plan to add a gradle-based build though.
 * Use cases
   CIECAM02, and potential related models, offer a host of new or improved
   capabilities. This library aims to provide an idiomatic java API to
