@@ -220,7 +220,7 @@ public class CS_CIECAM02 extends ColorSpace {
 	}
 
 	/**
-	 * convertes from CIECAT02 to Hunt–Pointer–Estévez space
+	 * convertes from CIECAT02 to Hunt-Pointer-EstÃ©vez space
 	 * @param RGB sRGB color
 	 * @return color in HPE 
 	 */
