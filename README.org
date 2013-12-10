@@ -4,15 +4,18 @@ PColor is a library for perceptually oriented color calculation. It tries
 to be easier to use than similar implementations. It mainly implements
 the CIECAM02 model in idiomatic java.
 
-The library enables color operations that are typically hard to
-perform and require manual tuning, such as finding visually
-equidistant colours.
+* What it is
 
-Basically colors can sensibly be manipulated in two types of color
-spaces: optically or perceptually uniform color spaces. There are also
-a lot of options in-between, but more on this follows below. This
+The library enables color operations that are typically hard to
+perform, such as finding visually equidistant colours. It attempts
+to define a safe and idiomatic interface to colour operations.
+
+PColor is opinionated software. Its opinion is that basically colors
+can sensibly be manipulated in two types of color spaces: optically or
+perceptually uniform color spaces. Other options may be nice for storage or
+transmission, but not for operations like interpolation. This
 library mainly cares about the perceptual sort, but can be used for
-optical manipulation as well.
+optically linear color manipulation as well.
    
 Established color management systems, such as those Java's JAI bridges
 to, enable conversion of colours or, more generally, colorimetric
@@ -24,7 +27,7 @@ applicable colour appearance models, chiefly CIECAM02 in 2002, more
 interesting tasks can be tackled. Most color management systems use
 CIECAM02, but they use it to answer the question outlined above, just
 more precisely. This leaves the richer capabilities of CAMs aside, some of
-which are outlined in the next section.
+which are outlined in the next sections.
 * Building
 
 There is a gradle build which should get you five artifacts;
@@ -42,14 +45,17 @@ There are three bundle projects:
   exploit these capabilities. Use cases include:
   - Altering colours to look the same under different viewing conditions
   - Finding a set of equidistant colours
-  - Estimating how visually distant different colours are (delta E-like)
-  - Exploiting colour relations for visualization of value relations
+  - Calculating how visually distant different colours are
+    - based on CAM-UCS (small distance; comparable to CIEDE2000)
+    - based on CIECAM02 euclidean for medium to large distance (opponent theory)
+  - Exploiting colour relations for visualization of value relations,
+    i.e. support visual analytics
   - creating color palettes for the web
 ** API
    The API is not considered stable. It largely builds upon the AWT
    color management API for interoperability, and partly the (defunct)
-   Painterly project this was derived from. However in the 1.1.0 release
-   the API is heading where it should.
+   Painterly project this was derived from. It has seen substantial improvements
+   but still may change without further notice.
 
    This is NOT a high performance implemetation. It favours
    correctness, precision and idiomatic APIs over speed. You need to
