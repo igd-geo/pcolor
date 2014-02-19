@@ -16,6 +16,7 @@ import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
 import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
+import de.fhg.igd.pcolor.colorspace.ViewingConditions;
 import de.fhg.igd.pcolor.util.ColorTools;
 
 /**
@@ -76,7 +77,7 @@ public class MixingIllustration {
 				+ "<th></th><th>JCh<br>(polar perceptual correlates<sup>1</sup>)</th>"
 				+ "<th></th><th>Jab<sub>Ch</sub><br>(cartesian perceptual correlates)</th>"
 				+ "<th></th><th>XYZ<br>(optical intensity<sup>2</sup>)</th>"
-				+ "<th></th><th>sRGB<sup>3</sup></th></tr>\r\n");
+				+ "<th></th><th>sRGB<sup>3</sup></th><th>delta E sRGB/XYZ</th></tr>\r\n");
 		for (MixingExample e : examples) {
 			out.write("<tr>\n");
 			CAMLch jch1 = (CAMLch)PColor.convert(e.c1, CS_CAMLch.defaultJChInstance);
@@ -91,6 +92,7 @@ public class MixingIllustration {
 			);
 			CAMLch psychoMidJCh = CAMLch.blend(jch1, jch2, 0.5f);
 			CIEXYZ opticalAverage = CIEXYZ.average(new CIEXYZ[]{xyz1, xyz2});
+			float dE = ColorTools.distance(bad_mix, opticalAverage, ViewingConditions.sRGB_typical_envirnonment);
 			
 			writeCell(out, e.c1, ColorTools.toCss(e.c1, false));
 			writeCell(out, e.c2, ColorTools.toCss(e.c2, false));
@@ -102,6 +104,7 @@ public class MixingIllustration {
 			writeCell(out, opticalAverage, ColorTools.toCssUnclipped(opticalAverage, false));
 			writeCell(out);
 			writeCell(out, bad_mix, ColorTools.toCssUnclipped(bad_mix, false));
+			out.write("<td>" + dE + "</td>");
 			out.write("</tr>\n");
 		}
 		
