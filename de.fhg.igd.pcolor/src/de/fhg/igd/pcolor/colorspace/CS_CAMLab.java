@@ -180,5 +180,12 @@ public class CS_CAMLab extends CS_CAMLch {
 	/**
 	 * A CS_CAMLab instance based on JMh (Ja<sub>M</sub>b<sub>M</sub>).
 	 */
-	public static final CS_CAMLab defaultJaMbMInstance = new CS_CAMLab(defaultContext, CS_CAMLch.JMh); 
+	public static final CS_CAMLab defaultJaMbMInstance = new CS_CAMLab(defaultContext, CS_CAMLch.JMh);
+	
+	/**
+	 * An instance with default viewing conditions and JCh correlate configuration.
+	 */
+	@SuppressWarnings("hiding") // we actually do not want to end up with pure CIECAM from here
+	public static final CS_CAMLch defaultInstance = defaultJaMbMInstance;
+
 }

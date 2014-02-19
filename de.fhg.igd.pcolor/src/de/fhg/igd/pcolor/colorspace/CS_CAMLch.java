@@ -258,5 +258,11 @@ public class CS_CAMLch extends CS_CIECAM02 {
 	 */
 	public static final CS_CAMLch defaultJChInstance = new CS_CAMLch(defaultContext, JCh);
 	
+	/**
+	 * An instance with default viewing conditions and JCh correlate configuration.
+	 */
+	@SuppressWarnings("hiding") // we actually do not want to end up with pure CIECAM from here
+	public static final CS_CAMLch defaultInstance = defaultJChInstance;
+	
 }
 	
