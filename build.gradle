@@ -53,7 +53,7 @@ project(':de.fhg.igd.pcolor') {
 
   task packageSources(type: Jar, dependsOn: assemble) {
     from sourceSets.main.allSource
-    classifier = 'source'
+    classifier = 'sources'
 
     manifest {
       attributes['Bundle-Vendor'] = packageVendor
