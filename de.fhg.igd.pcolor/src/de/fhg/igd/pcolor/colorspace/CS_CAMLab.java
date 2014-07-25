@@ -183,7 +183,7 @@ public class CS_CAMLab extends CS_CAMLch {
 	public static final CS_CAMLab defaultJaMbMInstance = new CS_CAMLab(defaultContext, CS_CAMLch.JMh);
 	
 	/**
-	 * An instance with default viewing conditions and JCh correlate configuration.
+	 * An instance with default viewing conditions and JaMbM correlate configuration.
 	 */
 	@SuppressWarnings("hiding") // we actually do not want to end up with pure CIECAM from here
 	public static final CS_CAMLch defaultInstance = defaultJaMbMInstance;
