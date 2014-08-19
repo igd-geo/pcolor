@@ -21,6 +21,7 @@
 package de.fhg.igd.pcolor.test;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.color.ColorSpace;
 
@@ -38,6 +39,8 @@ import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 import de.fhg.igd.pcolor.colorspace.Surrounding;
 import de.fhg.igd.pcolor.colorspace.ViewingConditions;
+import de.fhg.igd.pcolor.util.ColorTools;
+import de.fhg.igd.pcolor.util.MathTools;
 
 /**
  * Test conversion with pcolor
@@ -322,6 +325,48 @@ public class ConversionTest {
 		PColor b = PColor.convert(in, cs);
 		PColor test = PColor.convert(b, in.getColorSpace());
 		assertArrayEquals(in.getComponents(), test.getComponents(), delta);
+	}
+	
+	// test how often we can go CS_in -> cs_test -> CS_in (ad nauseam)
+	private int testForwardBackwardRepitition(PColor in, ColorSpace cs, float delta, int max_iter) {
+		int r = 0;
+		PColor test = in;
+		do {
+			PColor b = PColor.convert(test, cs);
+			test = PColor.convert(b, in.getColorSpace());
+			r++;
+		} while (MathTools.vectorDistance(in.getComponents(), test.getComponents()) < delta && r < max_iter);
+		return r-1;
+	}
+	
+	@Test
+	public void testRGBConversionStability() {
+		sRGB white = ColorTools.parseColor("#fff");
+		sRGB grey = ColorTools.parseColor("#888");
+		sRGB black = ColorTools.parseColor("#000");
+		
+		// these results look tremendous but merely say that the XYZ<->RGB conversion
+		// finds a stable equilibrium after few iterations. I.e. the test guards against problems
+		// but does not really assert precision.
+		assertTrue(testForwardBackwardRepitition(white, CS_CIEXYZ.instance, (float) 0.000001, 1000) > 500);
+		assertTrue(testForwardBackwardRepitition(grey, CS_CIEXYZ.instance, (float) 0.000001, 1000) > 500);
+		assertTrue(testForwardBackwardRepitition(black, CS_CIEXYZ.instance, (float) 0.000001, 1000) > 500);
+	}
+	
+	@Test
+	public void testCAMConversionStability() {
+		sRGB white = ColorTools.parseColor("#fff");
+		sRGB grey = ColorTools.parseColor("#888");
+		sRGB black = ColorTools.parseColor("#000");
+		
+		assertTrue(testForwardBackwardRepitition(white, CS_CAMLch.defaultInstance, (float) 0.0001, 100) > 50);
+		assertTrue(testForwardBackwardRepitition(grey, CS_CAMLch.defaultInstance, (float) 0.0001, 100) > 50);
+		assertTrue(testForwardBackwardRepitition(black, CS_CAMLch.defaultInstance, (float) 0.0001, 100) > 50);
+		
+		assertTrue(testForwardBackwardRepitition(white, CS_CAMLab.defaultJaMbMInstance, (float) 0.0001, 100) > 50);
+		assertTrue(testForwardBackwardRepitition(grey, CS_CAMLab.defaultJaMbMInstance, (float) 0.0001, 100) > 50);
+		assertTrue(testForwardBackwardRepitition(black, CS_CAMLab.defaultJaMbMInstance, (float) 0.0001, 100) > 50);
+
 	}
 	
 }
