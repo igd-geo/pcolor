@@ -24,6 +24,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.color.ColorSpace;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -35,6 +36,7 @@ import de.fhg.igd.pcolor.sRGB;
 import de.fhg.igd.pcolor.colorspace.CS_CAMLab;
 import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
 import de.fhg.igd.pcolor.colorspace.CS_CIECAM02;
+import de.fhg.igd.pcolor.colorspace.CS_CIELab;
 import de.fhg.igd.pcolor.colorspace.CS_CIEXYZ;
 import de.fhg.igd.pcolor.colorspace.CS_sRGB;
 import de.fhg.igd.pcolor.colorspace.Surrounding;
@@ -51,6 +53,15 @@ public class ConversionTest {
 	ViewingConditions brightCond = ViewingConditions.createAdapted(Illuminant.D65, 318.31, 20.0, Surrounding.averageSurrounding);
 	ViewingConditions darkCond = ViewingConditions.createAdapted(Illuminant.D65, 31.83, 6.0, Surrounding.averageSurrounding);
 
+	Random random = new Random();
+	
+	private float[] rnd(int dim) {
+		float[] x = new float[dim];
+		for(int i = 0; i < dim; i++)
+			x[i] = random.nextFloat();
+		return x;
+	}
+	
 	/**
 	 * tests conversion from CIEXYZ to CIECAM02 and back.   
 	 */
@@ -154,7 +165,7 @@ public class ConversionTest {
 
 		assertArrayEquals(rgb, back, 0.001f);
 	}
-
+	
 	/**
 	 * tests conversion from sRGB to JCh and back. checks if CIECAM02 values are correct.
 	 */
@@ -241,6 +252,24 @@ public class ConversionTest {
 		testXYZForwardBackward(xyz, ColorSpace.getInstance(ColorSpace.CS_sRGB), 0.001f);
 	}
 	
+	/**
+	 * tests conversion from sRGB to CIE L*a*b* and back
+	 */
+	@Test
+	public void RGBtoLab() {
+		float[] rgb = new float[]{0.4f, 0.5f, 0.8f};
+	
+		CS_CIELab csLab = CS_CIELab.instance;
+		testForwardBackward(new sRGB(rgb), csLab, 0.00001f);
+		
+		for(int i = 0; i < 1000; i++) {
+			testForwardBackward(new sRGB(rnd(3)), csLab, 0.00001f);
+		}
+		
+		// TODO enable this test (uses fromRGB)
+		//testRGBForwardBackward(rgb, csLab, 0.0001f);
+	}
+
 	// test XYZ -> CS -> XYZ
 	private void testXYZForwardBackward(float[] xyz, ColorSpace cs, float delta) {
 		// test color space ops

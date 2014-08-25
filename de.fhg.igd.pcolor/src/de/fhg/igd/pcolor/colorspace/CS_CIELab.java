@@ -74,9 +74,9 @@ public class CS_CIELab extends ColorSpace {
 
 	private static double fromxyz(float value) {
 		if(value > EPSILON) {
-			return Math.cbrt(value);
+			return Math.pow(value, 1d/3d);
 		} else {
-			return (KAPPA * value + 16 / 116); 
+			return ((KAPPA * value + 16) / 116d); 
 		}
 	}
 
@@ -96,14 +96,14 @@ public class CS_CIELab extends ColorSpace {
 		double fz = fy - colorvalue[b] / 200d;
 		double fx = colorvalue[a] / 500d + fy;
 
-		XYZ[0] = (float)tox(fx);
-		XYZ[1] = (float)toy(fy, colorvalue[L]);
-		XYZ[2] = (float)toz(fz);
+		XYZ[0] = (float)toxz(fx);
+		XYZ[1] = (float)toy(colorvalue[L]);
+		XYZ[2] = (float)toxz(fz);
 
 		return XYZ;
 	}
 
-	private static double tox(double fx) {
+	private static double toxz(double fx) {
 		if(Math.pow(fx, 3) > EPSILON) {
 			return Math.pow(fx, 3);
 		} else {
@@ -111,19 +111,11 @@ public class CS_CIELab extends ColorSpace {
 		}
 	}
 
-	private static double toy(double fy, float L) {
-		if(L > KAPPA * EPSILON) {
-			return Math.pow((L + 16) / 116d, 3);
+	private static double toy(double L_) {
+		if(L_ > KAPPA * EPSILON) {
+			return Math.pow((L_ + 16) / 116d, 3);
 		} else {
-			return L / KAPPA;
-		}
-	}
-
-	private static double toz(double fz) {
-		if(Math.pow(fz, 3) > EPSILON) {
-			return Math.pow(fz, 3);
-		} else {
-			return (116 * fz - 16) / KAPPA; 
+			return L_ / KAPPA;
 		}
 	}
 
