@@ -74,7 +74,7 @@ public class CS_CIELab extends ColorSpace {
 
 	private static double fromxyz(float value) {
 		if(value > EPSILON) {
-			return Math.pow(value, 1d/3d);
+			return Math.cbrt(value);
 		} else {
 			return ((KAPPA * value + 16) / 116d); 
 		}
@@ -97,7 +97,7 @@ public class CS_CIELab extends ColorSpace {
 		double fx = colorvalue[a] / 500d + fy;
 
 		XYZ[0] = (float)toxz(fx);
-		XYZ[1] = (float)toy(colorvalue[L]);
+		XYZ[1] = (float)toy(fy, colorvalue[L]);
 		XYZ[2] = (float)toxz(fz);
 
 		return XYZ;
@@ -111,9 +111,9 @@ public class CS_CIELab extends ColorSpace {
 		}
 	}
 
-	private static double toy(double L_) {
+	private static double toy(double fy, double L_) {
 		if(L_ > KAPPA * EPSILON) {
-			return Math.pow((L_ + 16) / 116d, 3);
+			return Math.pow(fy, 3);
 		} else {
 			return L_ / KAPPA;
 		}
