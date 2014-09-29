@@ -48,6 +48,19 @@ public class ColorTools {
     {
 		return Math.abs(hueDifference(hue1, hue2));
     }
+    
+    /**
+	 * Returns the smallest difference between two hues as a absolute float
+	 * (in the ring specified).
+     * @param hue1 the first hue
+     * @param hue2 the second hue
+     * @param c the length of the full circle
+	 * @return distance between two hues.
+	 */
+    public static float hueDistance(float hue1, float hue2, float c)
+    {
+		return Math.abs(hueDifference(hue1, hue2, c));
+    }
 
 	/**
 	 * Returns the smallest difference between two hues as a float (in degrees);
