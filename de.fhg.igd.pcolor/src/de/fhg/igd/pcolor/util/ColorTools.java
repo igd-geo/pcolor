@@ -125,12 +125,20 @@ public class ColorTools {
 	 */
 	public static float distance(CAMLch col1, CAMLch col2) {
 		// check for JMh correlates?
-		float[] c1ucs = toUCSJab(col1);
-		float[] c2ucs = toUCSJab(col2);
+		float[] c1ucs = toUCS_Jab(col1);
+		float[] c2ucs = toUCS_Jab(col2);
 		return MathTools.vectorDistance(c1ucs, c2ucs);
 	}
 
-	private static float[] toUCSJab(CAMLch col) {
+	/**
+	 * Return a float array representing CAM-UCS coordinates of the input.
+	 * See M. R. Luo, G. Cui, and C. Li, “Uniform colour spaces based on CIECAM02
+	 * colour appearance model,” Color Research & Application,
+	 * vol. 31, no. 4, pp. 320–330, Aug. 2006.
+	 * @param col the input color
+	 * @return a float array representing J'a'b'
+	 */
+	public static float[] toUCS_Jab(CAMLch col) {
 		float J = col.get(CAMLch.L);
 		float M = col.get(CAMLch.c);
 		float h = col.get(CAMLch.h);
