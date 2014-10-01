@@ -4,6 +4,6 @@ Bundle-Name: Examples for PColor library
 Bundle-SymbolicName: de.fhg.igd.pcolor.examples
 Bundle-Version: 1.4.0.qualifier
 Bundle-Vendor: Fraunhofer IGD
-Require-Bundle: de.fhg.igd.pcolor;bundle-version="1.4.0"
+Require-Bundle: de.fhg.igd.pcolor;bundle-version="1.4.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

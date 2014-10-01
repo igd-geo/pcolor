@@ -2,7 +2,7 @@
 
 def packageVendor = 'Fraunhofer IGD'
 def packageDescription = 'PColor is a library for perceptual color calculation.';
-def packageVersion = '1.4.0';
+def packageVersion = '1.4.1';
 
 def sourceEncoding = 'utf-8';
 
