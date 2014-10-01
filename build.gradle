@@ -4,12 +4,17 @@ def packageVendor = 'Fraunhofer IGD'
 def packageDescription = 'PColor is a library for perceptual color calculation.';
 def packageVersion = '1.4.0';
 
+def sourceEncoding = 'utf-8';
+
 subprojects {
     apply plugin: 'java'
 
     repositories {
        mavenCentral()
     }
+
+    compileJava.options.encoding = sourceEncoding
+    javadoc.options.encoding = sourceEncoding
 
     version = packageVersion
 
