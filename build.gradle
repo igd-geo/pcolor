@@ -5,6 +5,7 @@ def packageDescription = 'PColor is a library for perceptual color calculation.'
 def packageVersion = '1.4.1';
 
 def sourceEncoding = 'utf-8';
+def javaSourceVersion = '1.7';
 
 subprojects {
     apply plugin: 'java'
@@ -15,7 +16,7 @@ subprojects {
 
     compileJava.options.encoding = sourceEncoding
     javadoc.options.encoding = sourceEncoding
-
+    sourceCompatibility = javaSourceVersion
     version = packageVersion
 
     jar {
