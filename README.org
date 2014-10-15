@@ -56,10 +56,10 @@ There are three bundle projects:
     i.e. support visual analytics
   - creating color palettes for the web
 ** API
-   The API is not considered stable. It largely builds upon the AWT
-   color management API for interoperability, and partly the (defunct)
-   Painterly project this was derived from. It has seen substantial improvements
-   but still may change without further notice.
+   The API is considered stable as of version 1.4, meaning breaking
+   changes are not intended without major version change. The API largely
+   builds upon the AWT color management API for interoperability, and
+   partly the (defunct) Painterly project this project was derived from.
 
    This is NOT a high performance implemetation. It favours
    correctness, precision and idiomatic APIs over speed. You need to
