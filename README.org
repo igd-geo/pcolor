@@ -50,7 +50,7 @@ There are three bundle projects:
   - Altering colours to look the same under different viewing conditions
   - Finding a set of equidistant colours
   - Calculating how visually distant different colours are
-    - based on CAM-UCS (small distance; comparable to CIEDE2000)
+    - based on CAM-UCS (small and large distance; comparable to CIEDE2000)
     - based on CIECAM02 euclidean for medium to large distance (opponent theory)
   - Exploiting colour relations for visualization of value relations,
     i.e. support visual analytics
@@ -147,7 +147,7 @@ space again. This is not something you want, almost never.
 Supported physically linear spaces are CIE XYZ.
 
 *Perceptually* linear color spaces relate to the human visual
-system. The properties of our viusual system are still subject to
+system. The exact properties of our visual system are still subject to
 debate, but from time to time the CIE endorses color models designed
 to match those properties. Using such a model, it becomes feasible to
 answer questions such as

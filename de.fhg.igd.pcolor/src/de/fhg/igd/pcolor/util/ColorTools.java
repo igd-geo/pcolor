@@ -20,6 +20,7 @@
 
 package de.fhg.igd.pcolor.util;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -119,12 +120,12 @@ public class ColorTools {
 	 * Returns a delta E distance in CAM02-UCS as published in "Uniform Colour Spaces Based on
 	 * CIECAM02 Colour Appearance Model" (Luo et al.). This is shown to be a good
 	 * measure of perceptual distance.
-	 * @param col1 the first color.
-	 * @param col2 the second color
+	 * Note that the input colors MUST be {@link CS_CAMLch#JMh}.
+	 * @param col1 the first color, MUST be {@link CS_CAMLch#JMh}
+	 * @param col2 the second color, MUST be {@link CS_CAMLch#JMh}
 	 * @return a delta E, more accurately the CAM02-UCS distance between col1 and col2 
 	 */
 	public static float distance(CAMLch col1, CAMLch col2) {
-		// check for JMh correlates?
 		float[] c1ucs = toUCS_Jab(col1);
 		float[] c2ucs = toUCS_Jab(col2);
 		return MathTools.vectorDistance(c1ucs, c2ucs);
@@ -135,10 +136,13 @@ public class ColorTools {
 	 * See M. R. Luo, G. Cui, and C. Li, “Uniform colour spaces based on CIECAM02
 	 * colour appearance model,” Color Research & Application,
 	 * vol. 31, no. 4, pp. 320–330, Aug. 2006.
-	 * @param col the input color
+	 * @param col the input color, MUST be {@link CS_CAMLch#JMh}
 	 * @return a float array representing J'a'b'
 	 */
 	public static float[] toUCS_Jab(CAMLch col) {
+		if (!Arrays.equals(col.getColorSpace().getCorrelateConfiguration(), CS_CAMLch.JMh)) {
+			throw new IllegalArgumentException("Appearance correlates have to be J,M,h (CS_CAMLch.JMh)");
+		}
 		float J = col.get(CAMLch.L);
 		float M = col.get(CAMLch.c);
 		float h = col.get(CAMLch.h);
