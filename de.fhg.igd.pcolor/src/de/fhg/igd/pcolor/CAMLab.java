@@ -37,7 +37,7 @@ import de.fhg.igd.pcolor.colorspace.CS_CAMLch;
  * <b>do happen in the optical domain</b>. We just perceive the end result. In
  * other words, please <b>do NOT filter, scale, convolve etc. in this space</b>
  * unless you have very specific reasons to do so. Most likely, <b>doing so is
- * just plain wrong!<b/> Please use XYZ ({@link CIEXYZ}) for that.
+ * just plain wrong!</b> Please use XYZ ({@link CIEXYZ}) for that.
  */
 public class CAMLab extends PColor {
 

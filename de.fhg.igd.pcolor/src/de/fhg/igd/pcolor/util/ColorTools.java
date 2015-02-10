@@ -134,7 +134,7 @@ public class ColorTools {
 	/**
 	 * Return a float array representing CAM-UCS coordinates of the input.
 	 * See M. R. Luo, G. Cui, and C. Li, “Uniform colour spaces based on CIECAM02
-	 * colour appearance model,” Color Research & Application,
+	 * colour appearance model,” Color Research &amp; Application,
 	 * vol. 31, no. 4, pp. 320–330, Aug. 2006.
 	 * @param col the input color, MUST be {@link CS_CAMLch#JMh}
 	 * @return a float array representing J'a'b'
@@ -268,7 +268,7 @@ public class ColorTools {
 	 * This assumes that any "more lower" value for that channel than
 	 * already established to satisfy the predicate will also satisfy the
 	 * predicate. In other words, it will optimize towards upper,
-	 * but it is not required that lower < upper.
+	 * but it is not required that lower &lt; upper.
 	 * 
 	 * Not that the whole idea only makes sense if the predicate's space is smaller
 	 * than can be represented in the color space. For example, JCh values that

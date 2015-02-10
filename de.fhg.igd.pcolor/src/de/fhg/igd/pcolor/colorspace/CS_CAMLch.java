@@ -140,7 +140,7 @@ public class CS_CAMLch extends CS_CIECAM02 {
 	/**
 	 * Reconfigure to a different CIECAM02 correlate configuration.
 	 * This is less cumbersome and more precise than a full
-	 * CAM -> XYZ -> CAM cycle.
+	 * CAM =&gt; XYZ =&gt; CAM cycle.
 	 * @param colorvalue the value to convert
 	 * @param correlates the correlates to switch to
 	 * @return a CAMLch color value based on the given correlates
