@@ -163,14 +163,15 @@ public class ColorTools {
 	 *            the channel index
 	 * @param value
 	 *            the value to set
+	 * @param <C> the color type
 	 * @return a new pcolor with the new channel value
 	 */
 	@SuppressWarnings("unchecked")
-	public static <P extends PColor> P setChannel(P color, int channel, float value) {
+	public static <C extends PColor> C setChannel(C color, int channel, float value) {
 		if (channel >= 0 && channel <= color.getColorSpace().getNumComponents()) {
 			float[] arr = color.getRawComponents();
 			arr[channel] = value;
-			return (P) PColor.create(color.getColorSpace(), arr);
+			return (C) PColor.create(color.getColorSpace(), arr);
 		} else {
 			throw new IllegalArgumentException("channel " + channel + " is not in range");
 		}
@@ -181,6 +182,7 @@ public class ColorTools {
 	 * @param palette an array of colors
 	 * @param channel the channel to set
 	 * @param value the value to set the channel to, on each color.
+	 * @param <C> the color type
 	 * @return the input palette array (for convenience)
 	 */
 	public static <C extends PColor> C[] setChannel(C[] palette, int channel, float value) {
@@ -213,6 +215,7 @@ public class ColorTools {
 	 * @param inside
 	 *            a predicate defining a space whose boundary is tested
 	 * @param vc the viewing conditions to use for comparison
+	 * @param <C> the color type
 	 * @return the boundary color, when found
 	 */
 	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
@@ -252,6 +255,7 @@ public class ColorTools {
 	 *            the distance in JCh to allow for
 	 * @param inside
 	 *            a predicate defining a space whose boundary is tested
+	 * @param <C> the color type
 	 * @return the boundary color, when found
 	 */
 	public static <C extends PColor> C determineBoundaryColor(C col, int channel, float lower,
@@ -281,6 +285,7 @@ public class ColorTools {
 	 * @param upper the upper bound, which may satisfy the predicate for most colors
 	 * @param e the distance in JCh to allow for
 	 * @param predicate a predicate defining a color space whose boundary is tested
+	 * @param <C> the color type
 	 * @return new new array of optimized colors
 	 */
 	public static <C extends PColor> C[] optimizePalette(C[] palette,
