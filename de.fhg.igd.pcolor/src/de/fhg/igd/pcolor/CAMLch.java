@@ -137,7 +137,7 @@ public class CAMLch extends PColor {
 		return Math.sqrt(
 		    			Math.pow((color1.get(L) - color2.get(L)) * lightnessWeight, 2) +
 		    			Math.pow((color1.get(c) - color2.get(c)) * colorfulnessWeight, 2) +
-		    			Math.pow((color1.get(h) - color2.get(h)) * hueWeight, 2));
+		    			Math.pow(ColorTools.hueDistance(color1.get(h), color2.get(h), color2.getColorSpace().getMaxValue(h)) * hueWeight, 2));
     }
 
     
