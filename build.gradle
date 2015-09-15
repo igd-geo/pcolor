@@ -5,7 +5,7 @@ def packageDescription = 'PColor is a library for perceptual color calculation.'
 def packageVersion = '1.4.1';
 
 def sourceEncoding = 'utf-8';
-def javaSourceVersion = '1.7';
+def javaSourceVersion = '1.8';
 
 subprojects {
     apply plugin: 'java'
@@ -75,6 +75,9 @@ project(':de.fhg.igd.pcolor') {
 }
 
 project(':de.fhg.igd.pcolor.test') {
+  // quick fix for java 8
+  test.scanForTestClasses = false;
+
   // this is cumulative, i.e. compiled twice but
   // this way we don't need to adapt the test task.
   sourceSets {
