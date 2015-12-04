@@ -1,3 +1,18 @@
+* Project not maintained
+
+This project is not maintained, and probably cannot be. I was unable to
+clarify the license terms with the original author, so portions of
+this work remain "open source" without an explicitly stated license.
+Such terms are essentially legal limbo, so this project is no longer
+maintained.
+
+Unfortunately this means that at the time of this writing, there seems
+to be no reasonably complete, unambiguously licensed open source
+CIECAM02 implemetation for Java.
+
+The remaining text has been left as-is, which means any older statement
+regarding license terms you may encounter is invalid.
+
 * PColor
 
 PColor is a library for perceptually oriented color calculation. It tries
